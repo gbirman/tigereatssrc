@@ -23,5 +23,16 @@ def addUser():
 
     return jsonify({'result': result})
 
+@app.route('/api/findUsers', methods=['GET'])
+def findUsers():
+    users = mongo.db.users
+
+    result = []
+
+    for user in users.find({}):
+        result.append({'name': user['name']})
+
+    return jsonify(result)
+
 if __name__ == '__main__':
     app.run(debug=True)

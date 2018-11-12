@@ -48,10 +48,10 @@ export default class TigerEatsApp extends React.Component {
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>
-                    <input type="text" name="name" onChange={this.handleChange}/>
+                    <label>Input: </label>
+                        <input type="text" name="name" onChange={this.handleChange}/>
                     <input type="submit" value="Submit" />
                 </form>
-                <TigerButton />
             </div>
         );
     }
