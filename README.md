@@ -21,7 +21,5 @@
     - but, be judicious about your time.
     - tests should at least cover the functions expose to the outside  
 * **Documentation standard**
-	- We don�t need to enforce comment (i.e., not all methods need comments). Enforcing comment (in this case, use `pydoc`) does not help, because a non-sense comment will pass `pydoc`, but will not help human understanding the code.
 	- At the very least, each major class/interface should have a comment at the top explaining what it does
-	- If a code can be explained by itself, people would prefer to read the code instead of reading the comment, because comments usually does not get updated (or copy-pasted) together with the code.
-	- If a code cannot explain by itself (e.g., a 100-line function doing very arcane black magic), then a docstring is required to explain what�s the input & output of that blackbox.
+	- If a function cannot be explained by itself (e.g., a 100-line function doing very arcane black magic), then a docstring is required to explain what�s the input & output of that blackbox.
