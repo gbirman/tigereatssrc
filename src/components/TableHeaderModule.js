@@ -14,7 +14,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 
 const rows = [
-    { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
+    { id: 'name', numeric: false, disablePadding: false, label: 'Name' },
     { id: 'last_active', numeric: false, disablePadding: true, label: 'Last Active' },
     { id: 'gender', numeric: false, disablePadding: true, label: 'Gender' },
     { id: 'class_year', numeric: false, disablePadding: true, label: 'Class Year' },
@@ -27,13 +27,15 @@ const rows = [
   ];
   
 export default class TableHeaderMoudle extends React.Component {
+    createSortHandler = property => event => {
+        this.props.onRequestSort(event, property);
+    }
 
     render() {
         return (
             <TableHead>
                 <TableRow>
-                    <TableCell padding="checkbox">
-                    </TableCell>
+
                     {rows.map((row) => {
                         return (
                             <TableCell
@@ -49,7 +51,7 @@ export default class TableHeaderMoudle extends React.Component {
                                     <TableSortLabel
                                         active={this.props.orderBy === row.id}
                                         direction={this.props.order}
-                                        onClick={(e) => {console.log(row.label)}}
+                                        onClick={this.createSortHandler(row.id)}
                                     >
                                         <h3>{row.label}</h3>
                                     </TableSortLabel>

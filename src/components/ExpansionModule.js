@@ -8,6 +8,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DoneIcon from '@material-ui/icons/Done';
 import CloseIcon from '@material-ui/icons/Close';
 import Grid from '@material-ui/core/Grid';
+import axios from 'axios';
 
 // ON QUERY, SEND BACK LIST OF PARAMS FOR EACH FIELD THAT CAN BE INCLUDED, AS OPPOSED THAT CANT BE
 
@@ -24,9 +25,42 @@ export default class ExpansionModule extends React.Component {
 
         // take the prop giving the criteria, query the db for all the unique values of that variable, 
         // and put them in a sorted array
-        if (this.props.criteria === 'gender') ops = ['Male', 'Female'];
-        else if (this.props.criteria === 'team') ops = ['Soccer', 'Bball', 'Tennis'];
-        else if (this.props.criteria === 'class_year') ops = [2019, 2020, 2021, 2022];
+        if (this.props.criteria === 'gender') {
+            ops = ['Male', 'Female'];
+            /* ops = axios.get(
+                '/api/get_user_gender',
+                {
+                    userId: 'gender'
+                },
+                {
+                    headers: {'Content-type': 'application/json'}
+                }
+            ).then((response) => {console.log(response)}).catch((response) => {console.log(response)}); */
+        }
+        else if (this.props.criteria === 'team') {
+            ops = ['Soccer', 'Bball', 'Tennis'];
+            /*ops = axios.get(
+                '/api/get_user_team',
+                {
+                    userId: 'team'
+                },
+                {
+                    headers: {'Content-type': 'application/json'}
+                }
+            ).then((response) => {console.log(response)}).catch((response) => {console.log(response)}); */
+        }
+        else if (this.props.criteria === 'class_year') {
+            ops = [2019, 2020, 2021, 2022];
+            /*ops = axios.get(
+                '/api/get_user_year',
+                {
+                    userId: 'year'
+                },
+                {
+                    headers: {'Content-type': 'application/json'}
+                }
+            ).then((response) => {console.log(response)}).catch((response) => {console.log(response)}); */
+        }
 
         // set clicked array
         let bools = [];

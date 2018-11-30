@@ -1,12 +1,8 @@
 import React from 'react';
 import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
 import TableHeaderModule from './TableHeaderModule';
+import TableBodyModule from './TableBodyModule';
+import axios from 'axios';
 
 let counter = 0;
 function createData(name, last_active, gender, class_year, team, meals_logged_per_day, calories, protein, fat, carbs) {
@@ -15,20 +11,63 @@ function createData(name, last_active, gender, class_year, team, meals_logged_pe
 }
 
 export default class TableModule extends React.Component {
+    counter = 0;
 
+    getUsers = () => {
+        json = axios.get(
+            '/api/get_users',
+            {
+                headers: {'Content-type': 'application/json'}
+            }
+        ).then((response) => {console.log(response)}).catch((response) => {console.log(response)});
+
+        users = JSON.parse(json);
+        console.log(users);
+    }
     
+    /*([
+        createData('Paulo Frazão', '1 day ago', 'Male', 2020, 'Men\'s Bowling', 3, '2000/2200', '105/135', '70/85', '170/200'),
+            createData('Jamie Mercurio', '2 day ago', 'Male', 2020, 'Men\'s Running', 3, '2001/2200', '104/135', '7/85', '17/200'),
+            createData('Abby Breitfeld', '3 day ago', 'Female', 2020, 'Women\'s Running', 3, '2002/2200', '100/135', '70/85', '10/200'),
+        
+    ]) */
 
     state = {
         entries: 0,
         orderBy: 'name',
         order: 'asc',
+        data: this.getUsers()
+        /*[
+            createData('Paulo Frazão', '1 day ago', 'Male', 2020, 'Men\'s Bowling', 3, '2000/2200', '105/135', '70/85', '170/200'),
+            createData('Jamie Mercurio', '2 day ago', 'Male', 2020, 'Men\'s Running', 3, '2001/2200', '104/135', '7/85', '17/200'),
+            createData('Abby Breitfeld', '3 day ago', 'Female', 2020, 'Women\'s Running', 3, '2002/2200', '100/135', '70/85', '10/200'),
+        ]*/
+    };
+    
 
+    handleRequestSort = (event, property) => {
+        const orderBy = property;
+        let order = 'desc';
+
+        if (this.state.orderBy === property && this.state.order === 'desc') order = 'asc';
+
+        this.setState({order, orderBy})
     };
 
     render() {
         return (
             <Table>
-                <TableHeaderModule orderBy={this.state.orderBy} order={this.state.order}/>
+                <TableHeaderModule 
+                    orderBy={this.state.orderBy} 
+                    order={this.state.order}
+                    onRequestSort={this.handleRequestSort}
+                />
+                <TableBodyModule 
+                    data={this.state.data}
+                    onRequestSort={this.handleRequestSort}
+                    orderBy={this.state.orderBy}
+                    order={this.state.order}
+                />
             </Table>
         );
     }
