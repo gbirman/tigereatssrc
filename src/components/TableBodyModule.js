@@ -44,17 +44,17 @@ export default class TableBodyModule extends React.Component {
                                     key={n.id}
                                 >
                                     <TableCell>
-                                        <NavLink to="/test" style={{textDecoration: 'none'}}>{n.name}</NavLink>
+                                        <NavLink to="/test" style={{textDecoration: 'none'}}>{n.firstname + " " + n.lastname}</NavLink>
                                     </TableCell>
-                                    <TableCell>{n.last_active}</TableCell>
+                                    <TableCell>{"Placeholder"}</TableCell>
                                     <TableCell>{n.gender}</TableCell>
-                                    <TableCell>{n.class_year}</TableCell>
+                                    <TableCell>{2020}</TableCell>
                                     <TableCell>{n.team}</TableCell>
-                                    <TableCell>{n.meals_logged_per_day}</TableCell>
-                                    <TableCell>{n.calories}</TableCell>
-                                    <TableCell>{n.protein}</TableCell>
-                                    <TableCell>{n.fat}</TableCell>
-                                    <TableCell>{n.carbs}</TableCell>
+                                    <TableCell>{"Placeholder"}</TableCell>
+                                    <TableCell>{n.calorie_goal}</TableCell>
+                                    <TableCell>{n.protein_goal}</TableCell>
+                                    <TableCell>{n.fats_goal}</TableCell>
+                                    <TableCell>{n.carbs_goal}</TableCell>
                                 </TableRow>
                             );
                         })
