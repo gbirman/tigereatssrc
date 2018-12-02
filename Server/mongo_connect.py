@@ -59,69 +59,95 @@ def get_users():
         users.append(user)
     return jsonify(users)
 
-def _get_user(id: str)
+
+def _get_user(id: str):
     return mongo.db.users.find({"_id": ObjectId(id)})[0]
 
 
 @app.route('/api/get_user_email', methods=['GET'])
 def get_user_email(id: str):
     user = _get_user(id)
-    return user['email']
+    return jsonify(user['email'])
 
 
 @app.route('/api/get_user_firstname', methods=['GET'])
 def get_user_firstname(id: str):
-    user = mongo.db.users.find({"_id": ObjectId(id)})[0]
-    return user['firstname']
+    user = _get_user(id)
+    return jsonify(user['firstname'])
 
 
 @app.route('/api/get_user_lastname', methods=['GET'])
 def get_user_lastname(id: str):
-    user = mongo.db.users.find({"_id": ObjectId(id)})[0]
-    return user['lastname']
+    user = _get_user(id)
+    return jsonify(user['lastname'])
 
 
 @app.route('/api/get_user_gender', methods=['GET'])
 def get_user_gender(id: str):
-    user = mongo.db.users.find({"_id": ObjectId(id)})[0]
-    return user['gender']
+    user = _get_user(id)
+    return jsonify(user['gender'])
 
 
 @app.route('/api/get_user_height', methods=['GET'])
-def get_user_lastname(id: str):
-    user = mongo.db.users.find({"_id": ObjectId(id)})[0]
-    return user['height']
+def get_user_height(id: str):
+    user = _get_user(id)
+    return jsonify(user['height'])
 
 
 @app.route('/api/get_user_weight', methods=['GET'])
 def get_user_weight(id: str):
-    user = mongo.db.users.find({"_id": ObjectId(id)})[0]
-    return user['weight']
+    user = _get_user(id)
+    return jsonify(user['weight'])
 
 
 @app.route('/api/get_user_restrictions', methods=['GET'])
 def get_user_restrictions(id: str):
-    user = mongo.db.users.find({"_id": ObjectId(id)})[0]
-    return user['restrictions']
+    user = _get_user(id)
+    return jsonify(user['restrictions'])
 
 
 @app.route('/api/get_user_calorie_goal', methods=['GET'])
 def get_user_calorie_goal(id: str):
-    user = mongo.db.users.find({"_id": ObjectId(id)})[0]
-    return user['calorie_goal']
+    user = _get_user(id)
+    return jsonify(user['calorie_goal'])
 
 
 @app.route('/api/get_user_protein_goal', methods=['GET'])
 def get_user_protein_goal(id: str):
-    user = mongo.db.users.find({"_id": ObjectId(id)})[0]
-    return user['protein_goal']
+    user = _get_user(id)
+    return jsonify(user['protein_goal'])
 
 
 @app.route('/api/get_user_fats_goal', methods=['GET'])
 def get_user_fats_goal(id: str):
-    user = mongo.db.users.find({"_id": ObjectId(id)})[0]
-    return user['fats_goal']
+    user = _get_user(id)
+    return jsonify(user['fats_goal'])
+
+
+@app.route('/api/get_user_carbs_goal', methods=['GET'])
+def get_user_carbs_goal(id: str):
+    user = _get_user(id)
+    return jsonify(user['carbs_goal'])
+
+
+@app.route('/api/get_user_nutrition_goals', methods=['GET'])
+def get_user_nutrition_goals(id: str):
+    user = _get_user(id)
+    return jsonify([user['calorie_goal'], user['protein_goal'], user['fats_goal'], user['carbs_goal']])
+
+
+@app.route('/api/get_user_weight_goal', methods=['GET'])
+def get_user_weight_goal(id: str):
+    user = _get_user(id)
+    return jsonify(user['weight_goal'])
+
+
+@app.route('/api/get_user_team', methods=['GET'])
+def get_user_team(id: str):
+    user = _get_user(id)
+    return jsonify(user['team'])
+
+
 
 if __name__ == '__main__':
-    print(get_user_email("5bf8ca12e7179a56e21592c5"))
     app.run(debug=True)
