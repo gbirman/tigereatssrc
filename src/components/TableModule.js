@@ -4,11 +4,11 @@ import TableHeaderModule from './TableHeaderModule';
 import TableBodyModule from './TableBodyModule';
 import axios from 'axios';
 
-let counter = 0;
-function createData(name, last_active, gender, class_year, team, meals_logged_per_day, calories, protein, fat, carbs) {
-    counter += 1;
-    return {id: counter, name, last_active, gender, class_year, team, meals_logged_per_day, calories, protein, fat, carbs};
-}
+//let counter = 0;
+//function createData(name, last_active, gender, class_year, team, meals_logged_per_day, calories, protein, fat, carbs) {
+//    counter += 1;
+//    return {id: counter, name, last_active, gender, class_year, team, meals_logged_per_day, calories, protein, fat, carbs};
+//}
 
 export default class TableModule extends React.Component {
     counter = 0;

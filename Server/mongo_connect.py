@@ -8,6 +8,7 @@ from pymongo.errors import ConnectionFailure
 import sys 
 from bson import ObjectId
 
+
 class MyJSONEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, ObjectId):
@@ -23,6 +24,7 @@ mongo = PyMongo(app)
 
 CORS(app)
 
+
 @app.route('/api/addUser', methods=['POST'])
 def addUser():
     users = mongo.db.users
@@ -35,16 +37,18 @@ def addUser():
 
     return jsonify({'result': result})
 
-@app.route('/api/findUsers', methods=['GET'])
-def findUsers():
-    users = mongo.db.users
 
-    result = []
+# @app.route('/api/findUsers', methods=['GET'])
+# def findUsers():
+#     users = mongo.db.users
+#
+#     result = []
+#
+#     for user in users.find({}):
+#         result.append({'name': user['name']})
+#
+#     return jsonify(result)
 
-    for user in users.find({}):
-        result.append({'name': user['name']})
-
-    return jsonify(result)
 
 @app.route('/api/getUsers', methods=['GET'])
 def get_users():
@@ -55,5 +59,19 @@ def get_users():
         users.append(user)
     return jsonify(users)
 
+
+@app.route('/api/get_user_email', methods=['GET'])
+def get_user_email(id: str):
+    user = mongo.db.users.find({"_id": ObjectId(id)})[0]
+    return user['email']
+
+
+@app.route('/api/get_user_email', methods=['GET'])
+def get_user_email(id: str):
+    user = mongo.db.users.find({"_id": ObjectId(id)})[0]
+    return user['email']
+
+
 if __name__ == '__main__':
+    print(get_user_email("5bf8ca12e7179a56e21592c5"))
     app.run(debug=True)
