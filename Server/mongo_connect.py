@@ -148,6 +148,24 @@ def get_user_team(id: str):
     return jsonify(user['team'])
 
 
+@app.route('/api/get_user_year', methods=['GET'])
+def get_user_year(id: str):
+    user = _get_user(id)
+    return jsonify(user['year'])
+
+
+# @app.route('/api/get_user_meal_data', methods=['GET'])
+# def get_user_year(id: str, date: str, meal: str):
+#     """
+#     select * from users
+#         join meal_log on users.oid = meal_log.userId
+#         join food on meal_log.choices.keys = food.foodId
+#         where 1=1
+#             and users.oid = id
+#             and meal_log.date = date
+#             and meal_log.meal = meal
+#     """
+
 
 if __name__ == '__main__':
     app.run(debug=True)
