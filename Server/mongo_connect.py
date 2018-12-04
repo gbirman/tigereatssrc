@@ -154,18 +154,82 @@ def get_user_year(id: str):
     return jsonify(user['year'])
 
 
-# @app.route('/api/get_user_meal_data', methods=['GET'])
-# def get_user_year(id: str, date: str, meal: str):
-#     """
-#     select * from users
-#         join meal_log on users.oid = meal_log.userId
-#         join food on meal_log.choices.keys = food.foodId
-#         where 1=1
-#             and users.oid = id
-#             and meal_log.date = date
-#             and meal_log.meal = meal
-#     """
+def _update_nutrients(nutrients: dict, food_data: dict, num_servings: float) -> None:
+    nutrients['calories'] += num_servings*food_data['calories']
+    nutrients['protein'] += num_servings*food_data['protein']
+    nutrients['carbs'] += num_servings*food_data['carbs']
+    nutrients['fat'] += num_servings*food_data['fat']
+
+
+def _update_portions(portions: dict, food: str, serving_size: str, num_servings: float) -> None:
+    num_portion, unit_portion = serving_size.split(' ')
+    num_portion = float(num_portion)
+    portion_taken = str(num_portion*num_servings) + ' ' + unit_portion
+    portions[food] = portion_taken
+
+
+def _get_user_meal_data(id: str, date: str, meal: str):
+
+    data = mongo.db.meal_log.aggregate([
+        # match - "where" conditions
+        {
+            "$match": {
+                "$and": [
+                    {'userId' : ObjectId(id)},
+                    {'meal' : meal},
+                    {'date' : date}
+                ]
+            }
+        },
+        # # join
+        # {
+        #     "$lookup": {
+        #         "from": 'users',
+        #         "localField": 'userId',
+        #         "foreignField": '_id',
+        #         'as': 'user_meals'
+        #     }
+        # }
+    ]).next()
+
+    nutrients = {'calories' : 0, 'protein' : 0, 'carbs' : 0, 'fat' : 0}
+    portions = {}
+    for food in data['choices']:
+        food_data = mongo.db.food.find({
+            "$and" : [
+                {'foodId' : food},
+                {'meal' : meal},
+                {'date' : date},
+                {'cafeteria' : data['cafeteriaId']}
+            ]
+        })[0]
+        _update_nutrients(nutrients, food_data, data['choices'][food])
+        _update_portions(portions, food, food_data['portion'], data['choices'][food])
+
+    return [nutrients, portions]
+
+
+@app.route('/api/get_user_meal_data', methods=['GET'])
+def get_user_meal_data(id: str, date: str, meal: str):
+    return jsonify(_get_user_meal_data(id, date, meal))
+
+
+def _update_total_nutrients(nutrients, breakfast, lunch, dinner):
+    for macro in ['calories', 'protein', 'carbs', 'fat']:
+        nutrients[macro] = breakfast[0][macro] + lunch[0][macro] + dinner[0][macro]
+
+
+@app.route('/api/get_user_day_meal_data', methods=['GET'])
+def get_user_day_meal_data(id: str, date: str):
+    nutrients = {'calories' : 0, 'protein' : 0, 'carbs' : 0, 'fat' : 0}
+    breakfast = _get_user_meal_data(id, date, "breakfast")
+    lunch = _get_user_meal_data(id, date, "lunch")
+    dinner = _get_user_meal_data(id, date, "dinner")
+    _update_total_nutrients(nutrients, breakfast, lunch, dinner)
+    return jsonify([nutrients, breakfast, lunch, dinner])
+
 
 
 if __name__ == '__main__':
+    _get_user_meal_data("5bf8ca12e7179a56e21592c5", "2018-07-11", "lunch")
     app.run(debug=True)
