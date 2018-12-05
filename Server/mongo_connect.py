@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from flask.json import JSONEncoder
 from flask_pymongo import PyMongo
 from flask_cors import CORS
+from datetime import date, timedelta
 from pymongo import MongoClient 
 from urllib.parse import quote_plus
 from pymongo.errors import ConnectionFailure
@@ -170,6 +171,7 @@ def _update_portions(portions: dict, food: str, serving_size: str, num_servings:
 
 def _get_user_meal_data(id: str, date: str, meal: str):
 
+    """
     data = mongo.db.meal_log.aggregate([
         # match - "where" conditions
         {
@@ -191,18 +193,35 @@ def _get_user_meal_data(id: str, date: str, meal: str):
         #     }
         # }
     ]).next()
+    """
 
-    nutrients = {'calories' : 0, 'protein' : 0, 'carbs' : 0, 'fat' : 0}
+    nutrients = {'calories': 0, 'protein': 0, 'carbs': 0, 'fat': 0}
     portions = {}
-    for food in data['choices']:
-        food_data = mongo.db.food.find({
-            "$and" : [
-                {'foodId' : food},
-                {'meal' : meal},
-                {'date' : date},
-                {'cafeteria' : data['cafeteriaId']}
+
+    try:
+        data = mongo.db.meal_log.find({
+            "$and": [
+                {'userId': ObjectId(id)},
+                {'meal': meal},
+                {'date': date},
             ]
         })[0]
+
+    except IndexError:
+        return [nutrients, portions]
+
+    for food in data['choices']:
+        try:
+            food_data = mongo.db.food.find({
+                "$and" : [
+                    {'foodId' : food},
+                    # {'meal' : meal},  # would need to input MUCH more food data to include this. Implies eggs at breakfast are diff than eggs at lunch
+                    # {'date' : date},  # would need to input MUCH more food data to include this. Implies eggs on 9-1-18 are diff than 9-2-18
+                    {'cafeteria' : data['cafeteriaId']}
+                ]
+            })[0]
+        except IndexError:
+            continue
         _update_nutrients(nutrients, food_data, data['choices'][food])
         _update_portions(portions, food, food_data['portion'], data['choices'][food])
 
@@ -219,17 +238,48 @@ def _update_total_nutrients(nutrients, breakfast, lunch, dinner):
         nutrients[macro] = breakfast[0][macro] + lunch[0][macro] + dinner[0][macro]
 
 
-@app.route('/api/get_user_day_meal_data', methods=['GET'])
-def get_user_day_meal_data(id: str, date: str):
+def _get_user_day_meal_data(id: str, date: str):
     nutrients = {'calories' : 0, 'protein' : 0, 'carbs' : 0, 'fat' : 0}
     breakfast = _get_user_meal_data(id, date, "breakfast")
     lunch = _get_user_meal_data(id, date, "lunch")
     dinner = _get_user_meal_data(id, date, "dinner")
     _update_total_nutrients(nutrients, breakfast, lunch, dinner)
-    return jsonify([nutrients, breakfast, lunch, dinner])
+    return [nutrients, breakfast, lunch, dinner]
 
+
+@app.route('/api/get_user_day_meal_data', methods=['GET'])
+def get_user_day_meal_data(id: str, date: str):
+    return jsonify(_get_user_day_meal_data(id, date))
+
+
+def _convert_to_date(mydate: str):
+    date_list = mydate.split('-')
+    date_list = map(lambda x : int(x), date_list)
+    date_list = list(date_list)
+    return date(*date_list)
+
+
+def _get_user_nutrient_progress(id: str, startdate: str, enddate: str):
+    startdate = _convert_to_date(startdate)
+    enddate = _convert_to_date(enddate)
+    delta = enddate - startdate
+
+    date_to_nutrition = {}
+    for i in range(delta.days + 1):
+        this_date = str(startdate + timedelta(i))
+        date_to_nutrition[this_date] = _get_user_day_meal_data(id, this_date)[0]
+
+    return date_to_nutrition
+
+
+@app.route('/api/get_user_nutrient_progress', methods=['GET'])
+def get_user_nutrient_progress(id: str, startdate: str, enddate: str):
+    return jsonify(_get_user_nutrient_progress(id, startdate, enddate))
 
 
 if __name__ == '__main__':
-    _get_user_meal_data("5bf8ca12e7179a56e21592c5", "2018-07-11", "lunch")
+    # print(_get_user_meal_data("5bf8ca12e7179a56e21592c5", "2018-07-11", "lunch"))
+    # print(_get_user_meal_data("5bf8ca12e7179a56e21592c5", "2018-07-11", "breakfast"))
+    # print(_get_user_meal_data("5bf8ca12e7179a56e21592c5", "2018-07-13", "breakfast"))
+    print(_get_user_nutrient_progress("5bf8ca12e7179a56e21592c5", "2018-07-11", "2018-07-15"))
     app.run(debug=True)
