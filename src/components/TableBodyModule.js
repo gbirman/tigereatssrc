@@ -6,6 +6,7 @@ import { NavLink } from 'react-router-dom';
 
 
 function stableSort(array, cmp) {
+    console.log(array);
     const stabilizedThis = array.map((el, index) => [el, index]);
     stabilizedThis.sort((a,b) => {
         const order = cmp(a[0], b[0]);
@@ -33,29 +34,31 @@ export default class TableBodyModule extends React.Component {
     render () {
         return (
             <TableBody>
-                {
+                { 
                     stableSort(this.props.data, getSorting(this.props.order, this.props.orderBy))
                         .map(n => {
+                            
                             return (
-                                <TableRow
-                                    hover
-                                    onClick={event => this.isSelected(n.id)}
-                                    tabIndex={-1}
-                                    key={n.id}
-                                >
-                                    <TableCell>
-                                        <NavLink to="/test" style={{textDecoration: 'none'}}>{n.firstname + " " + n.lastname}</NavLink>
-                                    </TableCell>
-                                    <TableCell>{"Placeholder"}</TableCell>
-                                    <TableCell>{n.gender}</TableCell>
-                                    <TableCell>{2020}</TableCell>
-                                    <TableCell>{n.team}</TableCell>
-                                    <TableCell>{"Placeholder"}</TableCell>
-                                    <TableCell>{n.calorie_goal}</TableCell>
-                                    <TableCell>{n.protein_goal}</TableCell>
-                                    <TableCell>{n.fats_goal}</TableCell>
-                                    <TableCell>{n.carbs_goal}</TableCell>
-                                </TableRow>
+                                    <TableRow
+                                        hover
+                                        onClick={event => this.isSelected(n.id)}
+                                        tabIndex={-1}
+                                        key={n.id}
+                                        component={NavLink}
+                                        to="/test"
+                                        style={{textDecoration: 'none'}}
+                                    >
+                                        <TableCell>{n.fullname}</TableCell>
+                                        <TableCell>{"Placeholder"}</TableCell>
+                                        <TableCell>{n.gender}</TableCell>
+                                        <TableCell>{n.year}</TableCell>
+                                        <TableCell>{n.team}</TableCell>
+                                        <TableCell>{"Placeholder"}</TableCell>
+                                        <TableCell>{n.calorie_goal}</TableCell>
+                                        <TableCell>{n.protein_goal}</TableCell>
+                                        <TableCell>{n.fats_goal}</TableCell>
+                                        <TableCell>{n.carbs_goal}</TableCell>
+                                    </TableRow>
                             );
                         })
                 }

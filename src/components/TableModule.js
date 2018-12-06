@@ -2,7 +2,6 @@ import React from 'react';
 import Table from '@material-ui/core/Table';
 import TableHeaderModule from './TableHeaderModule';
 import TableBodyModule from './TableBodyModule';
-import axios from 'axios';
 
 //let counter = 0;
 //function createData(name, last_active, gender, class_year, team, meals_logged_per_day, calories, protein, fat, carbs) {
@@ -12,23 +11,8 @@ import axios from 'axios';
 
 export default class TableModule extends React.Component {
     counter = 0;
-
-    getUsers = () => {
-        axios.get(
-            'http://127.0.0.1:5000/api/getUsers',
-            {
-                headers: {'Content-type': 'application/json'}
-            }
-        ).then((data) => {
-            console.log(data);
-            this.setState({
-                data: data['data']
-            })
-        })
     
 
-        //return users;
-    }
     
     /*([
         createData('Paulo Frazão', '1 day ago', 'Male', 2020, 'Men\'s Bowling', 3, '2000/2200', '105/135', '70/85', '170/200'),
@@ -41,7 +25,7 @@ export default class TableModule extends React.Component {
         entries: 0,
         orderBy: 'name',
         order: 'asc',
-        data: []
+        restrictions: this.props.restrictions
         /*[
             createData('Paulo Frazão', '1 day ago', 'Male', 2020, 'Men\'s Bowling', 3, '2000/2200', '105/135', '70/85', '170/200'),
             createData('Jamie Mercurio', '2 day ago', 'Male', 2020, 'Men\'s Running', 3, '2001/2200', '104/135', '7/85', '17/200'),
@@ -50,7 +34,15 @@ export default class TableModule extends React.Component {
     };
 
     componentDidMount() {
-        this.getUsers();
+        console.log('IJBNIEFNIFENIOEFNIRFNF');
+        this.props.getUsers();
+    }
+
+    componentWillUpdate() {
+    }
+
+    componentDidUpdate() {
+        console.log('a');
     }
     
 
@@ -72,7 +64,7 @@ export default class TableModule extends React.Component {
                     onRequestSort={this.handleRequestSort}
                 />
                 <TableBodyModule 
-                    data={this.state.data}
+                    data={this.props.data}
                     onRequestSort={this.handleRequestSort}
                     orderBy={this.state.orderBy}
                     order={this.state.order}
