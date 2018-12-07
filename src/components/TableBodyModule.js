@@ -60,7 +60,7 @@ export default class TableBodyModule extends React.Component {
                                         <TableCell>{"Placeholder"}</TableCell>
                                         <TableCell>
                                             <NavLink
-                                                to={"/changeGoals/" + n._id + "/" + n.fullname + "/" + n.calorie_goal}
+                                                to={"/changeGoals/" + n._id + "/" + n.fullname + "/" + n.calorie_goal + "/" + n.protein_goal + "/" + n.fats_goal + "/" + n.carbs_goal}
                                                 style={{textDecoration: 'none'}}
                                             >
                                                 {n.calorie_goal}
@@ -68,7 +68,7 @@ export default class TableBodyModule extends React.Component {
                                         </TableCell>
                                         <TableCell>
                                             <NavLink
-                                                to={"/changeGoals/" + n._id + "/" + n.fullname + "/" + n.calorie_goal}
+                                                to={"/changeGoals/" + n._id + "/" + n.fullname + "/" + n.calorie_goal + "/" + n.protein_goal + "/" + n.fats_goal + "/" + n.carbs_goal}
                                                 style={{textDecoration: 'none'}}
                                             >
                                                 {n.protein_goal}
@@ -76,7 +76,7 @@ export default class TableBodyModule extends React.Component {
                                         </TableCell>
                                         <TableCell>
                                             <NavLink
-                                                to={"/changeGoals/" + n._id + "/" + n.fullname + "/" + n.calorie_goal}
+                                                to={"/changeGoals/" + n._id + "/" + n.fullname + "/" + n.calorie_goal + "/" + n.protein_goal + "/" + n.fats_goal + "/" + n.carbs_goal}
                                                 style={{textDecoration: 'none'}}
                                             >
                                                 {n.fats_goal}
@@ -84,7 +84,7 @@ export default class TableBodyModule extends React.Component {
                                         </TableCell>
                                         <TableCell>
                                             <NavLink
-                                                to={"/changeGoals/" + n._id + "/" + n.fullname + "/" + n.calorie_goal}
+                                                to={"/changeGoals/" + n._id + "/" + n.fullname + "/" + n.calorie_goal + "/" + n.protein_goal + "/" + n.fats_goal + "/" + n.carbs_goal}
                                                 style={{textDecoration: 'none'}}
                                             >
                                                 {n.carbs_goal}
