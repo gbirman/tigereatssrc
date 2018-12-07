@@ -16,16 +16,19 @@ export default class ExpansionModule extends React.Component {
     state = {
         options: [],
         queryParams: [],
-        clickedChips: []
+        clickedChips: [],
+        label: undefined
     };
 
     componentDidMount() {
         let ops = [];
+        let label;
 
         // take the prop giving the criteria, query the db for all the unique values of that variable, 
         // and put them in a sorted array
         if (this.props.criteria === 'gender') {
             ops = ['M', 'F'];
+            label = "Gender";
             /* ops = axios.get(
                 '/api/get_user_gender',
                 {
@@ -38,6 +41,7 @@ export default class ExpansionModule extends React.Component {
         }
         else if (this.props.criteria === 'team') {
             ops = ['soccer', 'Little League Basketball, Third String'];
+            label = "Team";
             /*ops = axios.get(
                 '/api/get_user_team',
                 {
@@ -50,6 +54,7 @@ export default class ExpansionModule extends React.Component {
         }
         else if (this.props.criteria === 'class_year') {
             ops = [2019, 2020, 2021, 2022];
+            label = "Class Year";
             /*ops = axios.get(
                 '/api/get_user_year',
                 {
@@ -69,7 +74,8 @@ export default class ExpansionModule extends React.Component {
         this.setState(() => ({
             options: ops,
             queryParams: ops,
-            clickedChips: bools
+            clickedChips: bools,
+            label: label
         }));
     }
 
@@ -91,7 +97,7 @@ export default class ExpansionModule extends React.Component {
         return (
             <ExpansionPanel>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                    {this.props.criteria}
+                    {this.state.label}
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <Grid container>

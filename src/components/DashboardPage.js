@@ -29,7 +29,6 @@ export default class DashboardPage extends React.Component {
                 n['fullname'] = full_name;
             });
 
-            console.log(details);
 
             /*this.setState({
                 data: data['data']
@@ -44,7 +43,6 @@ export default class DashboardPage extends React.Component {
 
         // value is in restrictions, so removes it, and potentially field too
         if (field in rest && rest[field].includes(value)) {
-            console.log('first');
             const index = rest[field].indexOf(value);
             rest[field].splice(index, 1);
 
@@ -55,13 +53,11 @@ export default class DashboardPage extends React.Component {
 
         // value is not in restrictions, so adds it
         else if (field in rest && !rest[field].includes(value)) {
-            console.log('second');
             rest[field].push(value);
         }
 
         // field isn't in restrictions, so adds it and value
         else {
-            console.log('third');
             rest[field] = [value];
         }
 

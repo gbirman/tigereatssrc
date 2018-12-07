@@ -2,7 +2,7 @@ import React from 'react';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 
 function stableSort(array, cmp) {
@@ -44,20 +44,52 @@ export default class TableBodyModule extends React.Component {
                                         onClick={event => this.isSelected(n.id)}
                                         tabIndex={-1}
                                         key={n.id}
-                                        component={NavLink}
-                                        to="/test"
-                                        style={{textDecoration: 'none'}}
                                     >
-                                        <TableCell>{n.fullname}</TableCell>
+                                        <TableCell>
+                                            <NavLink
+                                                to="/test"
+                                                style={{textDecoration: 'none'}}
+                                            >
+                                                {n.fullname}
+                                            </NavLink> 
+                                        </TableCell>
                                         <TableCell>{"Placeholder"}</TableCell>
                                         <TableCell>{n.gender}</TableCell>
                                         <TableCell>{n.year}</TableCell>
                                         <TableCell>{n.team}</TableCell>
                                         <TableCell>{"Placeholder"}</TableCell>
-                                        <TableCell>{n.calorie_goal}</TableCell>
-                                        <TableCell>{n.protein_goal}</TableCell>
-                                        <TableCell>{n.fats_goal}</TableCell>
-                                        <TableCell>{n.carbs_goal}</TableCell>
+                                        <TableCell>
+                                            <NavLink
+                                                to={"/changeGoals/" + n._id + "/" + n.fullname + "/" + n.calorie_goal}
+                                                style={{textDecoration: 'none'}}
+                                            >
+                                                {n.calorie_goal}
+                                            </NavLink> 
+                                        </TableCell>
+                                        <TableCell>
+                                            <NavLink
+                                                to={"/changeGoals/" + n._id + "/" + n.fullname + "/" + n.calorie_goal}
+                                                style={{textDecoration: 'none'}}
+                                            >
+                                                {n.protein_goal}
+                                            </NavLink> 
+                                        </TableCell>
+                                        <TableCell>
+                                            <NavLink
+                                                to={"/changeGoals/" + n._id + "/" + n.fullname + "/" + n.calorie_goal}
+                                                style={{textDecoration: 'none'}}
+                                            >
+                                                {n.fats_goal}
+                                            </NavLink> 
+                                        </TableCell>
+                                        <TableCell>
+                                            <NavLink
+                                                to={"/changeGoals/" + n._id + "/" + n.fullname + "/" + n.calorie_goal}
+                                                style={{textDecoration: 'none'}}
+                                            >
+                                                {n.carbs_goal}
+                                            </NavLink> 
+                                        </TableCell>
                                     </TableRow>
                             );
                         })
