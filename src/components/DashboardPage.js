@@ -4,6 +4,7 @@ import TableModule from './TableModule';
 import axios from 'axios';
 
 
+
 export default class DashboardPage extends React.Component {
 
     state = {
@@ -30,6 +31,7 @@ export default class DashboardPage extends React.Component {
             });
 
             this.setState({data: data['data']});
+            console.log(data['data']);
         })}
 
     handleFilterRequest = (field, value) => {

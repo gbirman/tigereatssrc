@@ -3,6 +3,8 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import { Link, NavLink } from 'react-router-dom';
+import EmailIcon from '@material-ui/icons/Email';
+
 
 
 function stableSort(array, cmp) {
@@ -25,6 +27,7 @@ function desc(a, b, orderBy) {
 function getSorting(order, orderBy) {
     return order === 'desc' ? (a,b) => desc(a,b,orderBy) : (a,b) => -desc(a,b,orderBy);
 }
+
 
 export default class TableBodyModule extends React.Component {
     isSelected = property => {
@@ -90,6 +93,14 @@ export default class TableBodyModule extends React.Component {
                                                 {n.carbs_goal}
                                             </NavLink> 
                                         </TableCell>
+                                        <TableCell>
+                                            <EmailIcon 
+                                                clickable 
+                                                style={{cursor: "pointer"}} 
+                                                onClick={(e) => {window.location.href = "mailto:" + n.email + "?subject=[TigerEats] A Message from your nutritionist!&body=Hi " + n.firstname + ",\n";}}
+                                            />
+                                        </TableCell>
+                                        
                                     </TableRow>
                             );
                         })

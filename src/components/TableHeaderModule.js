@@ -22,7 +22,8 @@ const rows = [
     { id: 'calorie_goal', numeric: false, disablePadding: true, label: 'Calories'},
     { id: 'protein_goal', numeric: false, disablePadding: true, label: 'Protein'},
     { id: 'fats_goal', numeric: false, disablePadding: true, label: 'Fat'},
-    { id: 'carbs_goal', numeric: false, disablePadding: true, label: 'Carbs'}
+    { id: 'carbs_goal', numeric: false, disablePadding: true, label: 'Carbs'},
+    { id: 'email', numeric: false, disablePadding: false, label: ''}
   ];
   
 export default class TableHeaderMoudle extends React.Component {
@@ -42,6 +43,7 @@ export default class TableHeaderMoudle extends React.Component {
                                 numeric={row.numeric}
                                 padding={row.disablePadding ? 'none' : 'default'}
                                 sortDirection={this.props.orderBy === row.id ? this.props.order : false}
+                                style={{textAlign: 'center'}}
                             >
                                 <Tooltip
                                     title="Sort"
