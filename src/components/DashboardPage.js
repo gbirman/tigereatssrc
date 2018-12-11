@@ -29,11 +29,6 @@ export default class DashboardPage extends React.Component {
                 n['fullname'] = full_name;
             });
 
-
-            /*this.setState({
-                data: data['data']
-            }) */
-
             this.setState({data: data['data']});
         })}
 

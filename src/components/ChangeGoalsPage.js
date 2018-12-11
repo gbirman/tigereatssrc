@@ -20,10 +20,6 @@ export default class ChangeGoalsPage extends React.Component {
         showError: false
     };
 
-    handleErrorToggle = () => {
-        this.setState({showError: !this.state.showError});
-    }
-
     validate = () => {
         console.log(this.state.calGoal + " " + this.state.proGoal + " " + this.state.fatsGoal + " " + this.state.carbsGoal);
         const val = (this.state.calGoal >= 0 && this.state.proGoal >= 0 && this.state.fatsGoal >= 0 && this.state.carbsGoal >= 0);
@@ -33,9 +29,26 @@ export default class ChangeGoalsPage extends React.Component {
                 this.props.history.push("/verified/" + this.state.verified);
                 console.log("/verified/" + this.state.verified);
             })
+
+            axios.post(
+                'http://127.0.0.1:5000/api/setGoals',
+                {
+                    params: {
+                        cals: this.state.calGoal,
+                        proteins: this.state.proGoal,
+                        fats: this.state.fatsGoal,
+                        carbs: this.state.carbsGoal
+                    }
+                },
+                {
+                    headers: {'Content-type': 'application/json'}
+                }
+            ).then((data) => {
+                console.log('Post sent');
+            })
         }
         else {
-            this.handleErrorToggle();
+            alert('Valid values only!');
         }
     }
 
@@ -97,11 +110,6 @@ export default class ChangeGoalsPage extends React.Component {
                 <Grid container justify="center" style={{padding: 20}} alignItems="center">
                     <Button variant="contained" color="primary" onClick={() => this.validate()}>Submit Changes!</Button>
                 </Grid>
-                {this.state.showError &&
-                    <SimpleModal onCloseRequest={() => this.handleErrorToggle}>
-                        Error: Values are not valid!
-                    </SimpleModal>
-                }
             </div>
         );
     }
