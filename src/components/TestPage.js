@@ -1,7 +1,7 @@
 import React from 'react';
 
 const TestPage = () => (
-    <p>TEST</p>
+    <p>LOGOUT TO BE COMPLETED BY ISHAN</p>
 );
 
 export default TestPage;

@@ -95,7 +95,7 @@ export default class TableBodyModule extends React.Component {
                                         </TableCell>
                                         <TableCell>
                                             <EmailIcon 
-                                                clickable 
+                                                clickable="true"
                                                 style={{cursor: "pointer"}} 
                                                 onClick={(e) => {window.location.href = "mailto:" + n.email + "?subject=[TigerEats] A Message from your nutritionist!&body=Hi " + n.firstname + ",\n";}}
                                             />
