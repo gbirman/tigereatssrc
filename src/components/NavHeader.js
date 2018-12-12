@@ -16,10 +16,7 @@ const NavHeader = () => (
                     <NavLink to="/" style={{ textDecoration: 'none'}}><Button variant="contained" color="primary">My Students</Button></NavLink>
                 </Grid>
                 <Grid item>
-                    <NavLink to="/test" style={{ textDecoration: 'none'}}><Button variant="contained" color="primary">My Messages</Button></NavLink>
-                </Grid>
-                <Grid item>
-                    <NavLink to="/test" style={{ textDecoration: 'none'}}><Button variant="contained" color="primary">Other</Button></NavLink>
+                    <NavLink to="/logout" style={{ textDecoration: 'none'}}><Button variant="contained" color="primary">Logout</Button></NavLink>
                 </Grid>
             </Grid>
         </Grid>

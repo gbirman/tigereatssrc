@@ -7,23 +7,23 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import Tooltip from '@material-ui/core/Tooltip';
 
 
 const rows = [
-    { id: 'name', numeric: false, disablePadding: false, label: 'Name' },
+    { id: 'fullname', numeric: false, disablePadding: false, label: 'Name' },
     { id: 'last_active', numeric: false, disablePadding: true, label: 'Last Active' },
     { id: 'gender', numeric: false, disablePadding: true, label: 'Gender' },
-    { id: 'class_year', numeric: false, disablePadding: true, label: 'Class Year' },
+    { id: 'year', numeric: false, disablePadding: true, label: 'Class Year' },
     { id: 'team', numeric: false, disablePadding: true, label: 'Team' },
     { id: 'meals_logged_per_day', numeric: false, disablePadding: true, label: 'Meals Logged / Day'},
-    { id: 'calories', numeric: false, disablePadding: true, label: 'Calories'},
-    { id: 'protein', numeric: false, disablePadding: true, label: 'Protein'},
-    { id: 'fat', numeric: false, disablePadding: true, label: 'Fat'},
-    { id: 'carbs', numeric: false, disablePadding: true, label: 'Carbs'}
+    { id: 'calorie_goal', numeric: false, disablePadding: true, label: 'Calories'},
+    { id: 'protein_goal', numeric: false, disablePadding: true, label: 'Protein'},
+    { id: 'fats_goal', numeric: false, disablePadding: true, label: 'Fat'},
+    { id: 'carbs_goal', numeric: false, disablePadding: true, label: 'Carbs'},
+    { id: 'email', numeric: false, disablePadding: false, label: ''}
   ];
   
 export default class TableHeaderMoudle extends React.Component {
@@ -43,6 +43,7 @@ export default class TableHeaderMoudle extends React.Component {
                                 numeric={row.numeric}
                                 padding={row.disablePadding ? 'none' : 'default'}
                                 sortDirection={this.props.orderBy === row.id ? this.props.order : false}
+                                style={{textAlign: 'center'}}
                             >
                                 <Tooltip
                                     title="Sort"

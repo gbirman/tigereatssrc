@@ -3,7 +3,6 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Chip from '@material-ui/core/Chip';
-import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DoneIcon from '@material-ui/icons/Done';
 import CloseIcon from '@material-ui/icons/Close';
@@ -17,16 +16,19 @@ export default class ExpansionModule extends React.Component {
     state = {
         options: [],
         queryParams: [],
-        clickedChips: []
+        clickedChips: [],
+        label: undefined
     };
 
     componentDidMount() {
         let ops = [];
+        let label;
 
         // take the prop giving the criteria, query the db for all the unique values of that variable, 
         // and put them in a sorted array
         if (this.props.criteria === 'gender') {
-            ops = ['Male', 'Female'];
+            ops = ['M', 'F'];
+            label = "Gender";
             /* ops = axios.get(
                 '/api/get_user_gender',
                 {
@@ -38,7 +40,8 @@ export default class ExpansionModule extends React.Component {
             ).then((response) => {console.log(response)}).catch((response) => {console.log(response)}); */
         }
         else if (this.props.criteria === 'team') {
-            ops = ['Soccer', 'Bball', 'Tennis'];
+            ops = ['soccer', 'Little League Basketball, Third String'];
+            label = "Team";
             /*ops = axios.get(
                 '/api/get_user_team',
                 {
@@ -51,6 +54,7 @@ export default class ExpansionModule extends React.Component {
         }
         else if (this.props.criteria === 'class_year') {
             ops = [2019, 2020, 2021, 2022];
+            label = "Class Year";
             /*ops = axios.get(
                 '/api/get_user_year',
                 {
@@ -70,15 +74,13 @@ export default class ExpansionModule extends React.Component {
         this.setState(() => ({
             options: ops,
             queryParams: ops,
-            clickedChips: bools
+            clickedChips: bools,
+            label: label
         }));
     }
 
-    handleChipClick = (option) => {
-        console.log(option);
-
+    handleChipClick = (option, criteria) => {
         const index = this.state.options.indexOf(option);
-        console.log(index);
 
         const newBools = this.state.clickedChips.slice();
         newBools[index] = !this.state.clickedChips[index];
@@ -86,6 +88,8 @@ export default class ExpansionModule extends React.Component {
         this.setState(() => ({
             clickedChips: newBools
         }))
+
+        this.props.onFilter(criteria, option);
     };
 
     render() {
@@ -93,7 +97,7 @@ export default class ExpansionModule extends React.Component {
         return (
             <ExpansionPanel>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography>{this.props.criteria}</Typography>
+                    {this.state.label}
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <Grid container>
@@ -101,8 +105,8 @@ export default class ExpansionModule extends React.Component {
                             this.state.options.map((option) => {
                                 const index = this.state.options.indexOf(option);
                                 const clicked = this.state.clickedChips[index];
-                                 return <Chip label={option} icon={clicked ? <DoneIcon /> : <CloseIcon />} clickable
-                                            onClick={(e) => {this.handleChipClick(option)}} />;
+                                 return <Chip label={option} criteria={this.props.criteria} icon={clicked ? <DoneIcon /> : <CloseIcon />} clickable
+                                            onClick={(e) => {this.handleChipClick(option, this.props.criteria)}} />;
                         })
                         }
                     </Grid>

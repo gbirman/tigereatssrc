@@ -13,13 +13,22 @@ export default class FilterExpansionModule extends React.Component {
                     </Grid>
                     <Grid container xs={12} sm={8} item justify="space-around">
                         <Grid item style={{width:250}}>
-                            <ExpansionModule criteria="gender"/>
+                            <ExpansionModule 
+                                criteria="gender"
+                                onFilter={this.props.onFilter}
+                            />
                         </Grid>
                         <Grid item style={{width:250}}>
-                            <ExpansionModule criteria="team"/>
+                            <ExpansionModule 
+                            criteria="team"
+                            onFilter={this.props.onFilter}
+                            />
                         </Grid>
                         <Grid item style={{width:250}}>
-                            <ExpansionModule criteria="class_year"/>
+                            <ExpansionModule 
+                            criteria="class_year"
+                            onFilter={this.props.onFilter}
+                            />
                         </Grid>
                     </Grid>
                 </Grid>
