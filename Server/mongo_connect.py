@@ -296,10 +296,13 @@ def change_nutrition_goals():
 
     args = request.get_json()
     user_id = args['user_id']
-    new_calorie_goal = float(args['new_calorie_goal'])
-    new_protein_goal = float(args['new_protein_goal'])
-    new_carbs_goal = float(args['new_carbs_goal'])
-    new_fats_goal = float(args['new_fats_goal'])
+    try:
+        new_calorie_goal = float(args['new_calorie_goal'])
+        new_protein_goal = float(args['new_protein_goal'])
+        new_carbs_goal = float(args['new_carbs_goal'])
+        new_fats_goal = float(args['new_fats_goal'])
+    except ValueError:
+        return jsonify(False)
 
     if new_calorie_goal <= 0 or new_fats_goal <= 0 or new_carbs_goal <= 0 or new_protein_goal <= 0:
         return jsonify(False)
