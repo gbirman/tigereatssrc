@@ -289,12 +289,14 @@ def _update_data(collection, user_id: str, data: dict):
         return True
     except:
         return False
-    return True
 
 
 @app.route('/api/change_nutrition_goals', methods=['POST'])
 def change_nutrition_goals(user_id: str, new_calorie_goal: float, new_protein_goal: float, new_carbs_goal: float, \
         new_fats_goal: float):
+
+    if new_calorie_goal <= 0 or new_fats_goal <= 0 or new_carbs_goal <= 0 or new_protein_goal <= 0:
+        return False
 
     if new_calorie_goal != 4*new_protein_goal + 4*new_carbs_goal + 9*new_fats_goal:
         return False
@@ -317,6 +319,51 @@ def change_weight_goal(user_id: str, new_weight_goal: float):
     return _update_data(users, user_id, data)
 
 
+@app.route('/api/change_name', methods=['POST'])
+def change_name(user_id: str, new_name: str):
+
+    users, data = _prep_data_to_update(user_id)
+    new_name = new_name.split(' ')
+    first_name = new_name[0]
+    last_name = new_name[-1]
+    data['firstname'] = first_name
+    data['lastname'] = last_name
+
+    return _update_data(users, user_id, data)
+
+
+@app.route('/api/change_team', methods=['POST'])
+def change_team(user_id: str, new_team: str):
+
+    users, data = _prep_data_to_update(user_id)
+    data['gender'] = new_team
+
+    return _update_data(users, user_id, data)
+
+
+@app.route('/api/change_gender', methods=['POST'])
+def change_gender(user_id: str, new_gender: str):
+
+    if new_gender not in ['M', 'F']:
+        return False
+
+    users, data = _prep_data_to_update(user_id)
+    data['gender'] = new_gender
+
+    return _update_data(users, user_id, data)
+
+
+@app.route('/api/change_year', methods=['POST'])
+def change_year(user_id: str, new_year: float):
+
+    if new_year <= 2018:
+        return False
+
+    users, data = _prep_data_to_update(user_id)
+    data['year'] = new_year
+
+    return _update_data(users, user_id, data)
+
 
 if __name__ == '__main__':
     # print(_get_user_meal_data("5bf8ca12e7179a56e21592c5", "2018-07-11", "lunch"))
@@ -324,5 +371,5 @@ if __name__ == '__main__':
     # print(_get_user_meal_data("5bf8ca12e7179a56e21592c5", "2018-07-13", "breakfast"))
     # print(_get_user_nutrient_progress("5bf8ca12e7179a56e21592c5", "2018-07-11", "2018-07-15"))
     # print(_get_user('5bf8ca12e7179a56e21592c5'))
-    print(change_goals('5bf8ca12e7179a56e21592c5', 68, 4, 4, 4))
+    print(change_nutrition_goals('5bf8ca12e7179a56e21592c5', 68, 4, 4, 4))
     app.run(debug=True)
