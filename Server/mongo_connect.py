@@ -66,7 +66,9 @@ def _get_user(id: str):
 
 
 @app.route('/api/get_user_email', methods=['GET'])
-def get_user_email(id: str):
+def get_user_email():
+    args = request.args
+    id = args['user_id']
     user = _get_user(id)
     return jsonify(user['email'])
 
@@ -286,20 +288,27 @@ def _prep_data_to_update(user_id: str):
 def _update_data(collection, user_id: str, data: dict):
     try:
         collection.update_one({'_id': ObjectId(user_id)}, {"$set": data}, upsert=False)
-        return True
+        return jsonify(True)
     except:
-        return False
+        return jsonify(False)
 
 
 @app.route('/api/change_nutrition_goals', methods=['POST'])
-def change_nutrition_goals(user_id: str, new_calorie_goal: float, new_protein_goal: float, new_carbs_goal: float, \
-        new_fats_goal: float):
+def change_nutrition_goals():
+
+    args = request.get_json()
+    print(args)
+    user_id = args['user_id']
+    new_calorie_goal = float(args['new_calorie_goal'])
+    new_protein_goal = float(args['new_protein_goal'])
+    new_carbs_goal = float(args['new_carbs_goal'])
+    new_fats_goal = float(args['new_fats_goal'])
 
     if new_calorie_goal <= 0 or new_fats_goal <= 0 or new_carbs_goal <= 0 or new_protein_goal <= 0:
-        return False
+        return jsonify(False)
 
     if new_calorie_goal != 4*new_protein_goal + 4*new_carbs_goal + 9*new_fats_goal:
-        return False
+        return jsonify(False)
 
     users, data = _prep_data_to_update(user_id)
     data['calorie_goal'] = new_calorie_goal
