@@ -42,11 +42,31 @@ def addUser():
 @app.route('/api/getUsers', methods=['GET'])
 def get_users():
 
-    cursor = mongo.db.users.find()
-    users = []
-    for user in cursor:
-        users.append(user)
-    return jsonify(users)
+    args = request.args
+    print(args)
+    gender_list = args['gender']
+    team_list = args['team']
+    year_list = args['year']
+    add_user = True
+
+    try:
+
+        cursor = mongo.db.users.find()
+        users = []
+        for user in cursor:
+            if gender_list is not None and user['gender'] not in gender_list:
+                add_user = False
+            if team_list is not None and user['team'] not in team_list:
+                add_user = False
+            if year_list is not None and user['year'] not in year_list:
+                add_user = False
+            if add_user:
+                users.append(user)
+        return jsonify(users)
+
+    except IndexError:
+
+        return None
 
 
 def _get_user(args):
@@ -296,10 +316,13 @@ def change_nutrition_goals():
 
     args = request.get_json()
     user_id = args['user_id']
-    new_calorie_goal = float(args['new_calorie_goal'])
-    new_protein_goal = float(args['new_protein_goal'])
-    new_carbs_goal = float(args['new_carbs_goal'])
-    new_fats_goal = float(args['new_fats_goal'])
+    try:
+        new_calorie_goal = float(args['new_calorie_goal'])
+        new_protein_goal = float(args['new_protein_goal'])
+        new_carbs_goal = float(args['new_carbs_goal'])
+        new_fats_goal = float(args['new_fats_goal'])
+    except ValueError:
+        return jsonify(False)
 
     if new_calorie_goal <= 0 or new_fats_goal <= 0 or new_carbs_goal <= 0 or new_protein_goal <= 0:
         return jsonify(False)
@@ -397,4 +420,6 @@ if __name__ == '__main__':
     # print(_get_user_nutrient_progress("5bf8ca12e7179a56e21592c5", "2018-07-11", "2018-07-15"))
     # print(_get_user('5bf8ca12e7179a56e21592c5'))
     # print(change_nutrition_goals('5bf8ca12e7179a56e21592c5', 68, 4, 4, 4))
+    rest = {'year' : 2020, 'team' : ['Soccer']}
+    get_users(rest)
     app.run(debug=True)
