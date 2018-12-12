@@ -42,15 +42,22 @@ def addUser():
 @app.route('/api/getUsers', methods=['GET'])
 def get_users():
 
-    args = request.args
-    print(args)
-    gender_list = args['gender']
-    team_list = args['team']
-    year_list = args['year']
+    filters = request.args['restrictions']
+    if 'gender' in filters:
+        gender_list = filters['gender']
+    else:
+        gender_list = None
+    if 'team' in filters:
+        team_list = filters['team']
+    else:
+        team_list = None
+    if 'year' in filters:
+        year_list = filters['year']
+    else:
+        year_list = None
     add_user = True
 
     try:
-
         cursor = mongo.db.users.find()
         users = []
         for user in cursor:
@@ -64,8 +71,7 @@ def get_users():
                 users.append(user)
         return jsonify(users)
 
-    except IndexError:
-
+    except:
         return None
 
 
