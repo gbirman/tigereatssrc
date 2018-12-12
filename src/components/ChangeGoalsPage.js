@@ -7,10 +7,12 @@ import Grid from '@material-ui/core/Grid';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
 import SimpleModal from './SimpleModal';
 
 export default class ChangeGoalsPage extends React.Component {
 
+    // todo change order and add note about equation
     state = {
         calGoal: this.props.match.params.calorie_goal,
         proGoal: this.props.match.params.protein_goal,
@@ -23,37 +25,35 @@ export default class ChangeGoalsPage extends React.Component {
 
     validate = () => {
         console.log(this.state.calGoal + " " + this.state.proGoal + " " + this.state.fatsGoal + " " + this.state.carbsGoal);
-        const val = (this.state.calGoal >= 0 && this.state.proGoal >= 0 && this.state.fatsGoal >= 0 && this.state.carbsGoal >= 0);
         
-        if (val) {
-            this.setState({verified: val}, () => {
-                this.props.history.push("/verified/" + this.state.verified);
-                console.log("/verified/" + this.state.verified);
-            })
+        let result;
 
-            console.log(this.state.id);
+        axios.post(
+            'http://127.0.0.1:5000/api/change_nutrition_goals',
+            {
+                user_id: this.state.id, 
+                new_calorie_goal: this.state.calGoal,
+                new_protein_goal: this.state.proGoal,
+                new_carbs_goal: this.state.carbsGoal,
+                new_fats_goal: this.state.fatsGoal
+            },
+            {
+                headers: {'Content-type': 'application/json'}
+            }
+        ).then((data) => {
+            console.log(data);
+            result = data['data'];
 
-            axios.post(
-                'http://127.0.0.1:5000/api/setGoals',
-                {
-                    params: {
-                        userId: this.state.id, 
-                        new_calorie_goal: this.state.calGoal,
-                        new_protein_goal: this.state.proGoal,
-                        new_fats_goal: this.state.fatsGoal,
-                        new_carbs_goal: this.state.carbsGoal
-                    }
-                },
-                {
-                    headers: {'Content-type': 'application/json'}
-                }
-            ).then((data) => {
-                console.log('Post sent');
-            })
-        }
-        else {
-            alert('Valid values only!');
-        }
+            if (result) {
+                this.setState({verified: result}, () => {
+                    this.props.history.push("/verified/" + this.state.verified);
+                    console.log("/verified/" + this.state.verified);
+                })
+            }
+            else {
+                alert('Valid values only!');
+            }
+        })        
     }
 
     handleCalChange = (e) => {
@@ -76,44 +76,52 @@ export default class ChangeGoalsPage extends React.Component {
     render() {
         return (
             <div>
-                <Paper padding={30} >
+                
+                <Paper style={{marginRight: '10%', marginLeft: '10%'}}>
                     <Grid container justify="center">
                         <h1>Change your goals below!</h1>
                     </Grid>
+                </Paper>
+                <Paper style={{marginRight: '30%', marginLeft: '30%', marginTop: '2%', marginBottom: '2%'}}>
+                    <Grid container justify="center">
+                        <p align="center">Totals must follow the following equality: <br />Calories = 4 * Protein + 4 * Carbs + 9 * Fat</p>
+                    </Grid>
+                </Paper>
+                <Paper style={{marginRight: '5%', marginLeft: '5%'}}>
                     <Grid container justify="center" alignItems="center">
                         <h2>Current Goals:</h2>
                     </Grid>
-                    <Grid container justify="space-around" alignItems="center">
-                        <Grid item xs={3}><u>Calories / Day</u></Grid>
-                        <Grid item xs={3}><u>Protein / Day</u></Grid>
-                        <Grid item xs={3}><u>Fats / Day</u></Grid>
-                        <Grid item xs={3}><u>Carbs / Day</u></Grid>
+                    <Grid container justify="center" alignItems="center">
+                        <Grid item style={{textAlign: "center"}} xs={3}><u>Calories / Day</u></Grid>
+                        <Grid item style={{textAlign: "center"}} xs={3}><u>Protein / Day</u></Grid>
+                        <Grid item style={{textAlign: "center"}} xs={3}><u>Carbs / Day</u></Grid>
+                        <Grid item style={{textAlign: "center"}} xs={3}><u>Fats / Day</u></Grid>
                     </Grid>
                     <Grid container justify="center" alignItems="center">
-                        <Grid item xs={3}>{this.props.match.params.calorie_goal}</Grid>
-                        <Grid item xs={3}>{this.props.match.params.protein_goal}</Grid>
-                        <Grid item xs={3}>{this.props.match.params.fats_goal}</Grid>
-                        <Grid item xs={3}>{this.props.match.params.carbs_goal}</Grid>
+                        <Grid item style={{textAlign: "center"}} xs={3}>{this.props.match.params.calorie_goal}</Grid>
+                        <Grid item style={{textAlign: "center"}} xs={3}>{this.props.match.params.protein_goal}</Grid>
+                        <Grid item style={{textAlign: "center"}} xs={3}>{this.props.match.params.carbs_goal}</Grid>
+                        <Grid item style={{textAlign: "center"}} xs={3}>{this.props.match.params.fats_goal}</Grid>
                     </Grid>
                     <Grid container justify="center" alignItems="center">
                         <h2>New Goals:</h2>
                     </Grid>
                     <Grid container justify="space-around" alignItems="center">
-                        <Grid item xs={3}><u>Calories / Day</u></Grid>
-                        <Grid item xs={3}><u>Protein / Day</u></Grid>
-                        <Grid item xs={3}><u>Fats / Day</u></Grid>
-                        <Grid item xs={3}><u>Carbs / Day</u></Grid>
+                        <Grid item style={{textAlign: "center"}} xs={3}><u>Calories / Day</u></Grid>
+                        <Grid item style={{textAlign: "center"}} xs={3}><u>Protein / Day</u></Grid>
+                        <Grid item style={{textAlign: "center"}} xs={3}><u>Carbs / Day</u></Grid>
+                        <Grid item style={{textAlign: "center"}} xs={3}><u>Fats / Day</u></Grid>
                     </Grid>
                     <Grid container justify="center" alignItems="center" style={{padding: 20}}>
-                        <Grid item xs={3}><Input placeholder={this.props.match.params.calorie_goal} onKeyUp={this.handleCalChange}/></Grid>
-                        <Grid item xs={3}><Input placeholder={this.props.match.params.protein_goal} onKeyUp={this.handleProChange}/></Grid>
-                        <Grid item xs={3}><Input placeholder={this.props.match.params.fats_goal} onKeyUp={this.handleFatsChange}/></Grid>
-                        <Grid item xs={3}><Input placeholder={this.props.match.params.carbs_goal} onKeyUp={this.handleCarbsChange}/></Grid>
+                        <Grid item style={{textAlign: "center"}} xs={3}><Input placeholder={this.props.match.params.calorie_goal} onKeyUp={this.handleCalChange}/></Grid>
+                        <Grid item style={{textAlign: "center"}} xs={3}><Input placeholder={this.props.match.params.protein_goal} onKeyUp={this.handleProChange}/></Grid>
+                        <Grid item style={{textAlign: "center"}} xs={3}><Input placeholder={this.props.match.params.carbs_goal} onKeyUp={this.handleCarbsChange}/></Grid>
+                        <Grid item style={{textAlign: "center"}} xs={3}><Input placeholder={this.props.match.params.fats_goal} onKeyUp={this.handleFatsChange}/></Grid>
+                    </Grid>
+                    <Grid container justify="center" style={{padding: 20}} alignItems="center">
+                        <Button variant="contained" color="primary" onClick={() => this.validate()}>Submit Changes!</Button>
                     </Grid>
                 </Paper>
-                <Grid container justify="center" style={{padding: 20}} alignItems="center">
-                    <Button variant="contained" color="primary" onClick={() => this.validate()}>Submit Changes!</Button>
-                </Grid>
             </div>
         );
     }
