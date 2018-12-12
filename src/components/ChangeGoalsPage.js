@@ -16,6 +16,7 @@ export default class ChangeGoalsPage extends React.Component {
         proGoal: this.props.match.params.protein_goal,
         fatsGoal: this.props.match.params.fats_goal,
         carbsGoal: this.props.match.params.carbs_goal,
+        id: this.props.match.params.id,
         verified: false,
         showError: false
     };
@@ -30,14 +31,17 @@ export default class ChangeGoalsPage extends React.Component {
                 console.log("/verified/" + this.state.verified);
             })
 
+            console.log(this.state.id);
+
             axios.post(
                 'http://127.0.0.1:5000/api/setGoals',
                 {
                     params: {
-                        cals: this.state.calGoal,
-                        proteins: this.state.proGoal,
-                        fats: this.state.fatsGoal,
-                        carbs: this.state.carbsGoal
+                        userId: this.state.id, 
+                        new_calorie_goal: this.state.calGoal,
+                        new_protein_goal: this.state.proGoal,
+                        new_fats_goal: this.state.fatsGoal,
+                        new_carbs_goal: this.state.carbsGoal
                     }
                 },
                 {
