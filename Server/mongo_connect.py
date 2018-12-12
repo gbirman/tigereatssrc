@@ -39,18 +39,6 @@ def addUser():
     return jsonify({'result': result})
 
 
-# @app.route('/api/findUsers', methods=['GET'])
-# def findUsers():
-#     users = mongo.db.users
-#
-#     result = []
-#
-#     for user in users.find({}):
-#         result.append({'name': user['name']})
-#
-#     return jsonify(result)
-
-
 @app.route('/api/getUsers', methods=['GET'])
 def get_users():
 
@@ -61,99 +49,98 @@ def get_users():
     return jsonify(users)
 
 
-def _get_user(id: str):
+def _get_user(args):
+    id = args['user_id']
     return mongo.db.users.find({"_id": ObjectId(id)})[0]
 
 
 @app.route('/api/get_user_email', methods=['GET'])
 def get_user_email():
-    args = request.args
-    id = args['user_id']
-    user = _get_user(id)
+    user = _get_user(request.args)
     return jsonify(user['email'])
 
 
 @app.route('/api/get_user_firstname', methods=['GET'])
-def get_user_firstname(id: str):
-    user = _get_user(id)
+def get_user_firstname():
+    user = _get_user(request.args)
     return jsonify(user['firstname'])
 
 
 @app.route('/api/get_user_lastname', methods=['GET'])
-def get_user_lastname(id: str):
-    user = _get_user(id)
+def get_user_lastname():
+    user = _get_user(request.args)
     return jsonify(user['lastname'])
 
 
 @app.route('/api/get_user_gender', methods=['GET'])
-def get_user_gender(id: str):
-    user = _get_user(id)
+def get_user_gender():
+    user = _get_user(request.args)
     return jsonify(user['gender'])
 
 
 @app.route('/api/get_user_height', methods=['GET'])
-def get_user_height(id: str):
-    user = _get_user(id)
+def get_user_height():
+    user = _get_user(request.args)
     return jsonify(user['height'])
 
 
 @app.route('/api/get_user_weight', methods=['GET'])
-def get_user_weight(id: str):
-    user = _get_user(id)
+def get_user_weight():
+    user = _get_user(request.args)
     return jsonify(user['weight'])
 
 
 @app.route('/api/get_user_restrictions', methods=['GET'])
-def get_user_restrictions(id: str):
-    user = _get_user(id)
+def get_user_restrictions():
+    user = _get_user(request.args)
     return jsonify(user['restrictions'])
 
 
 @app.route('/api/get_user_calorie_goal', methods=['GET'])
-def get_user_calorie_goal(id: str):
-    user = _get_user(id)
+def get_user_calorie_goal():
+    user = _get_user(request.args)
     return jsonify(user['calorie_goal'])
 
 
 @app.route('/api/get_user_protein_goal', methods=['GET'])
-def get_user_protein_goal(id: str):
-    user = _get_user(id)
+def get_user_protein_goal():
+    user = _get_user(request.args)
     return jsonify(user['protein_goal'])
 
 
 @app.route('/api/get_user_fats_goal', methods=['GET'])
-def get_user_fats_goal(id: str):
-    user = _get_user(id)
+def get_user_fats_goal():
+    user = _get_user(request.args)
     return jsonify(user['fats_goal'])
 
 
 @app.route('/api/get_user_carbs_goal', methods=['GET'])
-def get_user_carbs_goal(id: str):
-    user = _get_user(id)
+def get_user_carbs_goal():
+    user = _get_user(request.args)
     return jsonify(user['carbs_goal'])
 
 
 @app.route('/api/get_user_nutrition_goals', methods=['GET'])
-def get_user_nutrition_goals(id: str):
-    user = _get_user(id)
+def get_user_nutrition_goals():
+    user = _get_user(request.args)
     return jsonify([user['calorie_goal'], user['protein_goal'], user['fats_goal'], user['carbs_goal']])
 
 
 @app.route('/api/get_user_weight_goal', methods=['GET'])
-def get_user_weight_goal(id: str):
-    user = _get_user(id)
+def get_user_weight_goal():
+    user = _get_user(request.args)
     return jsonify(user['weight_goal'])
 
 
 @app.route('/api/get_user_team', methods=['GET'])
-def get_user_team(id: str):
-    user = _get_user(id)
+def get_user_team():
+    user = _get_user(request.args)
     return jsonify(user['team'])
 
 
 @app.route('/api/get_user_year', methods=['GET'])
-def get_user_year(id: str):
-    user = _get_user(id)
+def get_user_year():
+    user = _get_user(request.args)
     return jsonify(user['year'])
 
 
@@ -231,7 +218,11 @@ def _get_user_meal_data(id: str, date: str, meal: str):
 
 
 @app.route('/api/get_user_meal_data', methods=['GET'])
-def get_user_meal_data(id: str, date: str, meal: str):
+def get_user_meal_data():
+    args = request.args
+    id = args['user_id']
+    date = args['date']
+    meal = args['meal']
     return jsonify(_get_user_meal_data(id, date, meal))
 
 
@@ -251,6 +242,9 @@ def _get_user_day_meal_data(id: str, date: str):
 
 @app.route('/api/get_user_day_meal_data', methods=['GET'])
 def get_user_day_meal_data(id: str, date: str):
+    args = request.args
+    id = args['user_id']
+    date = args['date']
     return jsonify(_get_user_day_meal_data(id, date))
 
 
@@ -275,7 +269,11 @@ def _get_user_nutrient_progress(id: str, startdate: str, enddate: str):
 
 
 @app.route('/api/get_user_nutrient_progress', methods=['GET'])
-def get_user_nutrient_progress(id: str, startdate: str, enddate: str):
+def get_user_nutrient_progress():
+    args = request.args
+    id = args['user_id']
+    startdate = args['startdate']
+    enddate = args['enddate']
     return jsonify(_get_user_nutrient_progress(id, startdate, enddate))
 
 
@@ -297,7 +295,6 @@ def _update_data(collection, user_id: str, data: dict):
 def change_nutrition_goals():
 
     args = request.get_json()
-    print(args)
     user_id = args['user_id']
     new_calorie_goal = float(args['new_calorie_goal'])
     new_protein_goal = float(args['new_protein_goal'])
@@ -306,7 +303,6 @@ def change_nutrition_goals():
 
     if new_calorie_goal <= 0 or new_fats_goal <= 0 or new_carbs_goal <= 0 or new_protein_goal <= 0:
         return jsonify(False)
-
     if new_calorie_goal != 4*new_protein_goal + 4*new_carbs_goal + 9*new_fats_goal:
         return jsonify(False)
 
@@ -320,7 +316,11 @@ def change_nutrition_goals():
 
 
 @app.route('/api/change_weight_goal', methods=['POST'])
-def change_weight_goal(user_id: str, new_weight_goal: float):
+def change_weight_goal():
+
+    args = request.get_json()
+    user_id = args['user_id']
+    new_weight_goal = float(args['new_weight_goal'])
 
     users, data = _prep_data_to_update(user_id)
     data['weight_goal'] = new_weight_goal
@@ -329,7 +329,11 @@ def change_weight_goal(user_id: str, new_weight_goal: float):
 
 
 @app.route('/api/change_name', methods=['POST'])
-def change_name(user_id: str, new_name: str):
+def change_name():
+
+    args = request.get_json()
+    user_id = args['user_id']
+    new_name = args['new_name']
 
     users, data = _prep_data_to_update(user_id)
     new_name = new_name.split(' ')
@@ -342,7 +346,11 @@ def change_name(user_id: str, new_name: str):
 
 
 @app.route('/api/change_team', methods=['POST'])
-def change_team(user_id: str, new_team: str):
+def change_team():
+
+    args = request.get_json()
+    user_id = args['user_id']
+    new_team = args['new_team']
 
     users, data = _prep_data_to_update(user_id)
     data['gender'] = new_team
@@ -351,7 +359,11 @@ def change_team(user_id: str, new_team: str):
 
 
 @app.route('/api/change_gender', methods=['POST'])
-def change_gender(user_id: str, new_gender: str):
+def change_gender():
+
+    args = request.get_json()
+    user_id = args['user_id']
+    new_gender = args['new_gender']
 
     if new_gender not in ['M', 'F']:
         return False
@@ -363,7 +375,11 @@ def change_gender(user_id: str, new_gender: str):
 
 
 @app.route('/api/change_year', methods=['POST'])
-def change_year(user_id: str, new_year: float):
+def change_year():
+
+    args = request.get_json()
+    user_id = args['user_id']
+    new_year = int(args['new_year'])
 
     if new_year <= 2018:
         return False
