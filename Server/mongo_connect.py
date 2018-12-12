@@ -277,9 +277,52 @@ def get_user_nutrient_progress(id: str, startdate: str, enddate: str):
     return jsonify(_get_user_nutrient_progress(id, startdate, enddate))
 
 
+def _prep_data_to_update(user_id: str):
+    users = mongo.db.users
+    data = _get_user(user_id)
+    return users, data
+
+
+def _update_data(collection, user_id: str, data: dict):
+    try:
+        collection.update_one({'_id': ObjectId(user_id)}, {"$set": data}, upsert=False)
+        return True
+    except:
+        return False
+    return True
+
+
+@app.route('/api/change_nutrition_goals', methods=['POST'])
+def change_nutrition_goals(user_id: str, new_calorie_goal: float, new_protein_goal: float, new_carbs_goal: float, \
+        new_fats_goal: float):
+
+    if new_calorie_goal != 4*new_protein_goal + 4*new_carbs_goal + 9*new_fats_goal:
+        return False
+
+    users, data = _prep_data_to_update(user_id)
+    data['calorie_goal'] = new_calorie_goal
+    data['protein_goal'] = new_protein_goal
+    data['carbs_goal'] = new_carbs_goal
+    data['fats_goal'] = new_fats_goal
+
+    return _update_data(users, user_id, data)
+
+
+@app.route('/api/change_weight_goal', methods=['POST'])
+def change_weight_goal(user_id: str, new_weight_goal: float):
+
+    users, data = _prep_data_to_update(user_id)
+    data['weight_goal'] = new_weight_goal
+
+    return _update_data(users, user_id, data)
+
+
+
 if __name__ == '__main__':
     # print(_get_user_meal_data("5bf8ca12e7179a56e21592c5", "2018-07-11", "lunch"))
     # print(_get_user_meal_data("5bf8ca12e7179a56e21592c5", "2018-07-11", "breakfast"))
     # print(_get_user_meal_data("5bf8ca12e7179a56e21592c5", "2018-07-13", "breakfast"))
-    print(_get_user_nutrient_progress("5bf8ca12e7179a56e21592c5", "2018-07-11", "2018-07-15"))
+    # print(_get_user_nutrient_progress("5bf8ca12e7179a56e21592c5", "2018-07-11", "2018-07-15"))
+    # print(_get_user('5bf8ca12e7179a56e21592c5'))
+    print(change_goals('5bf8ca12e7179a56e21592c5', 68, 4, 4, 4))
     app.run(debug=True)
