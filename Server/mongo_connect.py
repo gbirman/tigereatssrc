@@ -305,7 +305,7 @@ def get_user_nutrient_progress():
 
 def _prep_data_to_update(user_id: str):
     users = mongo.db.users
-    data = _get_user(user_id)
+    data = mongo.db.users.find({"_id": ObjectId(user_id)})[0]
     return users, data
 
 
