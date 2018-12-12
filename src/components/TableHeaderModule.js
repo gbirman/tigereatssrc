@@ -14,15 +14,14 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 const rows = [
     { id: 'fullname', numeric: false, disablePadding: false, label: 'Name' },
-    { id: 'last_active', numeric: false, disablePadding: true, label: 'Last Active' },
     { id: 'gender', numeric: false, disablePadding: true, label: 'Gender' },
     { id: 'year', numeric: false, disablePadding: true, label: 'Class Year' },
     { id: 'team', numeric: false, disablePadding: true, label: 'Team' },
     { id: 'meals_logged_per_day', numeric: false, disablePadding: true, label: 'Meals Logged / Day'},
     { id: 'calorie_goal', numeric: false, disablePadding: true, label: 'Calories'},
     { id: 'protein_goal', numeric: false, disablePadding: true, label: 'Protein'},
-    { id: 'fats_goal', numeric: false, disablePadding: true, label: 'Fat'},
     { id: 'carbs_goal', numeric: false, disablePadding: true, label: 'Carbs'},
+    { id: 'fats_goal', numeric: false, disablePadding: true, label: 'Fat'},
     { id: 'email', numeric: false, disablePadding: false, label: ''}
   ];
   

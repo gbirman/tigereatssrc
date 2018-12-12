@@ -56,7 +56,6 @@ export default class TableBodyModule extends React.Component {
                                                 {n.fullname}
                                             </NavLink> 
                                         </TableCell>
-                                        <TableCell>{"Placeholder"}</TableCell>
                                         <TableCell>{n.gender}</TableCell>
                                         <TableCell>{n.year}</TableCell>
                                         <TableCell>{n.team}</TableCell>
@@ -64,7 +63,7 @@ export default class TableBodyModule extends React.Component {
                                         <TableCell>
                                             <NavLink
                                                 to={"/changeGoals/" + n._id + "/" + n.fullname + "/" + n.calorie_goal + "/" + n.protein_goal + "/" + n.fats_goal + "/" + n.carbs_goal}
-                                                style={{textDecoration: 'none'}}
+                                                style={{textDecoration: 'none'}} 
                                             >
                                                 {n.calorie_goal}
                                             </NavLink> 
@@ -82,7 +81,7 @@ export default class TableBodyModule extends React.Component {
                                                 to={"/changeGoals/" + n._id + "/" + n.fullname + "/" + n.calorie_goal + "/" + n.protein_goal + "/" + n.fats_goal + "/" + n.carbs_goal}
                                                 style={{textDecoration: 'none'}}
                                             >
-                                                {n.fats_goal}
+                                                {n.carbs_goal}
                                             </NavLink> 
                                         </TableCell>
                                         <TableCell>
@@ -90,7 +89,7 @@ export default class TableBodyModule extends React.Component {
                                                 to={"/changeGoals/" + n._id + "/" + n.fullname + "/" + n.calorie_goal + "/" + n.protein_goal + "/" + n.fats_goal + "/" + n.carbs_goal}
                                                 style={{textDecoration: 'none'}}
                                             >
-                                                {n.carbs_goal}
+                                                {n.fats_goal}
                                             </NavLink> 
                                         </TableCell>
                                         <TableCell>
