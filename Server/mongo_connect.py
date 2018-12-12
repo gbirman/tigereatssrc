@@ -420,6 +420,4 @@ if __name__ == '__main__':
     # print(_get_user_nutrient_progress("5bf8ca12e7179a56e21592c5", "2018-07-11", "2018-07-15"))
     # print(_get_user('5bf8ca12e7179a56e21592c5'))
     # print(change_nutrition_goals('5bf8ca12e7179a56e21592c5', 68, 4, 4, 4))
-    rest = {'year' : 2020, 'team' : ['Soccer']}
-    get_users(rest)
     app.run(debug=True)
