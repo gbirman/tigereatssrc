@@ -267,7 +267,7 @@ def _get_user_day_meal_data(id: str, date: str):
 
 
 @app.route('/api/get_user_day_meal_data', methods=['GET'])
-def get_user_day_meal_data(id: str, date: str):
+def get_user_day_meal_data():
     args = request.args
     id = args['user_id']
     date = args['date']
