@@ -85,7 +85,7 @@ def _get_user(args):
 @app.route('/api/get_all_user_info', methods=['GET'])
 def get_user_email():
     user = _get_user(request.args)
-    user_info = [user['email'], user['firstname'], user['lastname'], user['gender'], user['height']\
+    user_info = [user['email'], user['firstname'], user['lastname'], user['gender'], user['height'], \
                  user['weight'], user['restrictions'], user['calorie_goal'], user['protein_goal'], \
                  user['fats_goal'], user['carbs_goal'], user['weight_goal'], user['year'], user['team']]
     return jsonify(user_info)
