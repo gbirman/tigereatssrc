@@ -31,12 +31,11 @@ export default class DashboardPage extends React.Component {
             });
 
             this.setState({data: data['data']});
-            console.log(data['data']);
         })}
 
     handleFilterRequest = (field, value) => {
         let rest = this.state.restrictions;
-        console.log(this.state.data);
+        
 
         // value is in restrictions, so removes it, and potentially field too
         if (field in rest && rest[field].includes(value)) {
@@ -47,6 +46,7 @@ export default class DashboardPage extends React.Component {
                 delete rest[field];
             }
         }
+        
 
         // value is not in restrictions, so adds it
         else if (field in rest && !rest[field].includes(value)) {
@@ -57,10 +57,13 @@ export default class DashboardPage extends React.Component {
         else {
             rest[field] = [value];
         }
+        console.log(rest);
 
         this.setState({
             restrictions: rest
         });
+
+        this.getUsers();
     } 
 
     render() {
