@@ -49,3 +49,6 @@ chrome-user-data
 *.swp
 *.swo
 *.json
+
+!.gitignore
+!.package.json
