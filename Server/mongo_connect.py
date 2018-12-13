@@ -83,7 +83,7 @@ def _get_user(args):
 
 
 @app.route('/api/get_all_user_info', methods=['GET'])
-def get_user_email():
+def get_user_info():
     user = _get_user(request.args)
     user_info = [user['email'], user['firstname'], user['lastname'], user['gender'], user['height'], \
                  user['weight'], user['restrictions'], user['calorie_goal'], user['protein_goal'], \
