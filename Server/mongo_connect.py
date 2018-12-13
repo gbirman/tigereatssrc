@@ -6,7 +6,8 @@ from datetime import date, timedelta
 from pymongo import MongoClient 
 from urllib.parse import quote_plus
 from pymongo.errors import ConnectionFailure
-import sys 
+import sys
+import json
 from bson import ObjectId
 
 
@@ -43,6 +44,7 @@ def addUser():
 def get_users():
 
     filters = request.args['restrictions']
+    filters = json.loads(filters)
     if 'gender' in filters:
         gender_list = filters['gender']
     else:
@@ -55,17 +57,17 @@ def get_users():
         year_list = filters['year']
     else:
         year_list = None
-    add_user = True
 
     try:
         cursor = mongo.db.users.find()
         users = []
         for user in cursor:
-            if gender_list is not None and user['gender'] not in gender_list:
+            add_user = True
+            if gender_list is not None and user['gender'] in gender_list:
                 add_user = False
-            if team_list is not None and user['team'] not in team_list:
+            if team_list is not None and user['team'] in team_list:
                 add_user = False
-            if year_list is not None and user['year'] not in year_list:
+            if year_list is not None and user['year'] in year_list:
                 add_user = False
             if add_user:
                 users.append(user)
