@@ -89,6 +89,8 @@ export default class ExpansionModule extends React.Component {
             clickedChips: newBools
         }))
 
+        console.log(criteria + " " + option);
+
         this.props.onFilter(criteria, option);
     };
 
