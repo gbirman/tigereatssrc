@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 from flask.json import JSONEncoder
 from flask_pymongo import PyMongo
 from flask_cors import CORS
-from datetime import date, timedelta
+from datetime import datetime, date, timedelta
 from pymongo import MongoClient 
 from urllib.parse import quote_plus
 from pymongo.errors import ConnectionFailure
@@ -199,30 +199,6 @@ def _update_portions(portions: dict, food: str, serving_size: str, num_servings:
 
 def _get_user_meal_data(id: str, date: str, meal: str):
 
-    """
-    data = mongo.db.meal_log.aggregate([
-        # match - "where" conditions
-        {
-            "$match": {
-                "$and": [
-                    {'userId' : ObjectId(id)},
-                    {'meal' : meal},
-                    {'date' : date}
-                ]
-            }
-        },
-        # # join
-        # {
-        #     "$lookup": {
-        #         "from": 'users',
-        #         "localField": 'userId',
-        #         "foreignField": '_id',
-        #         'as': 'user_meals'
-        #     }
-        # }
-    ]).next()
-    """
-
     nutrients = {'calories': 0, 'protein': 0, 'carbs': 0, 'fat': 0}
     portions = {}
 
@@ -313,6 +289,29 @@ def get_user_nutrient_progress():
     id = args['user_id']
     startdate = args['startdate']
     enddate = args['enddate']
+    if startdate == '':
+        startdate = '2018-01-01'
+    if enddate == '':
+        enddate = datetime.today().strftime('%Y-%m-%d')
+
+    return jsonify(_get_user_nutrient_progress(id, startdate, enddate))
+
+
+@app.route('/api/get_user_nutrient_progress_all', methods=['GET'])
+def get_user_nutrient_progress_all():
+    args = request.args
+    id = args['user_id']
+    startdate = mongo.db.meal_log.find({
+        "$and": [
+            {'userId': ObjectId(id)},
+        ]
+    }).sort([('date', 1)]).limit(1)[0]['date']
+    enddate = mongo.db.meal_log.find({
+        "$and": [
+            {'userId': ObjectId(id)},
+        ]
+    }).sort([('date', -1)]).limit(1)[0]['date']
+
     return jsonify(_get_user_nutrient_progress(id, startdate, enddate))
 
 
