@@ -82,6 +82,15 @@ def _get_user(args):
     return mongo.db.users.find({"_id": ObjectId(id)})[0]
 
 
+@app.route('/api/get_all_user_info', methods=['GET'])
+def get_user_email():
+    user = _get_user(request.args)
+    user_info = [user['email'], user['firstname'], user['lastname'], user['gender'], user['height']\
+                 user['weight'], user['restrictions'], user['calorie_goal'], user['protein_goal'], \
+                 user['fats_goal'], user['carbs_goal'], user['weight_goal'], user['year'], user['team']]
+    return jsonify(user_info)
+
+
 @app.route('/api/get_user_email', methods=['GET'])
 def get_user_email():
     user = _get_user(request.args)
