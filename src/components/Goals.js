@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import CalBar from './images/CalBar.png';
-
+import { NavLink } from 'react-router-dom';
 
 export default class Goals extends React.Component {
 
@@ -18,7 +18,7 @@ export default class Goals extends React.Component {
 
             <tr>
                 <td><Button variant="contained" color="primary">Change Goals</Button></td>
-                <td><Button variant="contained" color="primary">See Progress</Button></td>
+                <td><NavLink to="/progress" style={{textDecoration: 'none'}}><Button variant="contained" color="primary">See Progress</Button></NavLink></td>
             </tr>
 
             <tr align = "left">
