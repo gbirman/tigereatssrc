@@ -9,6 +9,7 @@
     "axios": "^0.18.0",
     "lodash": "^4.17.11",
     "material-table": "^1.2.0",
+    "pondjs": "^0.8.9",
     "prop-types": "^15.6.2",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
@@ -16,6 +17,8 @@
     "react-popup": "^0.9.3",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.1",
+    "react-select": "^2.1.2",
+    "react-timeseries-charts": "^0.15.5",
     "typeface-roboto": "0.0.54"
   },
   "scripts": {

@@ -51,3 +51,4 @@ chrome-user-data
 
 !*.gitignore
 !*package.json
+!*yarn.lock
