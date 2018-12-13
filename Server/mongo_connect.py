@@ -51,10 +51,14 @@ def get_users():
         gender_list = None
     if 'team' in filters:
         team_list = filters['team']
+        for team in team_list:
+            team = team.lower()
     else:
         team_list = None
     if 'year' in filters:
         year_list = filters['year']
+        for year in year_list:
+            year = int(year)
     else:
         year_list = None
 
@@ -65,9 +69,9 @@ def get_users():
             add_user = True
             if gender_list is not None and user['gender'] in gender_list:
                 add_user = False
-            if team_list is not None and user['team'] in team_list:
+            if team_list is not None and user['team'].lower() in team_list:
                 add_user = False
-            if year_list is not None and user['year'] in year_list:
+            if year_list is not None and int(user['year']) in year_list:
                 add_user = False
             if add_user:
                 users.append(user)
