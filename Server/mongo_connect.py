@@ -289,10 +289,6 @@ def get_user_nutrient_progress():
     id = args['user_id']
     startdate = args['startdate']
     enddate = args['enddate']
-    if startdate == '':
-        startdate = '2018-01-01'
-    if enddate == '':
-        enddate = datetime.today().strftime('%Y-%m-%d')
 
     return jsonify(_get_user_nutrient_progress(id, startdate, enddate))
 
