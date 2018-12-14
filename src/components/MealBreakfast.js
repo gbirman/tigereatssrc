@@ -3,23 +3,36 @@ import Button from '@material-ui/core/Button';
 
 export default class MealBreakfast extends React.Component {
 
+    // Displays the food and the serving amount for a given meal
+    displayFood = (foodData) => {
+        let output = '';
+        for (let foodType in foodData) {
+            output +=    foodType + " | " + foodData[foodType] + "   .   ";
+        }
+        console.log(output);
+        return output;
+
+    }
+
+
 
     // TODO: New row for every part of food array
     render () {
 
         return (
             <div>
-            <p> Breakfast </p>
+            <p> {this.props.mealName} </p>
             <table>
                 <tr>
-                    <p>Cals: {this.props.cals} | 
-                    Protein: {this.props.protein} | 
-                    Carbs: {this.props.carbs} | 
-                    Fat: {this.props.fat} </p>
+                    <p>Cals: {this.props.mealData[0].calories} | 
+                    Protein: {this.props.mealData[0].protein} | 
+                    Carbs: {this.props.mealData[0].carbs} | 
+                    Fat: {this.props.mealData[0].fat} </p>
                 </tr>
-            <tr>
-            <p>{this.props.food}</p>
-            </tr>
+
+                <tr>
+                <p>{this.displayFood(this.props.mealData[1])}</p>
+                </tr>
 
             </table>
             <Button variant="contained" color="primary">Add Note</Button>
