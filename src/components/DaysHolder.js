@@ -54,12 +54,22 @@ export default class DaysHolder extends React.Component {
         
         return (
             <div>
-            {
-            days.map((day) => 
-            <DayHolder key={day.date} dayInfo={day}/>)    
-            }
-
-           
+            <DayHolder key={this.props.date} 
+            date = {this.props.date}
+            dayInfo={this.props.dayInfo1}
+            /> 
+            <DayHolder key={this.props.date} 
+            date = "2018-08-10"
+            dayInfo={this.props.dayInfo1}
+            />
+            <DayHolder key={this.props.date} 
+            date = "2018-09-10"
+            dayInfo={this.props.dayInfo1}
+            />
+            <DayHolder key={this.props.date} 
+            date = "2018-10-10"
+            dayInfo={this.props.dayInfo1}
+            />
             </div>
 
         );

@@ -17,21 +17,21 @@ export default class StudentDetails extends React.Component {
             <table border = "3" cellSpacing = "60">
                 <td><PersonTile /> </td>
                 <td><Profile 
-                    name="Jamie Mercurio" 
-                    class="2020" 
-                    team="Boi's Basketball" 
+                    name={this.props.fullName}
+                    class={this.props.userInfo[11]} 
+                    team={this.props.userInfo[12]} 
                 /> </td>
                 <td><Traits
-                    height="6'4"
+                    height={this.props.userInfo[4]}
                     age="21"
-                    weight= "145"
-                    goalWeight = "250"
+                    weight= {this.props.userInfo[5]} 
+                    goalWeight = {this.props.userInfo[10]} 
                 /> </td>
                 <td><Goals 
-                    calIntake="1400" calGoal="2000" 
-                    proteinIntake="45" proteinGoal="140"
-                    carbIntake="100" carbGoal="200"
-                    fatIntake="30" fatGoal="100"
+                    calIntake="1400" calGoal={this.props.userInfo[7]} 
+                    proteinIntake="45" proteinGoal={this.props.userInfo[8]} 
+                    carbIntake="100" carbGoal={this.props.userInfo[9]} 
+                    fatIntake="30" fatGoal={this.props.userInfo[10]} 
                 /> </td>
             </table>
             </div>
