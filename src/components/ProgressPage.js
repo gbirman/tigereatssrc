@@ -140,7 +140,7 @@ export default class ProgressPage extends React.Component {
         const min = 0;
         const max = this.state.maxVal;
         const axisType = "linear";
-        const interpolationType = "curveBasis";
+        const interpolationType = "curveLinear";
         const allOptions = this.state.columnNames.map(c => ({ value: c, label: c }));
         const style = styler(this.state.columnNames, this.state.scheme);
         const legendCategories = this.state.columnNames.map(d => ({ key: d, label: d }));
