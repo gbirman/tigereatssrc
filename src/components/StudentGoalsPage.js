@@ -16,6 +16,9 @@ export default class StudentGoalsPage extends React.Component {
 
     // Save student data for a page refresh?
     componentDidMount() {
+        this.getDayInfo(this.props.match.params.id, "2018-07-10"); // get date there
+        this.getUserInfo(this.props.match.params.id); 
+
     }
     componentDidUpdate(prevProps, prevState) {    
     }
@@ -106,13 +109,13 @@ export default class StudentGoalsPage extends React.Component {
 
     render() {
         
-        let user_id = "5bf8ca12e7179a56e21592c5" // Paulo: Yeah so I need this from the previous page. It's currently Ishan
+        console.log("Paulo's UID = " + JSON.stringify(this.props.match.params.id));
+        let user_id = this.props.match.params.id; // Paulo: Yeah so I need this from the previous page. It's currently Ishan
 
         // Old bug: it couldn't find getToday
         //let date = this.getToday(); // Fix and get this from some call to the current date
         let date = "2018-07-10";
-        this.getDayInfo(user_id, date);
-        this.getUserInfo(user_id); 
+
         // console.log("dayNutrients.calories: " + this.state.dayNutrients.calories + "<- are there");
         // console.log("dayInfo[0]  " + this.state.dayInfo[0].calories + "<- are there");
         //console.log("Day info is: " + dayInfo + " That is all "); // debugging 
