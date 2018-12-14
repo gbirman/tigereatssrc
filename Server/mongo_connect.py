@@ -1,14 +1,18 @@
-from flask import Flask, jsonify, request
-from flask.json import JSONEncoder
-from flask_pymongo import PyMongo
-from flask_cors import CORS
-from datetime import datetime, date, timedelta
-from pymongo import MongoClient 
-from urllib.parse import quote_plus
-from pymongo.errors import ConnectionFailure
 import sys
 import json
 from bson import ObjectId
+from datetime import datetime, date, timedelta
+import random
+
+from flask import Flask, jsonify, request
+from flask.json import JSONEncoder
+from flask_pymongo import PyMongo
+from flask_cas import login_required, CAS
+from flask_cors import CORS
+
+from pymongo import MongoClient 
+from urllib.parse import quote_plus
+from pymongo.errors import ConnectionFailure
 
 
 class MyJSONEncoder(JSONEncoder):
@@ -17,14 +21,19 @@ class MyJSONEncoder(JSONEncoder):
             return str(obj)
         return super(MyJSONEncoder, self).default(obj)
 
+
 app = Flask(__name__)
 app.json_encoder = MyJSONEncoder
 app.config['MONGO_DBNAME'] = 'tiger_eats_db'
 app.config['MONGO_URI'] = 'mongodb://pfrazao:y7gnykTXHj8j7EK@ds053380.mlab.com:53380/tiger_eats_db'
 
 mongo = PyMongo(app)
-
 CORS(app)
+
+cas = CAS(app, '/cas')
+app.config['CAS_SERVER'] = 'https://fed.princeton.edu/cas/login'
+app.config['CAS_AFTER_LOGIN'] = 'localhost:3000/dash'
+app.secret_key = 'secret key'
 
 
 @app.route('/api/addUser', methods=['POST'])
@@ -434,4 +443,34 @@ if __name__ == '__main__':
     # print(_get_user_nutrient_progress("5bf8ca12e7179a56e21592c5", "2018-07-11", "2018-07-15"))
     # print(_get_user('5bf8ca12e7179a56e21592c5'))
     # print(change_nutrition_goals('5bf8ca12e7179a56e21592c5', 68, 4, 4, 4))
+
+
+    # couldn't tell you why, but including the below in a private method leads to each entry being
+    # inserted twice. Maybe something with how the app reboots each time you run it?
+    # meal_choices = [
+    #     {"eggs": 3, "bread": 4.5}, {"eggs": 2, "bread": 8}, {"eggs": 7, "bread": 3},
+    #     {"eggs": 2.5, "bread": 5}, {"eggs": 4.5, "bread": 1}, {"eggs": 5.5, "bread": 2}
+    # ]
+    #
+    # startdate = _convert_to_date('2018-07-14')
+    # enddate = _convert_to_date('2018-09-01')
+    # delta = enddate - startdate
+    #
+    # for person in ["5bf8ca12e7179a56e21592c5", "5bf8ca52e7179a56e21592c8", "5c09f2aae7179a6ca08431f1",
+    #                "5c09f2e5e7179a6ca0843224"]:
+    #
+    #     for i in range(delta.days + 1):
+    #         this_date = str(startdate + timedelta(i))
+    #
+    #         for meal in ['breakfast', 'lunch', 'dinner']:
+    #             mongo.db.meal_log.insert(
+    #                 {
+    #                     "userId": ObjectId(person),
+    #                     "date": this_date,
+    #                     "cafeteriaId": "Wu",
+    #                     "meal": meal,
+    #                     "choices": random.choice(meal_choices)
+    #                 }
+    #             )
+
     app.run(debug=True)
