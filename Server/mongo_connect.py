@@ -36,6 +36,39 @@ app.config['CAS_AFTER_LOGIN'] = 'localhost:3000/dash'
 app.secret_key = 'secret key'
 
 
+def _fill_database():
+
+    """
+    KEY INFO: I don't know why, but if you just run this method from main(), each entry is inserted
+    twice, which is a pain in the ass. So just copy paste the below code and run it in main.
+    """
+    meal_choices = [
+        {"eggs": 3, "bread": 4.5}, {"eggs": 2, "bread": 8}, {"eggs": 7, "bread": 3},
+        {"eggs": 2.5, "bread": 5}, {"eggs": 4.5, "bread": 1}, {"eggs": 5.5, "bread": 2}
+    ]
+
+    startdate = _convert_to_date('2018-07-14')
+    enddate = _convert_to_date('2018-09-01')
+    delta = enddate - startdate
+
+    for person in ["5bf8ca12e7179a56e21592c5", "5bf8ca52e7179a56e21592c8", "5c09f2aae7179a6ca08431f1",
+                   "5c09f2e5e7179a6ca0843224"]:
+
+        for i in range(delta.days + 1):
+            this_date = str(startdate + timedelta(i))
+
+            for meal in ['breakfast', 'lunch', 'dinner']:
+                mongo.db.meal_log.insert(
+                    {
+                        "userId": ObjectId(person),
+                        "date": this_date,
+                        "cafeteriaId": "Wu",
+                        "meal": meal,
+                        "choices": random.choice(meal_choices)
+                    }
+                )
+
+
 @app.route('/api/addUser', methods=['POST'])
 def addUser():
     users = mongo.db.users
@@ -444,33 +477,5 @@ if __name__ == '__main__':
     # print(_get_user('5bf8ca12e7179a56e21592c5'))
     # print(change_nutrition_goals('5bf8ca12e7179a56e21592c5', 68, 4, 4, 4))
 
-
-    # couldn't tell you why, but including the below in a private method leads to each entry being
-    # inserted twice. Maybe something with how the app reboots each time you run it?
-    # meal_choices = [
-    #     {"eggs": 3, "bread": 4.5}, {"eggs": 2, "bread": 8}, {"eggs": 7, "bread": 3},
-    #     {"eggs": 2.5, "bread": 5}, {"eggs": 4.5, "bread": 1}, {"eggs": 5.5, "bread": 2}
-    # ]
-    #
-    # startdate = _convert_to_date('2018-07-14')
-    # enddate = _convert_to_date('2018-09-01')
-    # delta = enddate - startdate
-    #
-    # for person in ["5bf8ca12e7179a56e21592c5", "5bf8ca52e7179a56e21592c8", "5c09f2aae7179a6ca08431f1",
-    #                "5c09f2e5e7179a6ca0843224"]:
-    #
-    #     for i in range(delta.days + 1):
-    #         this_date = str(startdate + timedelta(i))
-    #
-    #         for meal in ['breakfast', 'lunch', 'dinner']:
-    #             mongo.db.meal_log.insert(
-    #                 {
-    #                     "userId": ObjectId(person),
-    #                     "date": this_date,
-    #                     "cafeteriaId": "Wu",
-    #                     "meal": meal,
-    #                     "choices": random.choice(meal_choices)
-    #                 }
-    #             )
 
     app.run(debug=True)
