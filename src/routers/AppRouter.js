@@ -30,7 +30,7 @@ export default class AppRouter extends React.Component {
                     <Switch>
                         <Route path="/" render={(props) => <LoginPage {...props} onLogin={this.handleLogin} onLogout={this.handleLogout}/>} exact={true} />
                         <Route path="/dash" exact component={DashboardPage} />
-                        <Route path="/test" component={StudentGoalsPage} exact={true} />
+                        <Route path="/test/:id" component={StudentGoalsPage} exact={true} />
                         <Route path="/changeGoals/:id/:fullname/:calorie_goal/:protein_goal/:fats_goal/:carbs_goal" component={ChangeGoalsPage} />
                         <Route path={"/verified/true"} component={DashboardPage} exact/>
                         <Route path="/progress" component={ProgressPage} />

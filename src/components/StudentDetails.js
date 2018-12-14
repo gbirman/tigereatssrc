@@ -18,8 +18,8 @@ export default class StudentDetails extends React.Component {
                 <td><PersonTile /> </td>
                 <td><Profile 
                     name={this.props.fullName}
-                    class={this.props.userInfo[11]} 
-                    team={this.props.userInfo[12]} 
+                    class={this.props.userInfo[12]} 
+                    team={this.props.userInfo[13]} 
                 /> </td>
                 <td><Traits
                     height={this.props.userInfo[4]}
