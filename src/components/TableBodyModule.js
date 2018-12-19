@@ -50,7 +50,7 @@ export default class TableBodyModule extends React.Component {
                                     >
                                         <TableCell>
                                             <NavLink
-                                                to="/test"
+                                                to={"/test/" + n._id}
                                                 style={{textDecoration: 'none'}}
                                             >
                                                 {n.fullname}

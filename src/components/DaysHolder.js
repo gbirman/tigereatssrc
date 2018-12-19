@@ -60,15 +60,15 @@ export default class DaysHolder extends React.Component {
             /> 
             <DayHolder key={this.props.date} 
             date = "2018-08-10"
-            dayInfo={this.props.dayInfo1}
+            dayInfo={this.props.dayInfo2}
             />
             <DayHolder key={this.props.date} 
             date = "2018-09-10"
-            dayInfo={this.props.dayInfo1}
+            dayInfo={this.props.dayInfo3}
             />
             <DayHolder key={this.props.date} 
             date = "2018-10-10"
-            dayInfo={this.props.dayInfo1}
+            dayInfo={this.props.dayInfo4}
             />
             </div>
 
