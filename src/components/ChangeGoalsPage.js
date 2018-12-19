@@ -16,7 +16,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import ChangeGoalsModuleQuantities from './ChangeGoalsModuleQuantities'
-import ChangeGoalsModulePercentages from './ChangeGoalsModulePercentages'
 
 export default class ChangeGoalsPage extends React.Component {
 
@@ -43,8 +42,7 @@ export default class ChangeGoalsPage extends React.Component {
                 new_calorie_goal: this.state.calGoal,
                 new_protein_goal: this.state.proGoal,
                 new_carbs_goal: this.state.carbsGoal,
-                new_fats_goal: this.state.fatsGoal,
-                input_option: this.state.inputOption
+                new_fats_goal: this.state.fatsGoal
             },
             {
                 headers: {'Content-type': 'application/json'}
@@ -116,7 +114,7 @@ export default class ChangeGoalsPage extends React.Component {
                     </Grid>
                 </Paper>
                 <Paper style={{marginRight: '5%', marginLeft: '5%'}}>
-                    {this.state.inputOption === "op1" && <ChangeGoalsModuleQuantities
+                    <ChangeGoalsModuleQuantities
                         proteinGoal={this.props.match.params.protein_goal}
                         carbsGoal={this.props.match.params.carbs_goal}
                         fatsGoal={this.props.match.params.fats_goal}
@@ -125,17 +123,7 @@ export default class ChangeGoalsPage extends React.Component {
                         onCarbsChange={this.handleCarbsChange}
                         onFatsChange={this.handleFatsChange}
                         onCalChange={this.handleCalChange}
-                    />}
-                    {this.state.inputOption === "op2" && <ChangeGoalsModulePercentages 
-                        proteinGoal={this.props.match.params.protein_goal}
-                        carbsGoal={this.props.match.params.carbs_goal}
-                        fatsGoal={this.props.match.params.fats_goal}
-                        calGoal={this.props.match.params.calorie_goal}
-                        onProChange={this.handleProteinChange}
-                        onCarbsChange={this.handleCarbsChange}
-                        onFatsChange={this.handleFatsChange}
-                        onCalChange={this.handleCalChange}
-                    />}
+                    />
                     <Grid container justify="center" style={{padding: 20}} alignItems="center">
                         <Button variant="contained" color="primary" onClick={() => this.validate()}>Submit Changes!</Button>
                     </Grid>
