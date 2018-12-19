@@ -16,7 +16,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 
-export default class ChangeGoalsModuleQuantities extends React.Component {
+export default class ChangeGoalsPage extends React.Component {
     state = {
         calGoal: this.props.calGoal,
         proGoal: this.props.proteinGoal,
