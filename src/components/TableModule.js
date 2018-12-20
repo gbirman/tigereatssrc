@@ -34,7 +34,6 @@ export default class TableModule extends React.Component {
     };
 
     componentDidMount() {
-        console.log('IJBNIEFNIFENIOEFNIRFNF');
         this.props.getUsers();
     }
 
@@ -42,7 +41,6 @@ export default class TableModule extends React.Component {
     }
 
     componentDidUpdate() {
-        console.log('a');
     }
     
 
