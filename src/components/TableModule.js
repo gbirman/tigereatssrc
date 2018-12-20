@@ -57,7 +57,7 @@ export default class TableModule extends React.Component {
 
     render() {
         return (
-            <Table style={{ width: '100%'}}>
+            <Table style={{ width: '100%', }} >
                 <TableHeaderModule 
                     orderBy={this.state.orderBy} 
                     order={this.state.order}

@@ -13,7 +13,7 @@ const NavHeader = () => (
             </Grid>
             <Grid container xs={12} sm={6} item justify="space-around" alignItems="center">
                 <Grid item>
-                    <NavLink to="/dash" style={{ textDecoration: 'none'}}><Button variant="contained" color="primary">My Students</Button></NavLink>
+                    <NavLink to="/dash" style={{ textDecoration: 'none'}}><Button variant="contained" color="primary">Dashboard</Button></NavLink>
                 </Grid>
                 <Grid item>
                     <NavLink to="/" style={{ textDecoration: 'none'}}><Button variant="contained" color="primary">Logout</Button></NavLink>
