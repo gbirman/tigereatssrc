@@ -21,7 +21,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 export default class DashboardPage extends React.Component {
 
     state = {
-        restrictions: {},
+        restrictions: {name: ""},
         data: []
     };
 
@@ -42,9 +42,20 @@ export default class DashboardPage extends React.Component {
                 const full_name = n.firstname + " " + n.lastname;
                 n['fullname'] = full_name;
             });
+            console.log('users updated');
 
             this.setState({data: data['data']});
         })}
+
+    handleSearchChange = (e) => {
+        let rest = this.state.restrictions;
+
+        rest['name'] = e.target.value;
+
+        this.setState({restrictions: rest});
+
+        this.getUsers();
+    }
 
     handleFilterRequest = (field, value) => {
         let rest = this.state.restrictions;
@@ -89,7 +100,7 @@ export default class DashboardPage extends React.Component {
                     <Toolbar>
                         <Grid container item justify="flex-end" alignItems="flex-end">
                             <Grid item><AccountCircle /></Grid>
-                            <Grid item><TextField id="input-with-icon-grid" label="Search for students..." /></Grid>
+                            <Grid item><TextField id="input-with-icon-grid" label="Search for students..." onKeyUp={this.handleSearchChange}/></Grid>
                         </Grid>
                     </Toolbar>
                     <TableModule 
