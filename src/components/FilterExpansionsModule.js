@@ -8,7 +8,7 @@ export default class FilterExpansionModule extends React.Component {
         return (
             <div>
                 <Grid container item >
-                    <Grid container item xs={12} sm={4} justify="center">
+                    <Grid container item xs={12} sm={4} justify="center" alignItems="center">
                         <h2>Filter on:</h2>
                     </Grid>
                     <Grid container xs={12} sm={8} item justify="space-around">
