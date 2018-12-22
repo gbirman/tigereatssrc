@@ -2,9 +2,10 @@ import sys
 import json
 from bson import ObjectId
 from datetime import datetime, date, timedelta
+from os import environ
 import random
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, redirect, session
 from flask.json import JSONEncoder
 from flask_pymongo import PyMongo
 from flask_cas import login_required, CAS
@@ -30,10 +31,18 @@ app.config['MONGO_URI'] = 'mongodb://pfrazao:y7gnykTXHj8j7EK@ds053380.mlab.com:5
 mongo = PyMongo(app)
 CORS(app)
 
-cas = CAS(app, '/cas')
-app.config['CAS_SERVER'] = 'https://fed.princeton.edu/cas/login'
-app.config['CAS_AFTER_LOGIN'] = 'localhost:3000/dash'
-app.secret_key = 'secret key'
+cas = CAS()
+cas.init_app(app)
+app.config['CAS_SERVER'] = 'https://fed.princeton.edu/cas/'
+app.secret_key = 'resttserase'
+app.config['CAS_AFTER_LOGIN'] = 'cas_redirect'
+
+
+@app.route('/cas_redirect', methods=['GET'])
+@login_required
+def cas_redirect():
+    uriRoot = environ.get('URIROOT', 'http://localhost:3000')
+    return redirect(uriRoot + '/dash', code=302)
 
 
 def _fill_database():
@@ -70,6 +79,7 @@ def _fill_database():
 
 
 @app.route('/api/getUsers', methods=['GET'])
+@login_required
 def get_users():
 
     filters = request.args['restrictions']
