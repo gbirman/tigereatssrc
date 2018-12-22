@@ -8,11 +8,32 @@ import DoneIcon from '@material-ui/icons/Done';
 import CloseIcon from '@material-ui/icons/Close';
 import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 
 // ON QUERY, SEND BACK LIST OF PARAMS FOR EACH FIELD THAT CAN BE INCLUDED, AS OPPOSED THAT CANT BE
 
+const styles = theme => ({
+    chip: {
+        fontFamily: 'Karla, sans-serif',
+        backgroundColor: '#59bf8e',
+        color: 'white',
+        border: 'solid', //#d9f495
+        borderColor: '#d9f495',
+        '&:hover': {
+            background: "#3e8563"
+        }
+    },
+    panel: {
+        border: 'solid',
+        borderColor: '#59bf8e',
+        color: '#59bf8e',
+        fontFamily: 'Karla, sans-serif'
+    }
 
-export default class ExpansionModule extends React.Component {
+})
+
+export default withStyles(styles)(class ExpansionModule extends React.Component {
     state = {
         options: [],
         queryParams: [],
@@ -95,9 +116,10 @@ export default class ExpansionModule extends React.Component {
     };
 
     render() {
+        const {classes} = this.props;
 
         return (
-            <ExpansionPanel>
+            <ExpansionPanel className={classes.panel} style={{borderRadius: '5px'}}>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                     {this.state.label}
                 </ExpansionPanelSummary>
@@ -107,7 +129,7 @@ export default class ExpansionModule extends React.Component {
                             this.state.options.map((option) => {
                                 const index = this.state.options.indexOf(option);
                                 const clicked = this.state.clickedChips[index];
-                                 return <Chip label={option} criteria={this.props.criteria} icon={clicked ? <DoneIcon /> : <CloseIcon />} clickable
+                                 return <Chip className={classes.chip} label={option} color="primary" criteria={this.props.criteria} icon={clicked ? <DoneIcon /> : <CloseIcon />} clickable
                                             onClick={(e) => {this.handleChipClick(option, this.props.criteria)}} />;
                         })
                         }
@@ -116,4 +138,4 @@ export default class ExpansionModule extends React.Component {
             </ExpansionPanel>  
         );
     }
-}
+})

@@ -16,7 +16,7 @@ const styles = theme => ({
         fontFamily: 'Karla, sans-serif',
         color: 'white',
         border: 'solid',
-        borderColor: '#7acba4'
+        borderColor: '#d9f495'
     },
     icon: {
         height: '180px', // responsive height is 30vh, 180px
@@ -29,7 +29,7 @@ const styles = theme => ({
         borderStyle: 'solid',
         backgroundColor: "#59bf8e",
         color: "white",
-        borderColor: '#7acba4',
+        borderColor: '#d9f495',
         paddingRight: '5vw',
         paddingLeft: '5vw',
         textAlign: 'center',
