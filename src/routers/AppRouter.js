@@ -47,7 +47,7 @@ console.log(theme);
 export default class AppRouter extends React.Component {
 
     state = {
-        renderHeader: false,
+        renderHeader: true,
     }
 
     handleLogin = (e) => {

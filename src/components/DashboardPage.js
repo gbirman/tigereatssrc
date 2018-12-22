@@ -10,14 +10,6 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
-
-
-
-
-
-
-
-
 export default class DashboardPage extends React.Component {
 
     state = {
