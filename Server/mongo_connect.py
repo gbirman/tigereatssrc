@@ -98,7 +98,7 @@ def get_users():
     else:
         year_list = None
     if 'name' in filters:
-        name = filters['name']
+        name = filters['name'].lower()
     else:
         name = ''
 
@@ -113,7 +113,7 @@ def get_users():
                 add_user = False
             if year_list is not None and int(user['year']) in year_list:
                 add_user = False
-            if (name not in user['firstname']) and (name not in user['lastname']):
+            if (name not in user['firstname'].lower()) and (name not in user['lastname'].lower()):
                 add_user = False
             if add_user:
                 users.append(user)
