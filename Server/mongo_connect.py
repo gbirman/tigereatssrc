@@ -69,19 +69,6 @@ def _fill_database():
                 )
 
 
-@app.route('/api/addUser', methods=['POST'])
-def addUser():
-    users = mongo.db.users
-    user = request.get_json()['user']
-
-    user_id = users.insert({'name': user})
-    new_user = users.find_one({'_id': user_id})
-
-    result = {'user': new_user['name']}
-
-    return jsonify({'result': result})
-
-
 @app.route('/api/getUsers', methods=['GET'])
 def get_users():
 
@@ -101,6 +88,10 @@ def get_users():
         year_list[:] = [int(x) for x in year_list]
     else:
         year_list = None
+    if 'name' in filters:
+        name = filters['name']
+    else:
+        name = ''
 
     try:
         cursor = mongo.db.users.find()
@@ -112,6 +103,8 @@ def get_users():
             if team_list is not None and user['team'].lower() in team_list:
                 add_user = False
             if year_list is not None and int(user['year']) in year_list:
+                add_user = False
+            if (name not in user['firstname']) and (name not in user['lastname']):
                 add_user = False
             if add_user:
                 users.append(user)
