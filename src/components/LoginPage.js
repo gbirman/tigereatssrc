@@ -19,7 +19,7 @@ const styles = theme => ({
         borderColor: '#7acba4'
     },
     icon: {
-        height: '30vh',
+        height: '180px', // responsive height is 30vh, 180px
         marginTop: '15vh',
         marginBottom: '5vh'
     },
@@ -33,7 +33,7 @@ const styles = theme => ({
         paddingRight: '5vw',
         paddingLeft: '5vw',
         textAlign: 'center',
-        marginBottom: '5vh'
+        marginBottom: '5vh',
     }
 
 })
