@@ -79,7 +79,6 @@ def _fill_database():
 
 
 @app.route('/api/getUsers', methods=['GET'])
-@login_required
 def get_users():
 
     filters = request.args['restrictions']
