@@ -7,10 +7,40 @@ import Button from '@material-ui/core/Button';
 import { Grid } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import logo from '../images/tiger_eats_graphic.png'
+
+const styles = theme => ({
+    loginButton: {
+        fontFamily: 'Karla, sans-serif',
+        color: 'white',
+        border: 'solid',
+        borderColor: '#7acba4'
+    },
+    icon: {
+        height: '30vh',
+        marginTop: '15vh',
+        marginBottom: '5vh'
+    },
+    welcomePaper: {
+        fontFamily: 'Karla, sans-serif',
+        width: '30vw',
+        borderStyle: 'solid',
+        backgroundColor: "#59bf8e",
+        color: "white",
+        borderColor: '#7acba4',
+        paddingRight: '5vw',
+        paddingLeft: '5vw',
+        textAlign: 'center',
+        marginBottom: '5vh'
+    }
+
+})
 
 
 
-export default class LoginPage extends React.Component {
+export default withStyles(styles)(class LoginPage extends React.Component {
 
     state = {
         email: undefined,
@@ -24,10 +54,11 @@ export default class LoginPage extends React.Component {
 
     handlePasswordChange = (e) => {
         this.setState({password: e.target.value});
-        console.log(e.target.value);
+        console.log(this.props.theme);
     }
 
     render() {
+        const {classes} = this.props;
         return (
             <div>
                 <Grid
@@ -36,25 +67,16 @@ export default class LoginPage extends React.Component {
                     direction="column"
                     alignItems="center"
                     justify="center"
-                    style={{minHeight: '100vh'}}
                 >
-                    <Paper style={{marginRight: '10%', marginLeft: '10%', marginBottom: '2%', paddingRight: 10, paddingLeft: 10}}>
-                        <h1>Welcome to TigerEats!</h1>
-                    </Paper>
-                    <Paper style={{padding:20, marginBottom: '2%'}}>
-                        <h3>Please enter your Princeton email and password:</h3>
-                        <Grid item style={{marginBottom: '2%'}}>
-                            <TextField fullWidth={true} label="Email" onKeyUp={this.handleEmailChange} placeholder='i.e. pfrazao@princeton.edu'></TextField>
-                        </Grid>
-                        <Grid item style={{marginBottom: '2%'}}>
-                            <TextField label="Password" type="password" onKeyUp={this.handlePasswordChange} fullWidth={true}></TextField>
-                        </Grid>
+                    <img className={classes.icon} src={logo} />
+                    <Paper color="primary" className={classes.welcomePaper}>
+                        <div><h1>Welcome to <span style={{padding: 0, margin: 0, color: "#d9f495"}}>Tiger</span>Eats!</h1></div>
                     </Paper>
                     <Grid item xs={3} >
-                        <NavLink to="/dash" justify="center"  style={{ textDecoration: 'none'}}><Button variant="contained" color="primary" onClick={() => {this.props.onLogin(); alert("You've been logged in!")}}>Login</Button></NavLink>
+                        <NavLink to="/dash" justify="center"  style={{ textDecoration: 'none'}}><Button className={classes.loginButton} variant="contained" color="primary" onClick={() => {this.props.onLogin(); alert("You've been logged in!")}}>Login with CAS</Button></NavLink>
                     </Grid>
                 </Grid>
             </div>
         )
     }
-}
+})
