@@ -22,7 +22,7 @@ const styles = theme => ({
         color: 'white',
         border: 'solid',
         borderStyle: 'solid',
-        borderColor: '#7acba4',
+        borderColor: '#d9f495',
     }
 })
 

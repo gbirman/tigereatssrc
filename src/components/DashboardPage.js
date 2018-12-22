@@ -88,7 +88,7 @@ export default class DashboardPage extends React.Component {
                 <FilterExpansionsModule 
                     onFilter={this.handleFilterRequest}
                 />
-                <Paper style={{overflowX: 'auto'}}>
+                <Paper style={{overflowX: 'auto', marginTop: '5vh'}}>
                     <Toolbar>
                         <Grid container item justify="flex-end" alignItems="flex-end">
                             <Grid item><AccountCircle /></Grid>
