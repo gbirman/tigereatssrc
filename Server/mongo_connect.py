@@ -15,6 +15,8 @@ from pymongo import MongoClient
 from urllib.parse import quote_plus
 from pymongo.errors import ConnectionFailure
 
+import time
+
 
 class MyJSONEncoder(JSONEncoder):
     def default(self, obj):
@@ -336,6 +338,10 @@ def get_user_nutrient_progress():
 
     return jsonify(_get_user_nutrient_progress(id, startdate, enddate))
 
+
+@app.route('/api/get_user_nutrient_progress_all_dummy', methods=['GET'])
+def get_user_nutrient_progress_all_dummy():
+    return open('dummy-data.txt', 'r').read()
 
 @app.route('/api/get_user_nutrient_progress_all', methods=['GET'])
 def get_user_nutrient_progress_all():

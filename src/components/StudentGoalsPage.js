@@ -185,7 +185,6 @@ export default class StudentGoalsPage extends React.Component {
 
         // TODO: dayInfoArray = {this.state.dayInfoArray}
 
-
         return (
            <div>
 
@@ -193,6 +192,7 @@ export default class StudentGoalsPage extends React.Component {
             <tbody>
                 <tr>
                     <StudentDetails
+                    user_id = {user_id}
                     userInfo = {this.state.userInfo}
                     fullName = {fullName}
                     />

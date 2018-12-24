@@ -24,10 +24,10 @@ export default class MealBreakfast extends React.Component {
             <p> {this.props.mealName} </p>
             <table>
                 <tr>
-                    <p>Cals: {this.props.mealData[0].calories} | 
+                    Cals: {this.props.mealData[0].calories} | 
                     Protein: {this.props.mealData[0].protein} | 
                     Carbs: {this.props.mealData[0].carbs} | 
-                    Fat: {this.props.mealData[0].fat} </p>
+                    Fat: {this.props.mealData[0].fat} 
                 </tr>
 
                 <tr>

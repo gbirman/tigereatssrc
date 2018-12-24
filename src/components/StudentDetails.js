@@ -10,6 +10,8 @@ export default class StudentDetails extends React.Component {
     //   <PersonTile />
     render () {
 
+        console.log(this.props);
+
         // May not need td - they say I need div
         // TODO: Get actual Props from somewhere, including the image for PersonTile
         return (
@@ -28,6 +30,7 @@ export default class StudentDetails extends React.Component {
                     goalWeight = {this.props.userInfo[10]} 
                 /> </td>
                 <td><Goals 
+                    user_id = {this.props.user_id}
                     calIntake="1400" calGoal={this.props.userInfo[7]} 
                     proteinIntake="45" proteinGoal={this.props.userInfo[8]} 
                     carbIntake="100" carbGoal={this.props.userInfo[9]} 
