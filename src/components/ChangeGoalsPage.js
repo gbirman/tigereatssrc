@@ -9,6 +9,14 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import SimpleModal from './SimpleModal';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+import ChangeGoalsModuleQuantities from './ChangeGoalsModuleQuantities'
+import ChangeGoalsModulePercentages from './ChangeGoalsModulePercentages'
 
 export default class ChangeGoalsPage extends React.Component {
 
@@ -20,7 +28,7 @@ export default class ChangeGoalsPage extends React.Component {
         carbsGoal: this.props.match.params.carbs_goal,
         id: this.props.match.params.id,
         verified: false,
-        showError: false
+        inputOption: "op1"
     };
 
     validate = () => {
@@ -35,7 +43,8 @@ export default class ChangeGoalsPage extends React.Component {
                 new_calorie_goal: this.state.calGoal,
                 new_protein_goal: this.state.proGoal,
                 new_carbs_goal: this.state.carbsGoal,
-                new_fats_goal: this.state.fatsGoal
+                new_fats_goal: this.state.fatsGoal,
+                input_option: this.state.inputOption
             },
             {
                 headers: {'Content-type': 'application/json'}
@@ -56,21 +65,24 @@ export default class ChangeGoalsPage extends React.Component {
         })        
     }
 
-    handleCalChange = (e) => {
-        this.setState({calGoal: e.target.value});
-        console.log(e.target.value);
+    handleProteinChange = (quantity) => {
+        this.setState({proGoal: quantity});
     }
 
-    handleProChange = (e) => {
-        this.setState({proGoal: e.target.value});
+    handleFatsChange = (quantity) => {
+        this.setState({fatsGoal: quantity});
     }
 
-    handleFatsChange = (e) => {
-        this.setState({fatsGoal: e.target.value});
+    handleCarbsChange = (quantity) => {
+        this.setState({carbsGoal: quantity});
     }
 
-    handleCarbsChange = (e) => {
-        this.setState({carbsGoal: e.target.value});
+    handleCalChange = (quantity) => {
+        this.setState({calGoal: quantity});
+    }
+
+    handleFormChange = (e) => {
+        this.setState({inputOption: e.target.value})
     }
 
     render() {
@@ -87,37 +99,43 @@ export default class ChangeGoalsPage extends React.Component {
                         <p align="center">Totals must follow the following equality: <br />Calories = 4 * Protein + 4 * Carbs + 9 * Fat</p>
                     </Grid>
                 </Paper>
+                <Paper style={{marginRight: '30%', marginLeft: '30%', marginTop: '2%', marginBottom: '2%', paddingTop: '1%'}}>
+                    <Grid container justify="center">
+                        <FormControl component="fieldset">
+                            <Grid item style={{textAlign: "center"}}>
+                                <FormLabel component="legend">Please select one of the following options for input:</FormLabel>
+                            </Grid>
+                            <RadioGroup
+                                value={this.state.inputOption}
+                                onChange={this.handleFormChange}
+                            >
+                                <FormControlLabel value="op1" control={<Radio />} label="Input daily protein, carbohydrate, and fat goals" />
+                                <FormControlLabel value="op2" control={<Radio />} label="Input daily caloric goal and macronutrient breakdown" />
+                            </RadioGroup>
+                        </FormControl>
+                    </Grid>
+                </Paper>
                 <Paper style={{marginRight: '5%', marginLeft: '5%'}}>
-                    <Grid container justify="center" alignItems="center">
-                        <h2>Current Goals:</h2>
-                    </Grid>
-                    <Grid container justify="center" alignItems="center">
-                        <Grid item style={{textAlign: "center"}} xs={3}><u>Calories / Day</u></Grid>
-                        <Grid item style={{textAlign: "center"}} xs={3}><u>Protein / Day</u></Grid>
-                        <Grid item style={{textAlign: "center"}} xs={3}><u>Carbs / Day</u></Grid>
-                        <Grid item style={{textAlign: "center"}} xs={3}><u>Fats / Day</u></Grid>
-                    </Grid>
-                    <Grid container justify="center" alignItems="center">
-                        <Grid item style={{textAlign: "center"}} xs={3}>{this.props.match.params.calorie_goal}</Grid>
-                        <Grid item style={{textAlign: "center"}} xs={3}>{this.props.match.params.protein_goal}</Grid>
-                        <Grid item style={{textAlign: "center"}} xs={3}>{this.props.match.params.carbs_goal}</Grid>
-                        <Grid item style={{textAlign: "center"}} xs={3}>{this.props.match.params.fats_goal}</Grid>
-                    </Grid>
-                    <Grid container justify="center" alignItems="center">
-                        <h2>New Goals:</h2>
-                    </Grid>
-                    <Grid container justify="space-around" alignItems="center">
-                        <Grid item style={{textAlign: "center"}} xs={3}><u>Calories / Day</u></Grid>
-                        <Grid item style={{textAlign: "center"}} xs={3}><u>Protein / Day</u></Grid>
-                        <Grid item style={{textAlign: "center"}} xs={3}><u>Carbs / Day</u></Grid>
-                        <Grid item style={{textAlign: "center"}} xs={3}><u>Fats / Day</u></Grid>
-                    </Grid>
-                    <Grid container justify="center" alignItems="center" style={{padding: 20}}>
-                        <Grid item style={{textAlign: "center"}} xs={3}><Input placeholder={this.props.match.params.calorie_goal} onKeyUp={this.handleCalChange}/></Grid>
-                        <Grid item style={{textAlign: "center"}} xs={3}><Input placeholder={this.props.match.params.protein_goal} onKeyUp={this.handleProChange}/></Grid>
-                        <Grid item style={{textAlign: "center"}} xs={3}><Input placeholder={this.props.match.params.carbs_goal} onKeyUp={this.handleCarbsChange}/></Grid>
-                        <Grid item style={{textAlign: "center"}} xs={3}><Input placeholder={this.props.match.params.fats_goal} onKeyUp={this.handleFatsChange}/></Grid>
-                    </Grid>
+                    {this.state.inputOption === "op1" && <ChangeGoalsModuleQuantities
+                        proteinGoal={this.props.match.params.protein_goal}
+                        carbsGoal={this.props.match.params.carbs_goal}
+                        fatsGoal={this.props.match.params.fats_goal}
+                        calGoal={this.props.match.params.calorie_goal}
+                        onProChange={this.handleProteinChange}
+                        onCarbsChange={this.handleCarbsChange}
+                        onFatsChange={this.handleFatsChange}
+                        onCalChange={this.handleCalChange}
+                    />}
+                    {this.state.inputOption === "op2" && <ChangeGoalsModulePercentages 
+                        proteinGoal={this.props.match.params.protein_goal}
+                        carbsGoal={this.props.match.params.carbs_goal}
+                        fatsGoal={this.props.match.params.fats_goal}
+                        calGoal={this.props.match.params.calorie_goal}
+                        onProChange={this.handleProteinChange}
+                        onCarbsChange={this.handleCarbsChange}
+                        onFatsChange={this.handleFatsChange}
+                        onCalChange={this.handleCalChange}
+                    />}
                     <Grid container justify="center" style={{padding: 20}} alignItems="center">
                         <Button variant="contained" color="primary" onClick={() => this.validate()}>Submit Changes!</Button>
                     </Grid>

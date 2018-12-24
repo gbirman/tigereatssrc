@@ -36,7 +36,7 @@ export default class TableBodyModule extends React.Component {
 
     render () {
         return (
-            <TableBody>
+            <TableBody >
                 { 
                     stableSort(this.props.data, getSorting(this.props.order, this.props.orderBy))
                         .map(n => {

@@ -2,13 +2,18 @@ import React from 'react';
 import FilterExpansionsModule from './FilterExpansionsModule';
 import TableModule from './TableModule';
 import axios from 'axios';
-
-
+import Paper from '@material-ui/core/Paper';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 
 export default class DashboardPage extends React.Component {
 
     state = {
-        restrictions: {},
+        restrictions: {name: ""},
         data: []
     };
 
@@ -29,9 +34,20 @@ export default class DashboardPage extends React.Component {
                 const full_name = n.firstname + " " + n.lastname;
                 n['fullname'] = full_name;
             });
+            console.log('users updated');
 
             this.setState({data: data['data']});
         })}
+
+    handleSearchChange = (e) => {
+        let rest = this.state.restrictions;
+
+        rest['name'] = e.target.value;
+
+        this.setState({restrictions: rest});
+
+        this.getUsers();
+    }
 
     handleFilterRequest = (field, value) => {
         let rest = this.state.restrictions;
@@ -72,11 +88,19 @@ export default class DashboardPage extends React.Component {
                 <FilterExpansionsModule 
                     onFilter={this.handleFilterRequest}
                 />
-                <TableModule 
-                    restrictions={this.state.restrictions}
-                    getUsers={this.getUsers}
-                    data={this.state.data}
-                />
+                <Paper style={{overflowX: 'auto', marginTop: '5vh'}}>
+                    <Toolbar>
+                        <Grid container item justify="flex-end" alignItems="flex-end">
+                            <Grid item><AccountCircle /></Grid>
+                            <Grid item><TextField id="input-with-icon-grid" label="Search for students..." onKeyUp={this.handleSearchChange}/></Grid>
+                        </Grid>
+                    </Toolbar>
+                    <TableModule 
+                        restrictions={this.state.restrictions}
+                        getUsers={this.getUsers}
+                        data={this.state.data}
+                    />
+                </Paper>
             </div>
         );
     }

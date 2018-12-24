@@ -33,7 +33,7 @@ export default class TableHeaderMoudle extends React.Component {
     render() {
         return (
             <TableHead>
-                <TableRow>
+                <TableRow >
 
                     {rows.map((row) => {
                         return (
