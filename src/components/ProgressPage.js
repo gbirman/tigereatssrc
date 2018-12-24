@@ -1,4 +1,6 @@
 
+//import 'bootstrap/dist/css/bootstrap.min.css';
+
 import React from 'react';
 import _ from "underscore";
 import Select from "react-select";
@@ -38,47 +40,42 @@ export default class ProgressPage extends React.Component {
       
     // when options are changed
     handleChange = (selectedOption) => {
-        this.setState({ selectedOption });
+
+        this.setState(() => ({ selectedOption }));
+
         // builds array of column names from selected options 
-
-        console.log(selectedOption)
-
         const validColumns = []
         const validMax = [] 
-        for (const [key, value] of Object.entries(selectedOption)) {
+        for (const [key, _] of Object.entries(selectedOption)) {
             const name = selectedOption[key]['label']
             validColumns.push(name)
             validMax.push(this.state.maxVals[name])
         }
         let maxVal = 0
-        if (validMax.length == 0) maxVal = this.state.maxVal;
+        if (validMax.length === 0) maxVal = this.state.maxVal;
         else maxVal = validMax.reduce((a, b) => a + b, 0); // get the sum
         console.log(maxVal)
 
-        let a = Object.entries(selectedOption)
-        .map( ([key]) => selectedOption[key]['label'] );
-        this.setState({cols: { up: a, down: [] }, maxVal: maxVal})
+        let a = Object.entries(selectedOption).map( ([key]) => selectedOption[key]['label'] );
+        this.setState(() => ({cols: { up: a, down: [] }, maxVal: maxVal}));
     }
 
     // Save student data for a page refresh?
     componentDidMount() {
 
-        console.log('got here')
-
         axios.get(
-            'http://127.0.0.1:5000/api/get_user_nutrient_progress_all',
+            'http://127.0.0.1:5000/api/get_user_nutrient_progress_all_dummy',
             {
                 params: {
-                user_id: "5bf8ca12e7179a56e21592c5"
+                user_id: `${this.props.match.params.id}`
             }},
             {
                 headers: {'Content-type': 'application/json'}
             }
         ).then((data) => {
+
             let details = data['data'];
             
-            console.log(details)
-
             // get column names via initial ordering of nutrients 
             let nutrient_dict = Object.entries(details)[0][1] // nutrient dictionary of first datapoint
             const columnNames = []; // nutrient types 
@@ -120,11 +117,10 @@ export default class ProgressPage extends React.Component {
             console.log(maxVals)
 
             // set state and render using callback function 
-            this.setState({series: series, columnNames: columnNames, 
+            this.setState(() => ({series: series, columnNames: columnNames, 
                 cols: { up: columnNames, down: [] }, 
                 selectedOption: columnNames.map(c => ({ value: c, label: c })),
-                maxVals: maxVals, maxVal: maxVal, waitingForData: false}, 
-                this.render); 
+                maxVals: maxVals, maxVal: maxVal, waitingForData: false}));
 
         })
 
@@ -135,7 +131,7 @@ export default class ProgressPage extends React.Component {
 
     render() {
 
-        if (this.state.waitingForData) return null;
+        if (this.state.waitingForData) return null; 
 
         const min = 0;
         const max = this.state.maxVal;
@@ -168,7 +164,7 @@ export default class ProgressPage extends React.Component {
                         <Resizable>
                             <ChartContainer
                                 timeRange={this.state.series.range()}
-                                onBackgroundClick={() => this.setState({ selection: null })}
+                                onBackgroundClick={() => this.setState(() => ({ selection: null }))}
                             >
                                 <ChartRow height="350">
                                     <YAxis
@@ -188,11 +184,11 @@ export default class ProgressPage extends React.Component {
                                             interpolation={interpolationType}
                                             highlight={this.state.highlight}
                                             onHighlightChange={highlight =>
-                                                this.setState({ highlight })
+                                                this.setState(() => ({ highlight }))
                                             }
                                             selection={this.state.selection}
                                             onSelectionChange={selection =>
-                                                this.setState({ selection })
+                                                this.setState(() => ({ selection }))
                                             }
                                             stack={true}
                                         />
