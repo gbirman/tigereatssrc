@@ -39,7 +39,7 @@ app.config['CAS_AFTER_LOGIN'] = 'cas_redirect'
 
 
 @app.route('/cas_redirect', methods=['GET'])
-@login_required
+# @login_required
 def cas_redirect():
     uriRoot = environ.get('URIROOT', 'http://localhost:3000')
     return redirect(uriRoot + '/dash', code=302)
@@ -282,7 +282,8 @@ def get_user_meal_data():
     id = args['user_id']
     date = args['date']
     meal = args['meal']
-    return jsonify(_get_user_meal_data(id, date, meal))
+    nutrients, portions = _get_user_meal_data(id, date, meal)
+    return jsonify([nutrients, portions])
 
 
 def _update_total_nutrients(nutrients, breakfast, lunch, dinner):
@@ -296,6 +297,7 @@ def _get_user_day_meal_data(id: str, date: str):
     lunch = _get_user_meal_data(id, date, "lunch")
     dinner = _get_user_meal_data(id, date, "dinner")
     _update_total_nutrients(nutrients, breakfast, lunch, dinner)
+
     return [nutrients, breakfast, lunch, dinner]
 
 
@@ -314,6 +316,13 @@ def _convert_to_date(mydate: str):
     return date(*date_list)
 
 
+def _convert_no_meals_logged(nutrients: dict):
+    if nutrients['calories'] == 0:
+        return {'calories': None, 'protein': None, 'carbs': None, 'fat': None}
+    else:
+        return nutrients
+
+
 def _get_user_nutrient_progress(id: str, startdate: str, enddate: str):
     startdate = _convert_to_date(startdate)
     enddate = _convert_to_date(enddate)
@@ -322,7 +331,7 @@ def _get_user_nutrient_progress(id: str, startdate: str, enddate: str):
     date_to_nutrition = {}
     for i in range(delta.days + 1):
         this_date = str(startdate + timedelta(i))
-        date_to_nutrition[this_date] = _get_user_day_meal_data(id, this_date)[0]
+        date_to_nutrition[this_date] =_convert_no_meals_logged(_get_user_day_meal_data(id, this_date)[0])
 
     return date_to_nutrition
 
@@ -478,6 +487,7 @@ if __name__ == '__main__':
     # print(_get_user_nutrient_progress("5bf8ca12e7179a56e21592c5", "2018-07-11", "2018-07-15"))
     # print(_get_user('5bf8ca12e7179a56e21592c5'))
     # print(change_nutrition_goals('5bf8ca12e7179a56e21592c5', 68, 4, 4, 4))
+    print(_get_user_nutrient_progress('5bf8ca12e7179a56e21592c5', '2018-11-01', '2019-01-02'))
 
 
     app.run(debug=True)
