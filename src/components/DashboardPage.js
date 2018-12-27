@@ -19,7 +19,7 @@ export default class DashboardPage extends React.Component {
 
     getUsers = () => {
         axios.get(
-            'http://127.0.0.1:5000/api/getUsers',
+            '/api/getUsers',
             {
                 params: {
                     restrictions: this.state.restrictions,

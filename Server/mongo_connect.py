@@ -489,5 +489,6 @@ if __name__ == '__main__':
     # print(change_nutrition_goals('5bf8ca12e7179a56e21592c5', 68, 4, 4, 4))
     print(_get_user_nutrient_progress('5bf8ca12e7179a56e21592c5', '2018-11-01', '2019-01-02'))
 
+    # port = int(os.environ.get('PORT', 5000)) # Needed for heroku
 
-    app.run(debug=True)
+    app.run(debug=True) #, port=port) # Needed for heroku
