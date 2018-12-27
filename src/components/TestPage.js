@@ -5,7 +5,7 @@ import axios from 'axios';
 export default class TestPage extends React.Component {
     handleClick = (e) => {
         axios.get(
-            'api/get_user_email',
+            '/api/get_user_email',
             {
                 params: {
                 user_id: "5bf8ca12e7179a56e21592c5"

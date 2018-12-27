@@ -48,7 +48,7 @@ export default withStyles(styles)(class DashboardPage extends React.Component {
 
     getUsers = () => {
         axios.get(
-            'api/getUsers',
+            '/api/getUsers',
             {
                 params: {
                     restrictions: this.state.restrictions,

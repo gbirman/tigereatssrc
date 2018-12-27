@@ -30,7 +30,7 @@ export default class StudentGoalsPage extends React.Component {
 
     getUserInfo = (user_id) => {
         axios.get(
-            'api/get_all_user_info',
+            '/api/get_all_user_info',
             {
 
                 params: {
