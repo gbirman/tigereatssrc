@@ -9,8 +9,37 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 
-export default class DashboardPage extends React.Component {
+const styles = theme => ({
+    table: {
+        overflowX: 'auto', 
+        marginTop: '5vh',
+        marginRight: '2vh',
+        marginLeft: '2vh',
+        border: 'solid',
+        borderColor: '#59bf8e',
+    },
+    personIcon: {
+        color: "#59BF8E",
+        marginRight: '3vh'
+    },
+    searchField: {
+        color: '#4CA279',
+        fontFamily: 'Karla, sans-serif',
+    },
+    searchFieldLabel: {
+        color: '#4CA279',
+        fontFamily: 'Karla, sans-serif',
+    },
+    searchUnderline: {
+        color: 'red !important'
+    }
+
+})
+
+export default withStyles(styles)(class DashboardPage extends React.Component {
 
     state = {
         restrictions: {name: ""},
@@ -19,7 +48,7 @@ export default class DashboardPage extends React.Component {
 
     getUsers = () => {
         axios.get(
-            'http://127.0.0.1:5000/api/getUsers',
+            'api/getUsers',
             {
                 params: {
                     restrictions: this.state.restrictions,
@@ -83,16 +112,17 @@ export default class DashboardPage extends React.Component {
     } 
 
     render() {
+        const {classes} = this.props;
         return (
             <div>
                 <FilterExpansionsModule 
                     onFilter={this.handleFilterRequest}
                 />
-                <Paper style={{overflowX: 'auto', marginTop: '5vh'}}>
+                <Paper className={classes.table}>
                     <Toolbar>
                         <Grid container item justify="flex-end" alignItems="flex-end">
-                            <Grid item><AccountCircle /></Grid>
-                            <Grid item><TextField id="input-with-icon-grid" label="Search for students..." onKeyUp={this.handleSearchChange}/></Grid>
+                            <Grid item><AccountCircle className={classes.personIcon}/></Grid>
+                            <Grid item><TextField InputLabelProps={{classes: {root: classes.searchFieldLabel}}} InputProps={{classes: {input: classes.searchField, underline: classes.searchUnderline}}} className={classes.searchField} id="input-with-icon-grid" label="Search for students..." onKeyUp={this.handleSearchChange}/></Grid>
                         </Grid>
                     </Toolbar>
                     <TableModule 
@@ -104,4 +134,4 @@ export default class DashboardPage extends React.Component {
             </div>
         );
     }
-}
+})
