@@ -66,7 +66,7 @@ export default class ProgressPage extends React.Component {
         console.log('got here')
 
         axios.get(
-            'http://127.0.0.1:5000/api/get_user_nutrient_progress_all',
+            '/api/get_user_nutrient_progress_all',
             {
                 params: {
                 user_id: "5bf8ca12e7179a56e21592c5"

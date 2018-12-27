@@ -41,7 +41,22 @@ const theme = createMuiTheme({
         '"Segoe UI Emoji"',
         '"Segoe UI Symbol"',
       ].join(','), 
+      overrides: {
+        MuiInput: {
+          underline: {
+            '&:before': { //underline color when textfield is inactive
+                borderBottom: '#59BF8E 2px solid',
+            },
+            '&:after': {
+                borderBottom: '#3e8563 2px solid',
+            },
+            "&&&&:hover:before": {
+                borderBottom: '#59BF8E 2px solid'
+              }
+          },
+        }}
 });
+
 console.log(theme);
 
 export default class AppRouter extends React.Component {
