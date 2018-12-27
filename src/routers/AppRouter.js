@@ -47,7 +47,7 @@ console.log(theme);
 export default class AppRouter extends React.Component {
 
     state = {
-        renderHeader: true,
+        renderHeader: false,
     }
 
     handleLogin = (e) => {
@@ -71,7 +71,7 @@ export default class AppRouter extends React.Component {
             <MuiThemeProvider theme={theme}>
                 <BrowserRouter>
                     <div> 
-                        {(this.state.renderHeader) ? <NavHeader onLogout={this.handleLogout}/> : null}
+                        <NavHeader />
                         <Switch>
                             <Route path="/" render={(props) => <LoginPage {...props} onLogin={this.handleLogin} onLogout={this.handleLogout}/>} exact={true} />
                             <Route path="/dash" exact component={DashboardPage} />
