@@ -64,12 +64,15 @@ export default class ProgressPage extends React.Component {
     componentDidMount() {
 
         console.log('got here')
-
+        let user_id = this.props.match.params.id;
+        // console.log("Gabe's page UID = " + JSON.stringify(this.props.match)); // debugging
+    
         axios.get(
             '/api/get_user_nutrient_progress_all',
             {
                 params: {
-                user_id: "5bf8ca12e7179a56e21592c5"
+                // user_id: "5bf8ca12e7179a56e21592c5"
+                user_id: user_id 
             }},
             {
                 headers: {'Content-type': 'application/json'}
