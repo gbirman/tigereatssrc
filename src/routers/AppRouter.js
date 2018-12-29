@@ -68,7 +68,7 @@ export default class AppRouter extends React.Component {
     handleLogin = (e) => {
         this.setState({renderHeader: true});
         axios.get(
-            'http://127.0.0.1:5000/api/cas_redirect',
+            '/api/cas_redirect',
             {
                 headers: {'Content-type': 'application/json'}
             }
