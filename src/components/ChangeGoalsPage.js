@@ -37,7 +37,7 @@ export default class ChangeGoalsPage extends React.Component {
         let result;
 
         axios.post(
-            'api/change_nutrition_goals',
+            '/api/change_nutrition_goals',
             {
                 user_id: this.state.id, 
                 new_calorie_goal: this.state.calGoal,
