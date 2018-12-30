@@ -4,7 +4,7 @@ import DashboardPage from '../components/DashboardPage';
 import NavHeader from '../components/NavHeader';
 import StudentGoalsPage from '../components/StudentGoalsPage';
 import ChangeGoalsPage from '../components/ChangeGoalsPage';
-import ProgressPage from '../components/ProgressPage';
+import ProgressPage from '../components/ProgressPageTest';
 import TestPage from '../components/TestPage';
 import LoginPage from '../components/LoginPage';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
@@ -42,7 +42,6 @@ const theme = createMuiTheme({
         '"Segoe UI Symbol"',
       ].join(','), 
 });
-console.log(theme);
 
 export default class AppRouter extends React.Component {
 
