@@ -68,7 +68,6 @@ class ProgressPage extends React.Component {
                 }
             ).then((response) => {
                 let data = response['data'];
-                console.log(data)
                 
                 // add goal data according to API-specified order 
                 channels['calories'].goal = data[0];
