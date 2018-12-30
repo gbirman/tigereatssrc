@@ -19,7 +19,9 @@ export default class Goals extends React.Component {
 
             <tr>
                 <td><Button variant="contained" color="primary">Change Goals</Button></td>
-                <td><NavLink to={`/progress/${this.props.user_id}`} style={{textDecoration: 'none'}}><Button variant="contained" color="primary">See Progress</Button></NavLink></td>
+                <td><NavLink 
+                to= {"/progress/" + this.props.user_id} 
+                style={{textDecoration: 'none'}}><Button variant="contained" color="primary">See Progress</Button></NavLink></td>
             </tr>
 
             <tr align = "left">

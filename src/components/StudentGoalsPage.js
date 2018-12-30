@@ -30,7 +30,7 @@ export default class StudentGoalsPage extends React.Component {
 
     getUserInfo = (user_id) => {
         axios.get(
-            'http://127.0.0.1:5000/api/get_all_user_info',
+            '/api/get_all_user_info',
             {
 
                 params: {
@@ -61,7 +61,7 @@ export default class StudentGoalsPage extends React.Component {
     // Gets a day's info given a user and a date
     getDayInfo = (user_id, date, day) => {
           axios.get(
-                'http://127.0.0.1:5000/api/get_user_day_meal_data',
+                '/api/get_user_day_meal_data',
                 {
 
                     params: {
@@ -177,7 +177,7 @@ export default class StudentGoalsPage extends React.Component {
         // Things I might not need: "width:100%"
 
         let userInfoTest = ["jamie@tigermag.com", "Jamies", "Mercurio",
-                            "Male", "5 9", "150lbs", "no restrictions motherfucker", 
+                            "Male", "5 9", "150lbs", "no restrictions mofo", 
                         "1000CAL", "2000PRO", "0FAT", "350POUNDSMUSCLE", "2020", "Little League MMA"];
        
         let fullName = this.state.userInfo[1] + " " + this.state.userInfo[2];

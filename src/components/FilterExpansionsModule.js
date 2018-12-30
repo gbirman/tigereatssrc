@@ -8,9 +8,6 @@ const styles = theme => ({
     blurb: {
         color: "#59bf8e",
         fontFamily: 'Karla, sans-serif',
-    },
-    module: {
-        
     }
     
 })

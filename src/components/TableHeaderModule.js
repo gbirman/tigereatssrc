@@ -10,6 +10,9 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import Tooltip from '@material-ui/core/Tooltip';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import classNames from 'classnames';
 
 
 const rows = [
@@ -24,13 +27,28 @@ const rows = [
     { id: 'fats_goal', numeric: false, disablePadding: true, label: 'Fat'},
     { id: 'email', numeric: false, disablePadding: false, label: ''}
   ];
+
+const styles = theme => ({
+    labelRoot: {
+        color: '#4CA279',
+        fontFamily: 'Karla, sans-serif',
+        textAlign: 'center'
+
+    },
+    labelActive: {
+        color: '#3e8563 !important',
+        fontFamily: 'Karla, sans-serif',
+
+    }
+});
   
-export default class TableHeaderMoudle extends React.Component {
+export default withStyles(styles)(class TableHeaderMoudle extends React.Component {
     createSortHandler = property => event => {
         this.props.onRequestSort(event, property);
     }
 
     render() {
+        const {classes} = this.props;
         return (
             <TableHead>
                 <TableRow >
@@ -49,6 +67,8 @@ export default class TableHeaderMoudle extends React.Component {
                                     placement={row.numeric ? 'bottom-end' : 'bottom-start'}
                                 >
                                     <TableSortLabel
+                                        className={classes.labelRoot}
+                                        classes={{active: classes.labelActive}}
                                         active={this.props.orderBy === row.id}
                                         direction={this.props.order}
                                         onClick={this.createSortHandler(row.id)}
@@ -66,4 +86,4 @@ export default class TableHeaderMoudle extends React.Component {
     }
     
     
-} 
+})
