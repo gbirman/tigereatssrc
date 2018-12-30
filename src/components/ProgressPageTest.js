@@ -20,13 +20,17 @@ const style = styler([
 // with associated metadata 
 const channels = {
     calories: { units: "kcal", label: "Calories", format: "d", show: true, goal: null,
-        dailyseries: null, weeklyseries: null, monthlyseries: null, subseries: null },
+        dailyseries_null: null, dailyseries: null, weeklyseries_null: null, weeklyseries: null, 
+        monthlyseries_null: null, monthlyseries: null, subseries: null },
     carbs: { units: "g", label: "Carbohydrates", format: "d", show: true, goal: null,
-        dailyseries: null, weeklyseries: null, monthlyseries: null, subseries: null },
+    dailyseries_null: null, dailyseries: null, weeklyseries_null: null, weeklyseries: null, 
+    monthlyseries_null: null, monthlyseries: null, subseries: null },
     fat: { units: "g", label: "Fat", format: "d", show: true, goal: null,
-        dailyseries: null, weeklyseries: null, monthlyseries: null, subseries: null },
+    dailyseries_null: null, dailyseries: null, weeklyseries_null: null, weeklyseries: null, 
+    monthlyseries_null: null, monthlyseries: null, subseries: null },
     protein: { units: "g", label: "Protein", format: "d", show: true, goal: null,
-        dailyseries: null, weeklyseries: null, monthlyseries: null, subseries: null }
+    dailyseries_null: null, dailyseries: null, weeklyseries_null: null, weeklyseries: null, 
+    monthlyseries_null: null, monthlyseries: null, subseries: null }
 }
 
 // these are the names of the nutrients as specified in MongoDB 
@@ -74,7 +78,7 @@ class ProgressPage extends React.Component {
                 channels['protein'].goal = data[1];
                 channels['fat'].goal = data[2];
                 channels['carbs'].goal = data[3];
-
+                this.setState(() => ({ channels }));
             });
 
             // get nutrient progress from server, then render 
@@ -105,7 +109,7 @@ class ProgressPage extends React.Component {
                     const d = moment(response_date).add(1, 'days').toDate();
                     const index = Index.getIndexString("1d", d)
                     channelNames.map(channelName => {
-                        points[channelName].push([index, response_nutrients[channelName]]);
+                        points[channelName].push([index, response_nutrients[channelName]])
                     });
                 });
 
@@ -119,56 +123,53 @@ class ProgressPage extends React.Component {
                         points: points[channelName]
                     });
 
-                    // // rollup 
-                    // const rollups = rollupLevels.map(rollupLevel => {
-                    //     return {
-                    //         duration: moment.duration(parseInt(rollupLevel[0]), rollupLevel[1]),
-                    //         series: initialseries.fixedWindowRollup({
-                    //             windowSize: rollupLevel,
-                    //             aggregation: { [channelName]: { [channelName]: avg() } }
-                    //         })
-                    //     };
-                    // });
-
-                    // // Rollup series levels
-                    // channels[channelName].rollups = rollups;
-
                     // rollups 
-                    let dailyseries = initialseries.dailyRollup({
+                    let dailyseries_null = initialseries.dailyRollup({
                         //windowSize: "1d",
                         aggregation: {[channelName]: {[channelName]: avg(filter.ignoreMissing)}}
                     });
 
-                    let weeklyseries = dailyseries.fixedWindowRollup({
+                    let weeklyseries_null = dailyseries_null.fixedWindowRollup({
                         windowSize: "7d",
                         aggregation: {[channelName]: {[channelName]: avg(filter.ignoreMissing)}}
                     });
 
-                    let monthlyseries = dailyseries.monthlyRollup({
+                    let monthlyseries_null = dailyseries_null.monthlyRollup({
                         aggregation: {[channelName]: {[channelName]: avg(filter.ignoreMissing)}}
                     });
                     
                     // converts series back to UTC format as rollups revert that 
 
-                    dailyseries = TimeSeries.timeSeriesListMerge({
-                        seriesList: [dailyseries]
+                    // daily series null will be used for omitting zeroes 
+                    // from calculations -- everywhere else zeroes will 
+                    // be used for performance 
+                    dailyseries_null = TimeSeries.timeSeriesListMerge({
+                        seriesList: [dailyseries_null]
                     });
 
-                    weeklyseries = TimeSeries.timeSeriesListMerge({
-                        seriesList: [weeklyseries]
+                    weeklyseries_null = TimeSeries.timeSeriesListMerge({
+                        seriesList: [weeklyseries_null]
                     });
 
-                    monthlyseries = TimeSeries.timeSeriesListMerge({
-                        seriesList: [monthlyseries]
+                    monthlyseries_null = TimeSeries.timeSeriesListMerge({
+                        seriesList: [monthlyseries_null]
                     });
+
+                    // fills nulls with zeroes
+                    const dailyseries = dailyseries_null.fill({fieldSpec: channelNames})
+                    const weeklyseries = weeklyseries_null.fill({fieldSpec: channelNames})
+                    const monthlyseries = monthlyseries_null.fill({fieldSpec: channelNames})
 
                     // Raw series
+                    channels[channelName].dailyseries_null = dailyseries_null;
                     channels[channelName].dailyseries = dailyseries;
+                    channels[channelName].weeklyseries_null = weeklyseries_null;
                     channels[channelName].weeklyseries = weeklyseries;
+                    channels[channelName].monthlyseries_null = monthlyseries_null;
                     channels[channelName].monthlyseries = monthlyseries;
-                    channels[channelName].subseries = dailyseries;
+                    channels[channelName].subseries = dailyseries_null;
 
-                    // Some simple statistics for each channel
+                    // max simple statistics for each channel
                     channels[channelName].max = parseInt(dailyseries.max(channelName), 10);
                 }); 
                 
@@ -282,7 +283,7 @@ class ProgressPage extends React.Component {
             // set subseries
             channelNames.map(channelName => {
                 channels[channelName].subseries = 
-                    channels[channelName].dailyseries.slice(beginPos, endPos);
+                    channels[channelName].dailyseries_null.slice(beginPos, endPos);
             });
 
             this.setState({ channels, timerange: new TimeRange(daystart, dayend)});
@@ -337,7 +338,6 @@ class ProgressPage extends React.Component {
             } else if (windowSize === 'month') {
                 series = channels[channelName].monthlyseries;
             }
-            let subseries = channels[channelName].subseries;
 
             const charts = [];
             charts.push(
@@ -355,14 +355,27 @@ class ProgressPage extends React.Component {
             // Get the value at the current tracker position for the ValueAxis
             let value = "--";
             if (trackerIdx !== null) {
-                value = parseInt(series.at(trackerIdx).get(channelName), 10);
+
+                let nullseries = null;
+                if (windowSize === 'day') {
+                    nullseries = channels[channelName].dailyseries_null;
+                } else if (windowSize === 'week') {
+                    nullseries = channels[channelName].weeklyseries_null;
+                } else if (windowSize === 'month') {
+                    nullseries = channels[channelName].monthlyseries_null;
+                }
+
+                if (nullseries.at(trackerIdx).get(channelName)) {
+                    value = parseInt(series.at(trackerIdx).get(channelName), 10);
+                }
             }
 
             // Get the summary values for the LabelAxis
+            let subseries = channels[channelName].subseries;
             const summary = [
-                { label: "Min", value: parseInt(subseries.min(channelName), 10) },
-                { label: "Max", value: parseInt(subseries.max(channelName), 10) },
-                { label: "Avg", value: parseInt(subseries.avg(channelName), 10) }
+                { label: "Min", value: parseInt(subseries.min(channelName, filter.ignoreMissing), 10) || '--' },
+                { label: "Max", value: parseInt(subseries.max(channelName, filter.ignoreMissing), 10) || '--' },
+                { label: "Avg", value: parseInt(subseries.avg(channelName, filter.ignoreMissing), 10) || '--' }
             ];
 
             const containerHeight = 350;
