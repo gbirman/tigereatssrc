@@ -27,8 +27,11 @@ const styles = theme => ({
     panel: {
         border: 'solid',
         borderColor: '#59bf8e',
-        color: '#59bf8e',
+        color: '#4CA279',
         fontFamily: 'Karla, sans-serif'
+    },
+    icon: {
+        color: '#4CA279'
     }
 
 })
@@ -120,7 +123,7 @@ export default withStyles(styles)(class ExpansionModule extends React.Component 
 
         return (
             <ExpansionPanel className={classes.panel} style={{borderRadius: '5px'}}>
-                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                <ExpansionPanelSummary classes={{expandIcon: classes.icon}} expandIcon={<ExpandMoreIcon />}>
                     {this.state.label}
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>

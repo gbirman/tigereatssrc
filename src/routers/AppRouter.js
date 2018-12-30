@@ -41,19 +41,34 @@ const theme = createMuiTheme({
         '"Segoe UI Emoji"',
         '"Segoe UI Symbol"',
       ].join(','), 
+      overrides: {
+        MuiInput: {
+          underline: {
+            '&:before': { //underline color when textfield is inactive
+                borderBottom: '#59BF8E 2px solid',
+            },
+            '&:after': {
+                borderBottom: '#3e8563 2px solid',
+            },
+            "&&&&:hover:before": {
+                borderBottom: '#59BF8E 2px solid'
+              }
+          },
+        }}
 });
+
 console.log(theme);
 
 export default class AppRouter extends React.Component {
 
     state = {
-        renderHeader: true,
+        renderHeader: false,
     }
 
     handleLogin = (e) => {
         this.setState({renderHeader: true});
         axios.get(
-            'http://127.0.0.1:5000/api/cas_redirect',
+            '/api/cas_redirect',
             {
                 headers: {'Content-type': 'application/json'}
             }
@@ -71,7 +86,7 @@ export default class AppRouter extends React.Component {
             <MuiThemeProvider theme={theme}>
                 <BrowserRouter>
                     <div> 
-                        {(this.state.renderHeader) ? <NavHeader onLogout={this.handleLogout}/> : null}
+                        <NavHeader />
                         <Switch>
                             <Route path="/" render={(props) => <LoginPage {...props} onLogin={this.handleLogin} onLogout={this.handleLogout}/>} exact={true} />
                             <Route path="/dash" exact component={DashboardPage} />
