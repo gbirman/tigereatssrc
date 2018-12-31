@@ -31,12 +31,12 @@ export default class ChangeGoalsPage extends React.Component {
         inputOption: "op1"
     };
 
-    validate = () => {
+    validate = async () => {
         console.log(this.state.calGoal + " " + this.state.proGoal + " " + this.state.fatsGoal + " " + this.state.carbsGoal);
         
         let result;
 
-        axios.post(
+        await axios.post(
             '/api/change_nutrition_goals',
             {
                 user_id: this.state.id, 
