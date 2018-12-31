@@ -15,8 +15,47 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 
-export default class ChangeGoalsModulePercentages extends React.Component {
+const styles = theme => ({
+    paperTitle: {
+        color: "#3e8563",
+        fontFamily: 'Karla, sans-serif',
+    },
+    labelContainer: {
+        marginTop: '1vh',
+        marginBottom: '1vh'
+    },
+    valueContainer: {
+        marginTop: '1vh',
+        marginBottom: '1vh'
+    },
+    paperLabel: {
+        textAlign: "center",
+        color: "#4CA279",
+        fontFamily: 'Karla, sans-serif',
+    },
+    paperValue: {
+        textAlign: "center",
+        color: "#59bf8e",
+        fontFamily: 'Karla, sans-serif',
+    },
+    searchField: {
+        color: '#4CA279',
+        fontFamily: 'Karla, sans-serif',
+    },
+    searchFieldLabel: {
+        color: '#4CA279',
+        fontFamily: 'Karla, sans-serif',
+    },
+    paperInput: {
+        textAlign: 'center'
+    }
+
+});
+
+export default withStyles(styles)(class ChangeGoalsModulePercentages extends React.Component {
     state = {
         calGoal: this.props.calGoal,
         proGoal: this.props.proteinGoal,
@@ -114,6 +153,7 @@ export default class ChangeGoalsModulePercentages extends React.Component {
     }
 
     render() {
+        const {classes} = this.props;
         return (
             <div>
                 <Grid container justify="center" alignItems="center">
@@ -142,9 +182,9 @@ export default class ChangeGoalsModulePercentages extends React.Component {
                 </Grid>
                 <Grid container justify="center" alignItems="center" style={{padding: 20}}>
                     <Grid item style={{textAlign: "center"}} xs={3}><Input placeholder={this.props.calGoal} onKeyUp={this.handleCalChange} /></Grid>
-                    <Grid item style={{textAlign: "center"}} xs={3}><Input placeholder={'carbs'} onKeyUp={this.handleProChange} /></Grid>
-                    <Grid item style={{textAlign: "center"}} xs={3}><Input placeholder={'fats'} onKeyUp={this.handleCarbsChange} /></Grid>
-                    <Grid item style={{textAlign: "center"}} xs={3}><Input placeholder={'calories'} onKeyUp={this.handleFatsChange}></Input></Grid>
+                    <Grid item style={{textAlign: "center"}} xs={3}><Input placeholder={'protein'} onKeyUp={this.handleProChange} /></Grid>
+                    <Grid item style={{textAlign: "center"}} xs={3}><Input placeholder={'carbs'} onKeyUp={this.handleCarbsChange} /></Grid>
+                    <Grid item style={{textAlign: "center"}} xs={3}><Input placeholder={'fats'} onKeyUp={this.handleFatsChange}></Input></Grid>
                 </Grid>
                 <Grid container justify="center" alignItems="center">
                     <h2>New Goals:</h2>
@@ -165,4 +205,4 @@ export default class ChangeGoalsModulePercentages extends React.Component {
         );
     }
 
-}
+})

@@ -15,8 +15,47 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 
-export default class ChangeGoalsModuleQuantities extends React.Component {
+const styles = theme => ({
+    paperTitle: {
+        color: "#3e8563",
+        fontFamily: 'Karla, sans-serif',
+    },
+    labelContainer: {
+        marginTop: '1vh',
+        marginBottom: '1vh'
+    },
+    valueContainer: {
+        marginTop: '1vh',
+        marginBottom: '1vh'
+    },
+    paperLabel: {
+        textAlign: "center",
+        color: "#4CA279",
+        fontFamily: 'Karla, sans-serif',
+    },
+    paperValue: {
+        textAlign: "center",
+        color: "#59bf8e",
+        fontFamily: 'Karla, sans-serif',
+    },
+    searchField: {
+        color: '#4CA279',
+        fontFamily: 'Karla, sans-serif',
+    },
+    searchFieldLabel: {
+        color: '#4CA279',
+        fontFamily: 'Karla, sans-serif',
+    },
+    paperInput: {
+        textAlign: 'center'
+    }
+    
+});
+
+export default withStyles(styles)(class ChangeGoalsModuleQuantities extends React.Component {
     state = {
         calGoal: this.props.calGoal,
         proGoal: this.props.proteinGoal,
@@ -94,40 +133,41 @@ export default class ChangeGoalsModuleQuantities extends React.Component {
     }
 
     render() {
+        const {classes} = this.props;
         return (
             <div>
-                <Grid container justify="center" alignItems="center">
+                <Grid container justify="center" alignItems="center" className={classes.paperTitle}>
                     <h2>Current Goals:</h2>
                 </Grid>
-                <Grid container justify="center" alignItems="center">
-                    <Grid item style={{textAlign: "center"}} xs={3}><u>Protein / Day</u></Grid>
-                    <Grid item style={{textAlign: "center"}} xs={3}><u>Carbs / Day</u></Grid>
-                    <Grid item style={{textAlign: "center"}} xs={3}><u>Fats / Day</u></Grid>
-                    <Grid item style={{textAlign: "center"}} xs={3}><u>Calories / Day</u></Grid>
+                <Grid container justify="center" className={classes.labelContainer} alignItems="center">
+                    <Grid item className={classes.paperLabel} xs={3}><u>Protein / Day</u></Grid>
+                    <Grid item className={classes.paperLabel} xs={3}><u>Carbs / Day</u></Grid>
+                    <Grid item className={classes.paperLabel} xs={3}><u>Fats / Day</u></Grid>
+                    <Grid item className={classes.paperLabel} xs={3}><u>Calories / Day</u></Grid>
                 </Grid>
-                <Grid container justify="center" alignItems="center">
-                    <Grid item style={{textAlign: "center"}} xs={3}>{this.props.proteinGoal}</Grid>
-                    <Grid item style={{textAlign: "center"}} xs={3}>{this.props.carbsGoal}</Grid>
-                    <Grid item style={{textAlign: "center"}} xs={3}>{this.props.fatsGoal}</Grid>
-                    <Grid item style={{textAlign: "center"}} xs={3}>{this.props.calGoal}</Grid>
+                <Grid container justify="center" className={classes.valueContainer} alignItems="center">
+                    <Grid item className={classes.paperValue} xs={3}>{this.props.proteinGoal}</Grid>
+                    <Grid item className={classes.paperValue} xs={3}>{this.props.carbsGoal}</Grid>
+                    <Grid item className={classes.paperValue} xs={3}>{this.props.fatsGoal}</Grid>
+                    <Grid item className={classes.paperValue} xs={3}>{this.props.calGoal}</Grid>
                 </Grid>
-                <Grid container justify="center" alignItems="center">
+                <Grid container justify="center" alignItems="center" className={classes.paperTitle}>
                     <h2>New Goals:</h2>
                 </Grid>
-                <Grid container justify="space-around" alignItems="center"> 
-                    <Grid item style={{textAlign: "center"}} xs={3}><u>Protein / Day</u></Grid>
-                    <Grid item style={{textAlign: "center"}} xs={3}><u>Carbs / Day</u></Grid>
-                    <Grid item style={{textAlign: "center"}} xs={3}><u>Fats / Day</u></Grid>
-                    <Grid item style={{textAlign: "center"}} xs={3}><u>Calories / Day</u></Grid>
+                <Grid container justify="space-around" alignItems="center" className={classes.labelContainer}> 
+                    <Grid item className={classes.paperLabel} xs={3}><u>Protein / Day</u></Grid>
+                    <Grid item className={classes.paperLabel} xs={3}><u>Carbs / Day</u></Grid>
+                    <Grid item className={classes.paperLabel} xs={3}><u>Fats / Day</u></Grid>
+                    <Grid item className={classes.paperLabel} xs={3}><u>Calories / Day</u></Grid>
                 </Grid>
                 <Grid container justify="center" alignItems="center" style={{padding: 20}}>
-                    <Grid item style={{textAlign: "center"}} xs={3}><Input placeholder={this.props.proteinGoal} onKeyUp={this.handleProChange} onBlur={this.handleFocusOut}/></Grid>
-                    <Grid item style={{textAlign: "center"}} xs={3}><Input placeholder={this.props.carbsGoal} onKeyUp={this.handleCarbsChange} onBlur={this.handleFocusOut}/></Grid>
-                    <Grid item style={{textAlign: "center"}} xs={3}><Input placeholder={this.props.fatsGoal} onKeyUp={this.handleFatsChange} onBlur={this.handleFocusOut}/></Grid>
-                    <Grid item style={{textAlign: "center"}} xs={3}><Input placeholder={this.props.calGoal} onBlur={this.handleFocusOut} value={this.state.calShouldBeCalculated ? this.state.calGoal : ""}></Input></Grid>
+                    <Grid item className={classes.paperInput} xs={3}><Input InputLabelProps={{classes: {root: classes.searchFieldLabel}}} InputProps={{classes: {input: classes.searchField, underline: classes.searchUnderline}}} className={classes.searchField} placeholder={this.props.proteinGoal} onKeyUp={this.handleProChange} onBlur={this.handleFocusOut}/></Grid>
+                    <Grid item className={classes.paperInput} xs={3}><Input InputLabelProps={{classes: {root: classes.searchFieldLabel}}} InputProps={{classes: {input: classes.searchField, underline: classes.searchUnderline}}} className={classes.searchField} placeholder={this.props.carbsGoal} onKeyUp={this.handleCarbsChange} onBlur={this.handleFocusOut}/></Grid>
+                    <Grid item className={classes.paperInput} xs={3}><Input InputLabelProps={{classes: {root: classes.searchFieldLabel}}} InputProps={{classes: {input: classes.searchField, underline: classes.searchUnderline}}} className={classes.searchField} placeholder={this.props.fatsGoal} onKeyUp={this.handleFatsChange} onBlur={this.handleFocusOut}/></Grid>
+                    <Grid item className={classes.paperInput} xs={3}><Input InputLabelProps={{classes: {root: classes.searchFieldLabel}}} InputProps={{classes: {input: classes.searchField, underline: classes.searchUnderline}}} className={classes.searchField} placeholder={this.props.calGoal} onBlur={this.handleFocusOut} value={this.state.calShouldBeCalculated ? this.state.calGoal : ""}></Input></Grid>
                 </Grid>
             </div>
         );
     }
 
-}
+})

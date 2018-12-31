@@ -25,27 +25,53 @@ const styles = theme => ({
         color: "#59bf8e",
         fontFamily: 'Karla, sans-serif',
     },
-    formInst: {
+    instructions: {
         color: '#3e8563',
         fontFamily: 'Karla, sans-serif',
-        textAlign: 'center'
+        textAlign: 'center',
+        paddingRight: '5vw',
+        paddingLeft: '5vw'
     },
     formOp: {
+    },
+    formOpLabel: {
         textAlign: 'center',
         color: "#4CA279",
         fontFamily: 'Karla, sans-serif',
     },
     radio: {
-        color: "#4CA279"
+        color: "#4CA279",
+        textAlign: 'center'
     },
-    instPaper: {
+    instructionsPaper: {
         marginRight: '30vw', 
-        marginLeft: '30vw', 
-        marginTop: '2%', 
-        marginBottom: '2%', 
-        paddingTop: '1%'
+        marginLeft: '30vw',  
+        marginBottom: '2%',
+        paddingBottom: '2vh',
+        border: 'solid',
+        borderColor: '#59bf8e'
+    },
+    goalsPaper: {
+        marginRight: '10vw',
+        marginLeft: '10vw',
+        border: 'solid',
+        borderColor: '#59bf8e'
+    },
+    radioGroup: {
+        alignItems: 'center',
+        paddingLeft: '5vw',
+        paddingRight: '2vw'
+    },
+    button: {
+        marginBottom: 'vh',
+        width: '20vw',
+        fontFamily: 'Karla, sans-serif',
+        fontSize: '1em',
+        color: 'white',
+        border: 'solid',
+        borderStyle: 'solid',
+        borderColor: '#d9f495',
     }
-
 })
 
 export default withStyles(styles)(class ChangeGoalsPage extends React.Component {
@@ -122,24 +148,26 @@ export default withStyles(styles)(class ChangeGoalsPage extends React.Component 
                 <Grid container justify="center" alignContent="center" className={classes.header}>
                     <h1>Change your goals below!</h1>
                 </Grid>
-                <Paper className={classes.instPaper}>
+                <Paper className={classes.instructionsPaper}>
                     <Grid container justify="center" >
                         <FormControl component="fieldset" >
-                            <Grid item alignItems="center">
-                                <FormLabel component="legend" className={classes.formInst}><h3>Please select one of the following options for input:</h3></FormLabel>
+                            <Grid item container alignItems="center">
+                                <FormLabel component="legend" className={classes.instructions}><h3>Please select one of the following options for input:</h3></FormLabel>
                             </Grid>
-                            <RadioGroup
-                                value={this.state.inputOption}
-                                onChange={this.handleFormChange}
-                                
-                            >
-                                <FormControlLabel value="op1" control={<Radio color="secondary" classes={{root: classes.radio}}/> } label={<div className={classes.formOp} >Input daily protein, carbohydrate, and fat goals</div>} />
-                                <FormControlLabel value="op2" control={<Radio classes={{root: classes.radio}}/>} label={<div className={classes.formOp} >Input daily caloric goal and macronutrient breakdown</div>} />
-                            </RadioGroup>
+                            <Grid item container alignItems="center">
+                                <RadioGroup
+                                    value={this.state.inputOption}
+                                    onChange={this.handleFormChange}
+                                    classes={{root: classes.radioGroup}}
+                                >
+                                    <FormControlLabel classes={{root: classes.formOp}} value="op1" control={<Radio color="secondary" classes={{root: classes.radio}}/> } label={<div className={classes.formOpLabel} >Input daily protein, carbohydrate, and fat goals</div>} />
+                                    <FormControlLabel classes={{root: classes.formOp}} value="op2" control={<Radio classes={{root: classes.radio}}/>} label={<div className={classes.formOpLabel} >Input daily caloric goal and macronutrient breakdown</div>} />
+                                </RadioGroup>
+                            </Grid>
                         </FormControl>
                     </Grid>
                 </Paper>
-                <Paper style={{marginRight: '5%', marginLeft: '5%'}}>
+                <Paper className={classes.goalsPaper}>
                     {this.state.inputOption === "op1" && <ChangeGoalsModuleQuantities
                         proteinGoal={this.props.match.params.protein_goal}
                         carbsGoal={this.props.match.params.carbs_goal}
@@ -161,7 +189,7 @@ export default withStyles(styles)(class ChangeGoalsPage extends React.Component 
                         onCalChange={this.handleCalChange}
                     />}
                     <Grid container justify="center" style={{padding: 20}} alignItems="center">
-                        <Button variant="contained" color="primary" onClick={() => this.validate()}>Submit Changes!</Button>
+                        <Button variant="contained" color="primary" className={classes.button} onClick={() => this.validate()}>Submit Changes!</Button>
                     </Grid>
                 </Paper>
             </div>
