@@ -9,7 +9,7 @@ export default class MealBreakfast extends React.Component {
         for (let foodType in foodData) {
             output +=    foodType + " | " + foodData[foodType] + "   .   ";
         }
-        console.log(output);
+       // console.log(output);
         return output;
 
     }
@@ -25,9 +25,9 @@ export default class MealBreakfast extends React.Component {
             <table>
                 <tr>
                     <p>Cals: {this.props.mealData[0].calories} | 
-                    Protein: {this.props.mealData[0].protein} | 
-                    Carbs: {this.props.mealData[0].carbs} | 
-                    Fat: {this.props.mealData[0].fat} </p>
+                    Protein: {this.props.mealData[0].protein}g | 
+                    Carbs: {this.props.mealData[0].carbs}g | 
+                    Fat: {this.props.mealData[0].fat}g </p>
                 </tr>
 
                 <tr>

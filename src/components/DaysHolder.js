@@ -51,25 +51,34 @@ export default class DaysHolder extends React.Component {
 
         */
 
-        
+            /* Confirming dinner isn't just missing for one of the days
+
+
+
+
+            */
+
+        // TODO: Use automated dates, looking at the last four days
         return (
             <div>
             <DayHolder key={this.props.date} 
-            date = {this.props.date}
-            dayInfo={this.props.dayInfo1}
+                date = {this.props.date}
+                dayInfo={this.props.dayInfo1}
             /> 
-            <DayHolder key={this.props.date} 
-            date = "2018-08-10"
-            dayInfo={this.props.dayInfo2}
+            
+            <DayHolder key="2018-07-11" 
+                date = "2018-07-11"
+                dayInfo={this.props.dayInfo2}
             />
-            <DayHolder key={this.props.date} 
-            date = "2018-09-10"
-            dayInfo={this.props.dayInfo3}
+            <DayHolder key="2018-07-12"
+                date = "2018-07-12"
+                dayInfo={this.props.dayInfo3}
             />
-            <DayHolder key={this.props.date} 
-            date = "2018-10-10"
-            dayInfo={this.props.dayInfo4}
+            <DayHolder key="2018-07-13"
+                date = "2018-07-13"
+                dayInfo={this.props.dayInfo4}
             />
+
             </div>
 
         );
