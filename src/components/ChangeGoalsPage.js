@@ -17,8 +17,38 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import ChangeGoalsModuleQuantities from './ChangeGoalsModuleQuantities'
 import ChangeGoalsModulePercentages from './ChangeGoalsModulePercentages'
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 
-export default class ChangeGoalsPage extends React.Component {
+const styles = theme => ({
+    header: {
+        color: "#59bf8e",
+        fontFamily: 'Karla, sans-serif',
+    },
+    formInst: {
+        color: '#3e8563',
+        fontFamily: 'Karla, sans-serif',
+        textAlign: 'center'
+    },
+    formOp: {
+        textAlign: 'center',
+        color: "#4CA279",
+        fontFamily: 'Karla, sans-serif',
+    },
+    radio: {
+        color: "#4CA279"
+    },
+    instPaper: {
+        marginRight: '30vw', 
+        marginLeft: '30vw', 
+        marginTop: '2%', 
+        marginBottom: '2%', 
+        paddingTop: '1%'
+    }
+
+})
+
+export default withStyles(styles)(class ChangeGoalsPage extends React.Component {
 
     // todo change order and add note about equation
     state = {
@@ -86,31 +116,25 @@ export default class ChangeGoalsPage extends React.Component {
     }
 
     render() {
+        const {classes} = this.props;
         return (
             <div>
-                
-                <Paper style={{marginRight: '10%', marginLeft: '10%'}}>
-                    <Grid container justify="center">
-                        <h1>Change your goals below!</h1>
-                    </Grid>
-                </Paper>
-                <Paper style={{marginRight: '30%', marginLeft: '30%', marginTop: '2%', marginBottom: '2%'}}>
-                    <Grid container justify="center">
-                        <p align="center">Totals must follow the following equality: <br />Calories = 4 * Protein + 4 * Carbs + 9 * Fat</p>
-                    </Grid>
-                </Paper>
-                <Paper style={{marginRight: '30%', marginLeft: '30%', marginTop: '2%', marginBottom: '2%', paddingTop: '1%'}}>
-                    <Grid container justify="center">
-                        <FormControl component="fieldset">
-                            <Grid item style={{textAlign: "center"}}>
-                                <FormLabel component="legend">Please select one of the following options for input:</FormLabel>
+                <Grid container justify="center" alignContent="center" className={classes.header}>
+                    <h1>Change your goals below!</h1>
+                </Grid>
+                <Paper className={classes.instPaper}>
+                    <Grid container justify="center" >
+                        <FormControl component="fieldset" >
+                            <Grid item alignItems="center">
+                                <FormLabel component="legend" className={classes.formInst}><h3>Please select one of the following options for input:</h3></FormLabel>
                             </Grid>
                             <RadioGroup
                                 value={this.state.inputOption}
                                 onChange={this.handleFormChange}
+                                
                             >
-                                <FormControlLabel value="op1" control={<Radio />} label="Input daily protein, carbohydrate, and fat goals" />
-                                <FormControlLabel value="op2" control={<Radio />} label="Input daily caloric goal and macronutrient breakdown" />
+                                <FormControlLabel value="op1" control={<Radio color="secondary" classes={{root: classes.radio}}/> } label={<div className={classes.formOp} >Input daily protein, carbohydrate, and fat goals</div>} />
+                                <FormControlLabel value="op2" control={<Radio classes={{root: classes.radio}}/>} label={<div className={classes.formOp} >Input daily caloric goal and macronutrient breakdown</div>} />
                             </RadioGroup>
                         </FormControl>
                     </Grid>
@@ -143,4 +167,4 @@ export default class ChangeGoalsPage extends React.Component {
             </div>
         );
     }
-}
+})
