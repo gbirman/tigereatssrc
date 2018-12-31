@@ -22,14 +22,21 @@ const styles = theme => ({
     paperTitle: {
         color: "#3e8563",
         fontFamily: 'Karla, sans-serif',
+        textAlign: 'center',
+        paddingRight: '2vh',
+        paddingLeft: '2vh'
     },
     labelContainer: {
         marginTop: '1vh',
-        marginBottom: '1vh'
+        marginBottom: '1vh',
+        paddingRight: '2vh',
+        paddingLeft: '2vh'
     },
     valueContainer: {
         marginTop: '1vh',
-        marginBottom: '1vh'
+        marginBottom: '1vh',
+        paddingRight: '2vh',
+        paddingLeft: '2vh'
     },
     paperLabel: {
         textAlign: "center",
