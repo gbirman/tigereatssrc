@@ -38,24 +38,26 @@ const styles = theme => ({
         //paddingBottom: theme.spacing.unit * 2,
         backgroundColor: `${themecolors.darkgray}`,
         [theme.breakpoints.down('sm')]: {
-            height: "40px",
+            height: "50px",
         },
         height: "100%",
-        //width: "100%"
     },
     group: {
         display: "flex",
-        //flexDirection: "column",
         alignItems: "center",
         justifyContent: "space-between",
         height: "100%",
     }
 });
 
+// Radio Buttons to set the window
+// to either day week or month 
+
 const FormControlLabelPosition = (props) => {
     const {classes} =  props;
-    const [value, setValue] = React.useState('day');
+    const [value, setValue] = React.useState('day'); // these are hooks supported in the react alpha version
 
+    // change the display for >= sm (e.g. "Day" vs "D")
     const minwidth = useMediaQuery(`(min-width:${props.theme.breakpoints.values.sm}px)`);
 
     const handleChange = (event) => {

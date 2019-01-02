@@ -1,5 +1,4 @@
 import React from 'react';
-import moment from "moment";
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -23,6 +22,10 @@ const styles = theme => ({
     }
 });
 
+// this statless component displays various strings
+// for nutrional components. However, it has been
+// DEPRECATED
+
 const NutritionValues = (props) => {
 
     const { classes } = props;
@@ -36,7 +39,6 @@ const NutritionValues = (props) => {
                 + ((values.calories === "--") ? "" : ' kcal');
         } else {
             displaystring = `Cal: ${values.calories}`
-                + ((values.calories === "--") ? "" : ' kcal');
         }
     } else if (nutrient === "Carbs") {
         if (minwidth) {
@@ -44,7 +46,6 @@ const NutritionValues = (props) => {
                 + ((values.carbs === "--") ? "" : ' g');
         } else {
             displaystring = `Car: ${values.carbs}`
-                + ((values.carbs === "--") ? "" : ' g');
         }
     } else if (nutrient === "Fat") {
         if (minwidth) {
@@ -52,7 +53,6 @@ const NutritionValues = (props) => {
              + ((values.fat === "--") ? "" : ' g');
         } else {
             displaystring = `Fat: ${values.fat}`
-            + ((values.fat === "--") ? "" : ' g');
         }
     } else if (nutrient === "Protein") {
         if (minwidth) {
@@ -60,7 +60,6 @@ const NutritionValues = (props) => {
             + ((values.protein === "--") ? "" : ' g');
         } else {
             displaystring = `Pro: ${values.protein}`
-            + ((values.protein === "--") ? "" : ' g');
         }
     }
 

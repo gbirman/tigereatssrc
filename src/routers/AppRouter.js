@@ -14,8 +14,6 @@ import createPalette from '@material-ui/core/styles';
 import createTypography from '@material-ui/core/Typography';
 import axios from 'axios';
 
-
-
 const theme = createMuiTheme({
     palette: {
         primary: {

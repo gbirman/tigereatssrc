@@ -1,9 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import _ from 'lodash';
-import {ChartRow, LabelAxis, Charts, Baseline,
-    ValueAxis, ChartContainer, Resizable,
-    Brush, YAxis, BarChart, styler} from 'react-timeseries-charts';
+import {styler} from 'react-timeseries-charts';
 import { TimeSeries, avg, sum, Index, filter, TimeRange} from 'pondjs';
 import "moment-duration-format";
 import moment from "moment";
@@ -14,11 +12,10 @@ import ChannelsChart from "./ChannelsChart";
 import BrushChart from "./BrushChart";
 import {nutrientcolors} from '../styles/color';
 import TrackerTime from './TrackerTime';
-import Paper from '@material-ui/core/Paper';
-import { Typography } from '@material-ui/core';
-import NutritionValues from './NutritionValues';
-import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
+import withWidth, { isWidthUp, isWidthDown } from '@material-ui/core/withWidth';
 import {themecolors} from '../styles/color';
+import LegendString from './LegendString';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const style = styler([
     { key: "calories", color: nutrientcolors.calories},
@@ -47,11 +44,10 @@ const channels = {
 // these are the names of the nutrients as specified in MongoDB 
 const channelNames = ['protein', 'fat', 'carbs', 'calories'];
 
-// // Rollups we'll generate to reduce data for the screen
-// const rollupLevels = ["1d", "3d", "5d", "7d"];
+
+// this is the main display for the user's progress page 
 
 class ProgressPage extends React.Component {
-
 
     // functions to set window size in state 
     setWindowDay = () => this.setState(() => ({ rollupSize: "day" }));
@@ -70,7 +66,7 @@ class ProgressPage extends React.Component {
         rollupSize: 'day',
         mintime: null,
         maxtime: null,
-        values: {calories: "--", carbs: "--", fat: "--", protein: "--"}
+        values: {calories: "--", carbs: "--", fat: "--", protein: "--"} 
     };
 
     componentDidMount() {
@@ -80,7 +76,7 @@ class ProgressPage extends React.Component {
 
              // get calorie goal from server 
              axios.get(
-                'http://127.0.0.1:5000/api/get_user_nutrition_goals',
+                '/api/get_user_nutrition_goals',
                 {
                     params: {
                     user_id: `${this.props.match.params.id}`
@@ -101,7 +97,9 @@ class ProgressPage extends React.Component {
 
             // get nutrient progress from server, then render 
             axios.get(
-                'http://127.0.0.1:5000/api/get_user_nutrient_progress_all_dummy',
+                // remove "_dummy" to get real data from server
+                // currently waiting on Ishan to speed it up
+                '/api/get_user_nutrient_progress_all_dummy',
                 {
                     params: {
                     user_id: `${this.props.match.params.id}`
@@ -141,12 +139,18 @@ class ProgressPage extends React.Component {
                         points: points[channelName]
                     });
 
-                    // rollups 
+                    // AVERAGE rollups by size
+                    // the ignoremissing filter allows us to distinguish between null 
+                    // and zero data
+
                     let dailyseries_null = initialseries.dailyRollup({
-                        //rollupSize: "1d",
                         aggregation: {[channelName]: {[channelName]: avg(filter.ignoreMissing)}}
                     });
 
+                    // this gets weekly rollups starting on a thursday
+                    // since it starts on UTC Jan 1, 1970 -- a thursday. 
+                    // To change this you could move the data back to the thursday, 
+                    // roll it up, then shift it back?
                     let weeklyseries_null = dailyseries_null.fixedWindowRollup({
                         windowSize: "7d",
                         aggregation: {[channelName]: {[channelName]: avg(filter.ignoreMissing)}}
@@ -156,7 +160,9 @@ class ProgressPage extends React.Component {
                         aggregation: {[channelName]: {[channelName]: avg(filter.ignoreMissing)}}
                     });
                     
-                    // converts series back to UTC format as rollups revert that 
+                    // The following converts series back to UTC format as rollups revert that 
+                    // Going forward a proper UTC standard will be necessary
+                    // this is pretty hacky tbh but it worked
 
                     // daily series null will be used for omitting zeroes 
                     // from calculations -- everywhere else zeroes will 
@@ -165,6 +171,7 @@ class ProgressPage extends React.Component {
                         seriesList: [dailyseries_null]
                     });
 
+                    // as above 
                     weeklyseries_null = TimeSeries.timeSeriesListMerge({
                         seriesList: [weeklyseries_null]
                     });
@@ -173,7 +180,7 @@ class ProgressPage extends React.Component {
                         seriesList: [monthlyseries_null]
                     });
 
-                    // fills nulls with zeroes
+                    // replaces nulls with zeroes
                     const dailyseries = dailyseries_null.fill({fieldSpec: channelNames})
                     const weeklyseries = weeklyseries_null.fill({fieldSpec: channelNames})
                     const monthlyseries = monthlyseries_null.fill({fieldSpec: channelNames})
@@ -187,10 +194,15 @@ class ProgressPage extends React.Component {
                     channels[channelName].monthlyseries = monthlyseries;
                     channels[channelName].subseries = dailyseries_null;
 
-                    // max simple statistics for each channel
+                    // for the label axis 
                     channels[channelName].max = parseInt(dailyseries.max(channelName), 10);
                 }); 
                 
+                // The following operations are also quite hacky but since our
+                // brush chart is a stacked bar chart this is how I figured
+                // I would get the max of the sums in order to display
+                // the vertical range approriately  
+
                 // represent the entirety of the data for bottom barchart 
                 const totalseries = TimeSeries.timeSeriesListMerge({
                      seriesList: channelNames.map(channelName => 
@@ -209,23 +221,31 @@ class ProgressPage extends React.Component {
                 // represents range of entire loaded series 
                 let totalrange = totalseries.range(); 
 
+                // gets the start and end of the range in terms of start of days
                 const mintime = moment(totalrange.begin()).utc().startOf('day');
                 const maxtime = moment(totalrange.end()).utc().endOf('day');
 
                 totalrange = new TimeRange(mintime, maxtime);
 
+                // set state and calls render! 
                 this.setState(() => ({ ready: true, channels, maxHeight, 
                     timerange: totalrange, totalrange, totalseries, mintime, maxtime}));
 
             });
 
-        }, 0);
+        }, 1000); // one second timeout 
     };
 
+    // deals w changes to the tracker in the channels chart component 
     handleTrackerChanged = (t) => {
         const { channels, rollupSize, timerange, values } = this.state
 
         let trackerIdx = null;
+
+        // we get the tracker index here because each of the channels 
+        // has the same tracker indexso it more computationally efficient to calculate
+        // the index for the first channel and then perform relevant operations 
+        // with that index later 
 
         let series = null; 
         let channelName = channelNames[0];
@@ -237,9 +257,9 @@ class ProgressPage extends React.Component {
             series = channels[channelName].monthlyseries;
         }
 
-        if (t >= timerange.begin() && t <= timerange.end()) {
+        if (t >= timerange.begin() && t <= timerange.end()) { // if selected in channel chart range 
             trackerIdx = series.bisect(new Date(t));
-        } else {
+        } else {  // display null values and return 
             this.setState(() => ({ tracker: null, trackerIdx: null, values: {
                 calories: "--", carbs: "--", fat: "--", protein: "--" } }));
             return; 
@@ -254,6 +274,8 @@ class ProgressPage extends React.Component {
             }
         })
 
+        // for each channel figure out the value at that 
+        // tracker index 
         displayChannels.map(channelName => {
 
             let series = null; 
@@ -282,37 +304,44 @@ class ProgressPage extends React.Component {
 
     };
 
-    // Handles when the brush changes the timerange
+    // Handles when the brush changes the timerange or the user 
+    // zooms, pans, etc. the logic here is kind of tricky
     handleTimeRangeChange = (timerange) => {
         const { channels, rollupSize, tracker, mintime, maxtime } = this.state;
-
+        
         if (timerange) {
 
             // Note this code works as long as the minimum time
             // unit is in terms of days within the supplied data 
+            // i.e. if you wanted to specify hours of meal consumption 
+            // for breakfast, lunch, and dinner, you would have to 
+            // rework the logic here (the degree to which idk)
 
-            // snap time range to days 
+            // get range endings 
             const rangebegin = moment(timerange.begin()).utc();
             const rangeend = moment(timerange.end()).utc();
 
             // get start of the day from the range 
             let daystart = null
-            if (rangebegin.isSameOrBefore(mintime)) { // lower bound 
-                daystart = mintime;
-            } else if (rangebegin.isSameOrAfter(maxtime)) { // upper bound 
+            if (rangebegin.isSameOrBefore(mintime)) { // hit lower bound
+                daystart = mintime; 
+            } else if (rangebegin.isSameOrAfter(maxtime)) { // hit upper bound 
                 daystart = maxtime.clone().subtract(1, 'days');
             } else {
-                daystart = rangebegin.clone().startOf('day');
+                daystart = rangebegin.clone().startOf('day'); // as usual 
             }
 
             // get end of the day from the range 
             let dayend = null
-            if (rangeend.isSameOrAfter(maxtime)) { // upper bound 
+            // this part is necessary to prevent zooming getting stuck with React-TimeSeries-Charts 
+            if (rangeend.clone().startOf('day').isSameOrBefore(mintime.clone().add(2, 'days'))) {
+                dayend = mintime.clone().add(3, 'days');
+            } else if (rangeend.isSameOrAfter(maxtime)) { // hit upper bound 
                 dayend = maxtime
-            } else if (rangeend.isSameOrBefore(mintime)) { // lower bound 
+            } else if (rangeend.isSameOrBefore(mintime)) { // hit lower bound 
                 dayend = mintime.clone().add(1, 'days');
             } else {
-                dayend = rangeend.clone().startOf('day');
+                dayend = rangeend.clone().startOf('day'); // as usual 
             }
 
             // make sure dayend is at least a day greater than start end 
@@ -334,7 +363,7 @@ class ProgressPage extends React.Component {
             beginPos = bisectedEventOutsideRange ? beginPos + 1 : beginPos;
             let endPos = initseries.bisect(timerangeEnd, beginPos); 
             
-            // set subseries
+            // set subseries for displaying in channels chart component  
             channelNames.map(channelName => {
                 channels[channelName].subseries = 
                     channels[channelName].dailyseries_null.slice(beginPos, endPos);
@@ -343,54 +372,58 @@ class ProgressPage extends React.Component {
             this.setState({ channels, timerange: new TimeRange(daystart, dayend)});
                 
         } else {
-            this.setState({ timerange: this.state.totalrange });
+            // resets and updates values accordingly for a null click to the full range
+            this.handleTimeRangeChange(this.state.totalrange );
         }
     };
 
+    // determines which channels to show/not show in the chart 
     toggleChannelShow = channelName => {
         let channels = this.state.channels;
 
-        // if channelNames becomes too big 
-        // this will become an expensive operation 
-        // it would be better to set display channels in state 
-        if (channelNames.filter(channelName => {
-            if (channels[channelName].show) {
-                return true;
-            } else {
-                return false;
-            }
-        }).length <= 1) {
-            // do something if all unchecked: TBD 
-        } 
-
-        channels[channelName].show = !channels[channelName].show; 
+        channels[channelName].show = !channels[channelName].show;
         this.setState(() => ({channels}));
     }
 
     render() {
     
-        console.log(this.props.width);
-
         const { ready, channels, rollupSize, tracker, timerange } = this.state;
 
+        // wait for the data to be retrieved/aggregated, show 
+        // a loading bar while waiting 
         if (!ready) {
             return (
                 <div>
-                    Loading
+                    <CircularProgress style={{
+                        width: "300px",
+                        height: "300px",
+                        position: "absolute",
+                        left: "50%",
+                        top: "50%", 
+                        marginLeft: "-150px",
+                        marginTop: "-150px",
+                        color: `${this.props.theme.palette.primary.main}`
+                        }} />
                 </div>
                 );
         }
 
         return (
+            // this part is just a bunch of conditional renders depending on the 
+            // width of the screen -- you kinda just have to see it 
             <div>
                 <Grid
                     container
                     direction="column"
                     justify="flex-start"
                     alignItems="stretch"
-                    style={{height: "100%"}}
+                    style={{height: "100%", width:"100%"}}
+                    variant="determinate"
                 >
-                    <Grid item xs={12}> 
+                    <Grid item xs={12} style={{marginLeft: "1%", marginRight: "1%"}}> 
+
+                        {/* this display is too prevent crowding which causes a newline
+                        in the checkboxs and radio buttons */}
                         {isWidthUp('md', this.props.width) 
                         ?
                         <Grid 
@@ -410,6 +443,8 @@ class ProgressPage extends React.Component {
                             <Grid item xs={4}>
                                 <CheckBoxes 
                                     toggleChannelShow={this.toggleChannelShow}
+                                    channelNames={channelNames}
+                                    channels={this.state.channels}
                                 />
                             </Grid>
                             <Grid item xs={3}>
@@ -422,7 +457,8 @@ class ProgressPage extends React.Component {
                             direction="row"
                             justify="space-evenly"
                             alignItems="stretch"
-                            style={{backgroundColor: `${themecolors.darkgray}`, height: "120px"}}
+                            style={{backgroundColor: `${themecolors.darkgray}`,
+                                height: `${isWidthUp('sm', this.props.width) ? "80px" : "120px"}`}}
                         >
                             <Grid item xs={isWidthUp('sm', this.props.width) ? 12 : 9}>
                                 <Grid 
@@ -440,7 +476,7 @@ class ProgressPage extends React.Component {
                                             direction="row"
                                             justify="space-evenly"
                                             alignItems="stretch"
-                                            style={{height: "80px"}}
+                                            style={{height: "40px"}}
                                         >
                                             <Grid item xs={7}>
                                                 <RadioButtons 
@@ -462,6 +498,8 @@ class ProgressPage extends React.Component {
                                         <CheckBoxes 
                                             toggleChannelShow={this.toggleChannelShow}
                                             smallScreen={true}
+                                            channelNames={channelNames}
+                                            channels={this.state.channels}
                                         />
                                     </Grid>
                                     </React.Fragment>
@@ -479,6 +517,8 @@ class ProgressPage extends React.Component {
                                         <CheckBoxes 
                                             toggleChannelShow={this.toggleChannelShow}
                                             smallScreen={true}
+                                            channelNames={channelNames}
+                                            channels={this.state.channels}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -488,38 +528,25 @@ class ProgressPage extends React.Component {
                                         />
                                     </Grid>
                                     </React.Fragment>
+                                    
                                     }
                                 </Grid>
                             </Grid>
-                            {isWidthUp('sm', this.props.width)
-                            ?
-                            <div/>
-                            :
-                            <Grid item xs={3}>
-                                <Grid 
-                                    container
-                                    direction="column"
-                                    justify="space-evenly"
-                                    alignItems="stretch"
-                                >
-                                    <Grid item xs={12}>
-                                        <NutritionValues {...this.state} nutrient="Protein"/>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <NutritionValues {...this.state} nutrient="Fat"/>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <NutritionValues {...this.state} nutrient="Carbs"/>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <NutritionValues {...this.state} nutrient="Calories"/>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                            }
                         </Grid>
                         }   
                     </Grid> 
+                    
+                    {/* display legend when screen is xs */}
+                    {isWidthDown('xs', this.props.width) 
+                    ?
+                    <Grid item xs={12}>
+                        <LegendString /> 
+                     </Grid>
+                     :
+                     <div/>
+                    }
+                    
+                    {/* display channels chart*/}
                     <Grid item xs={12}>
                         <ChannelsChart 
                             {...this.state}
@@ -529,7 +556,9 @@ class ProgressPage extends React.Component {
                             style={style}
                         />
                     </Grid> 
-                    {isWidthUp('md', this.props.width) 
+
+                    {/* display brush when screen >= sm */}
+                    {isWidthUp('sm', this.props.width) 
                     ?
                     <Grid item xs={12}>
                         <BrushChart 

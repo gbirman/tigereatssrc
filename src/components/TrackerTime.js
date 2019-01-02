@@ -15,7 +15,7 @@ const styles = theme => ({
             height: "80px",
           },
         [theme.breakpoints.down('sm')]: {
-            height: "40px",
+            height: "20px",
         },
         height: "100%",
         display: "flex",
@@ -29,11 +29,15 @@ const styles = theme => ({
         [theme.breakpoints.only('sm')]: {
             height: "100%",
           },
-          height: "auto",
+        height: "auto",
         overflow: "initial",
-        color: theme.palette.secondary.dark
+        color: theme.palette.primary.light
     }
 });
+
+// this statless component displays the date 
+// as a day, week or month depending on 
+// the parent components state
 
 const TrackerTime = (props) => {
 

@@ -38,16 +38,11 @@ const styles = (theme) => ({
     },
     checked: {}, 
     paper: {
-        //...theme.mixins.gutters(),
-        //paddingTop: theme.spacing.unit * 2,
-        //paddingBottom: theme.spacing.unit * 2,
         backgroundColor: `${themecolors.darkgray}`,
         [theme.breakpoints.down('sm')]: {
-            height: "40px",
+            height: "50px",
         },
         height: "100%",
-        //display: "flex",
-        //alignItems: "center",
     },
     group: {
         display: "flex",
@@ -57,23 +52,48 @@ const styles = (theme) => ({
     }
 });
 
+// statless function component for the 
+
+
 const CheckboxLabels = (props) => {
 
   const minwidth = useMediaQuery(`(min-width:${props.theme.breakpoints.values.lg}px)`);
 
   const {classes} =  props;
-  const [state, setState] = React.useState({
+  const {channels, channelNames} = props;
+  const [state, setState] = React.useState({ // these are hooks supported in the react alpha version
     calories: true,
     carbs: true,
     fat: true,
     protein: true,
   });
 
+  // handles chart display (toggling individual channels)
   const handleChange = name => event => {
+
+    // disable toggle when only one checkbox left  
+    // Note: if channelNames becomes too big 
+    // this will become an expensive operation 
+    // it would be better to set displayChannels variable in state 
+    // but since there's only four channels rn I didn't bother 
+    if (channelNames.filter(channelName => {
+        if (channels[channelName].show) {
+            return true;
+        } else {
+            return false;
+        }
+    }).length === 1 && !event.target.checked) {
+        setState({ ...state, [name]: !event.target.checked });
+        return;
+    } 
+
     setState({ ...state, [name]: event.target.checked });
     props.toggleChannelShow(name);
   };
 
+  // the hardcoded names can be made more dynamic by replacing 
+  // calories with channelNames[0] for instance -- I didn't 
+  // feel this was necessary though 
   return (
     <Paper className={classes.paper} elevation={props.smallScreen ? 0 : 1}>
         <FormGroup row className={classes.group}>

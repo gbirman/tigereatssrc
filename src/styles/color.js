@@ -1,3 +1,5 @@
+// some color constants for easier facility 
+
 export const darkgreen = "#59BF8E";
 export const lightgreen = "#d9f495";
 export const yellow = "#fff58c";

@@ -1,36 +1,57 @@
 import React from 'react';
 import {ChartRow, LabelAxis, Charts, Baseline,
         ValueAxis, ChartContainer, Resizable,
-        BarChart, styler} from 'react-timeseries-charts';
+        BarChart} from 'react-timeseries-charts';
 import { filter} from 'pondjs';
 import { unstable_useMediaQuery as useMediaQuery } from '@material-ui/core/useMediaQuery';
 import Paper from '@material-ui/core/Paper';
-import {themecolors} from '../styles/color';
+import {themecolors, nutrientcolors} from '../styles/color';
 import { withStyles } from '@material-ui/core/styles';
+
+// OK, so I know the black background for the channels chart
+// is kind of weird, but the React-time-series-charts API 
+// doesnt let you access the color values for either the LabelAxis or the 
+// ValueAxis (only the box that surrounds those). Since the colors
+// are pretty opposed, black was one of the few colors where both 
+// would be visible enough. Worst comes to worst, you'll have 
+// to access the elements through the DOM and set the inner-html,
+// but they're mad nested and don't have id's so have fun with that
 
 const styles = theme => ({
     paper: {
         //...theme.mixins.gutters(),
         //paddingTop: theme.spacing.unit * 2,
         //paddingBottom: theme.spacing.unit * 2,
-        backgroundColor: `${themecolors.lightgray}`,
+        backgroundColor: "black", //`${themecolors.darkgray}`,
         height: "100%",
-        marginLeft: theme.spacing.unit * 2,
-        marginRight: theme.spacing.unit * 2,
-        marginTop: theme.spacing.unit * 2,
-        marginBottom: theme.spacing.unit * 2,
+        marginLeft: "1%",
+        marginRight: "1%",
+        [theme.breakpoints.only('sm')]: {
+            marginTop: theme.spacing.unit*2,
+          },
+        marginTop: theme.spacing.unit,
+        marginBottom: theme.spacing.unit,
     }
 });
 
+// this is the main chart, the meat and potatoes,
+// if you will. 
+
 const ChannelsChart = (props) => {
 
+    // the number 325 has been hardcoded but it is based on 
+    // the heights of the nav bar and the other elements 
+    // so this can be made dynamic 
+    const containerHeight = window.innerHeight - 325;
+
+    // hide axis when too small 
     const minwidth = useMediaQuery(`(min-width:${props.theme.breakpoints.values.sm}px)`);
+    // for tick counts -- we want to prevent crowding
+    const medwidth = useMediaQuery(`(min-width:${props.theme.breakpoints.values.md}px)`); 
 
     const {classes} =  props;
-    const { ready, channels, tracker, trackerIdx, timerange, 
+    const { channels, tracker, timerange, 
             rollupSize, channelNames, style, values } = props;
-
-    const [width, setWidth] = React.useState({width: window.innerWidth});
 
     const rows = [];
 
@@ -68,26 +89,9 @@ const ChannelsChart = (props) => {
             />     
         );
 
-        // // Get the value at the current tracker position for the ValueAxis
-        // let value = "--";
-        // if (trackerIdx !== null) {
-
-        //     let nullseries = null;
-        //     if (rollupSize === 'day') {
-        //         nullseries = channels[channelName].dailyseries_null;
-        //     } else if (rollupSize === 'week') {
-        //         nullseries = channels[channelName].weeklyseries_null;
-        //     } else if (rollupSize === 'month') {
-        //         nullseries = channels[channelName].monthlyseries_null;
-        //     }
-
-        //     if (nullseries.at(trackerIdx).get(channelName)) {
-        //         value = parseInt(series.at(trackerIdx).get(channelName), 10);
-        //     }
-        // }
-        // values[`${channelName}`] = value; 
-
         // Get the summary values for the LabelAxis
+        // these depend on the current subseries so it's a pretty
+        // nifty real-time aggregation 
         let subseries = channels[channelName].subseries;
         const summary = [
             { label: "Min", value: parseInt(subseries.min(channelName, filter.ignoreMissing), 10) || '--' },
@@ -95,13 +99,13 @@ const ChannelsChart = (props) => {
             { label: "Avg", value: parseInt(subseries.avg(channelName, filter.ignoreMissing), 10) || '--' }
         ];
 
-        const containerHeight = 350;
-
+        // represents each chart row
         rows.push(
             <ChartRow
                 height={containerHeight / displayChannels.length}
                 key={`row-${channelName}`}
             >
+                {/* look at left side of the chart! */}
                 <LabelAxis
                     visible={minwidth}
                     id={`${channelName}_axis`}
@@ -112,6 +116,9 @@ const ChannelsChart = (props) => {
                     width={100}
                     type="linear"
                     format="d"
+                    style = { {axis: { fontSize: 11, textAnchor: "left", stroke: `${themecolors.lightgrey}` }, 
+                            label: { fontSize: 12, textAnchor: "middle", fill: `${nutrientcolors[channelName]}`}, 
+                            values: { fill: "none", stroke: "none" }} }
                 />
                 <Charts>
                     {charts}
@@ -120,17 +127,17 @@ const ChannelsChart = (props) => {
                         axis={`${channelName}_axis`}
                         value={channels[channelName].goal}
                         //label={`Goal: ${parseInt(channels[channelName].goal)}`}
-                        style = {{ line: { stroke: "#595959", strokeWidth: 0.5, strokeDasharray: "4,4", pointerEvents: "none" } }}
+                        style = {{ line: { stroke: "white", strokeWidth: 0.5, strokeDasharray: "4,4", pointerEvents: "none" } }}
                     />
                 </Charts>
+                {/* look at left side of the chart! */}
                 <ValueAxis
-                    visible={minwidth}
                     id={`${channelName}_valueaxis`}
                     value={values[`${channelName}`]}
                     detail={channels[channelName].units}
                     width={70}
                     min={0}
-                    max={35} // ??
+                    max={35} // the number here seems to be irrelevant but if i remove max shit breaks
                 />
             </ChartRow>
         );
@@ -139,26 +146,23 @@ const ChannelsChart = (props) => {
 
     return (
         <Paper className={classes.paper}>
-        <Resizable>
-            {ready 
-                ? 
-                <ChartContainer
-                    timeRange={timerange}
-                    utc={true}
-                    timeAxisTickCount={2}
-                    trackerPosition={tracker}
-                    onTimeRangeChanged={props.handleTimeRangeChange}
-                    onTrackerChanged={props.handleTrackerChanged}
-                    enablePanZoom={true}
-                    paddingLeft={10}
-                    paddingRight={10}
-                    hideTimeAxis={minwidth ? false : true}
-                >
-                    {rows}
-                </ChartContainer> 
-                :
-                <div>Loading.....</div>
-            }
+         {/* dynamically resizes (only!) width with container size */}
+        <Resizable> 
+            <ChartContainer
+                timeRange={timerange}
+                utc={true}
+                timeAxisTickCount={medwidth ? 10 : 5}
+                trackerPosition={tracker}
+                onTimeRangeChanged={props.handleTimeRangeChange}
+                onTrackerChanged={props.handleTrackerChanged}
+                enablePanZoom={true}
+                paddingTop={2}
+                paddingLeft={10}
+                paddingRight={10}
+                hideTimeAxis={minwidth ? false : true}
+            >
+                {rows}
+            </ChartContainer> 
         </Resizable>
         </Paper>
     );
