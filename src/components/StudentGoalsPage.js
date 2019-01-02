@@ -43,7 +43,7 @@ export default class StudentGoalsPage extends React.Component {
         ).then((data) => {
             let details = data['data'];
 
-            console.log("User's email " + details[0] + "<- is here");
+           // console.log("User's email " + details[0] + "<- is here");
             
             this.setState((prevState) => {
               return {  
@@ -75,7 +75,7 @@ export default class StudentGoalsPage extends React.Component {
             ).then((data) => {
                 let details = data['data'];
 
-                console.log("The real deets " + details[0].calories + "<- are there");
+                // console.log("The real deets " + details[0].calories + "<- are there");
                 
                 let dayInfoUpdated = [];
  
@@ -87,6 +87,7 @@ export default class StudentGoalsPage extends React.Component {
                         dayInfo1: data['data'], 
                         dayInfo2: prevState.dayInfo2,
                         dayInfo3: prevState.dayInfo3,
+                        dayInfo4: prevState.dayInfo4,
                         dayNutrients: details[0],
                         breakfastInfo: details[1]
                         //dayInfoArray: prevState.dayInfoArray.push(data['data']) // Testing for multiple days
@@ -100,6 +101,7 @@ export default class StudentGoalsPage extends React.Component {
                             dayInfo1: prevState.dayInfo1,
                             dayInfo2: data['data'], 
                             dayInfo3: prevState.dayInfo3,
+                            dayInfo4: prevState.dayInfo4,
                             dayNutrients: details[0],
                             breakfastInfo: details[1]
                             //dayInfoArray: prevState.dayInfoArray.push(data['data']) // Testing for multiple days
@@ -145,7 +147,7 @@ export default class StudentGoalsPage extends React.Component {
            // let daysPreprocessed = this.getDay(this.props.userID, this.props.date); // MOVE
            // console.log(daysPreprocessed); // DEBUGGING
 
-
+    // This gets today - I don't yet use it because we don't neccessarily have data for the last 4 days
     getToday() { // can be changed to get yesterdays date, etc (I'm sure there's a method we can use)
         let today = new Date();
         let dd = today.getDate();
@@ -158,29 +160,29 @@ export default class StudentGoalsPage extends React.Component {
             mm = '0'+mm
         } 
         today = yyyy + "-" + mm + "-" + dd;
-        console.log("Today is: " + today); // Debugging
+       // console.log("Today is: " + today); // Debugging
         return today;
     }
 
     render() {
         
-        console.log("Paulo's UID = " + JSON.stringify(this.props.match.params.id));
-        let user_id = this.props.match.params.id; // Paulo: Yeah so I need this from the previous page. It's currently Ishan
+       // console.log("Paulo's UID = " + JSON.stringify(this.props.match.params.id));
+        let user_id = this.props.match.params.id; // From dashboard
 
-        // Old bug: it couldn't find getToday
-        //let date = this.getToday(); // Fix and get this from some call to the current date
         let date = "2018-07-10";
 
-        // console.log("dayNutrients.calories: " + this.state.dayNutrients.calories + "<- are there");
-        // console.log("dayInfo[0]  " + this.state.dayInfo[0].calories + "<- are there");
-        //console.log("Day info is: " + dayInfo + " That is all "); // debugging 
-        // Things I might not need: "width:100%"
-
-        let userInfoTest = ["jamie@tigermag.com", "Jamies", "Mercurio",
+       /* let userInfoTest = ["jamie@tigermag.com", "Jamies", "Mercurio",
                             "Male", "5 9", "150lbs", "no restrictions mofo", 
-                        "1000CAL", "2000PRO", "0FAT", "350POUNDSMUSCLE", "2020", "Little League MMA"];
+                        "1000CAL", "2000PRO", "0FAT", "350POUNDSMUSCLE", "2020", "Little League MMA"]; */
        
         let fullName = this.state.userInfo[1] + " " + this.state.userInfo[2];
+
+
+        // Debugging meal info acqusition:
+        // console.log("\n 7/10 \n" + JSON.stringify(this.state.dayInfo1));
+        // console.log("\n 7/11 \n:" + JSON.stringify(this.state.dayInfo2));
+        // console.log("\n 7/12 \n:" + JSON.stringify(this.state.dayInfo3));
+        // console.log("\n 7/13 \n:" + JSON.stringify(this.state.dayInfo4));
 
 
         // TODO: dayInfoArray = {this.state.dayInfoArray}

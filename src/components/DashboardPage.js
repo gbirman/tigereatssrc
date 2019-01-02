@@ -23,7 +23,7 @@ const styles = theme => ({
     },
     personIcon: {
         color: "#59BF8E",
-        marginRight: '3vh'
+        marginRight: '1vh'
     },
     searchField: {
         color: '#4CA279',
@@ -46,8 +46,8 @@ export default withStyles(styles)(class DashboardPage extends React.Component {
         data: []
     };
 
-    getUsers = () => {
-        axios.get(
+    getUsers = async () => {
+        await axios.get(
             '/api/getUsers',
             {
                 params: {

@@ -17,8 +17,64 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import ChangeGoalsModuleQuantities from './ChangeGoalsModuleQuantities'
 import ChangeGoalsModulePercentages from './ChangeGoalsModulePercentages'
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 
-export default class ChangeGoalsPage extends React.Component {
+const styles = theme => ({
+    header: {
+        color: "#59bf8e",
+        fontFamily: 'Karla, sans-serif',
+    },
+    instructions: {
+        color: '#3e8563',
+        fontFamily: 'Karla, sans-serif',
+        textAlign: 'center',
+        paddingRight: '5vw',
+        paddingLeft: '5vw'
+    },
+    formOp: {
+    },
+    formOpLabel: {
+        textAlign: 'center',
+        color: "#4CA279",
+        fontFamily: 'Karla, sans-serif',
+    },
+    radio: {
+        color: "#4CA279",
+        textAlign: 'center'
+    },
+    instructionsPaper: {
+        marginRight: '30vw', 
+        marginLeft: '30vw',  
+        marginBottom: '2%',
+        paddingBottom: '2vh',
+        border: 'solid',
+        borderColor: '#59bf8e'
+    },
+    goalsPaper: {
+        marginRight: '10vw',
+        marginLeft: '10vw',
+        border: 'solid',
+        borderColor: '#59bf8e'
+    },
+    radioGroup: {
+        alignItems: 'center',
+        paddingLeft: '5vw',
+        paddingRight: '2vw'
+    },
+    button: {
+        marginBottom: 'vh',
+        width: '20vw',
+        fontFamily: 'Karla, sans-serif',
+        fontSize: '1em',
+        color: 'white',
+        border: 'solid',
+        borderStyle: 'solid',
+        borderColor: '#d9f495',
+    }
+})
+
+export default withStyles(styles)(class ChangeGoalsPage extends React.Component {
 
     // todo change order and add note about equation
     state = {
@@ -31,12 +87,12 @@ export default class ChangeGoalsPage extends React.Component {
         inputOption: "op1"
     };
 
-    validate = () => {
+    validate = async () => {
         console.log(this.state.calGoal + " " + this.state.proGoal + " " + this.state.fatsGoal + " " + this.state.carbsGoal);
         
         let result;
 
-        axios.post(
+        await axios.post(
             '/api/change_nutrition_goals',
             {
                 user_id: this.state.id, 
@@ -86,36 +142,32 @@ export default class ChangeGoalsPage extends React.Component {
     }
 
     render() {
+        const {classes} = this.props;
         return (
             <div>
-                
-                <Paper style={{marginRight: '10%', marginLeft: '10%'}}>
-                    <Grid container justify="center">
-                        <h1>Change your goals below!</h1>
-                    </Grid>
-                </Paper>
-                <Paper style={{marginRight: '30%', marginLeft: '30%', marginTop: '2%', marginBottom: '2%'}}>
-                    <Grid container justify="center">
-                        <p align="center">Totals must follow the following equality: <br />Calories = 4 * Protein + 4 * Carbs + 9 * Fat</p>
-                    </Grid>
-                </Paper>
-                <Paper style={{marginRight: '30%', marginLeft: '30%', marginTop: '2%', marginBottom: '2%', paddingTop: '1%'}}>
-                    <Grid container justify="center">
-                        <FormControl component="fieldset">
-                            <Grid item style={{textAlign: "center"}}>
-                                <FormLabel component="legend">Please select one of the following options for input:</FormLabel>
+                <Grid container justify="center" alignContent="center" className={classes.header}>
+                    <h1>Change your goals below!</h1>
+                </Grid>
+                <Paper className={classes.instructionsPaper}>
+                    <Grid container justify="center" >
+                        <FormControl component="fieldset" >
+                            <Grid item container alignItems="center">
+                                <FormLabel component="legend" className={classes.instructions}><h3>Please select one of the following options for input:</h3></FormLabel>
                             </Grid>
-                            <RadioGroup
-                                value={this.state.inputOption}
-                                onChange={this.handleFormChange}
-                            >
-                                <FormControlLabel value="op1" control={<Radio />} label="Input daily protein, carbohydrate, and fat goals" />
-                                <FormControlLabel value="op2" control={<Radio />} label="Input daily caloric goal and macronutrient breakdown" />
-                            </RadioGroup>
+                            <Grid item container alignItems="center">
+                                <RadioGroup
+                                    value={this.state.inputOption}
+                                    onChange={this.handleFormChange}
+                                    classes={{root: classes.radioGroup}}
+                                >
+                                    <FormControlLabel classes={{root: classes.formOp}} value="op1" control={<Radio color="secondary" classes={{root: classes.radio}}/> } label={<div className={classes.formOpLabel} >Input daily protein, carbohydrate, and fat goals</div>} />
+                                    <FormControlLabel classes={{root: classes.formOp}} value="op2" control={<Radio classes={{root: classes.radio}}/>} label={<div className={classes.formOpLabel} >Input daily caloric goal and macronutrient breakdown</div>} />
+                                </RadioGroup>
+                            </Grid>
                         </FormControl>
                     </Grid>
                 </Paper>
-                <Paper style={{marginRight: '5%', marginLeft: '5%'}}>
+                <Paper className={classes.goalsPaper}>
                     {this.state.inputOption === "op1" && <ChangeGoalsModuleQuantities
                         proteinGoal={this.props.match.params.protein_goal}
                         carbsGoal={this.props.match.params.carbs_goal}
@@ -137,10 +189,10 @@ export default class ChangeGoalsPage extends React.Component {
                         onCalChange={this.handleCalChange}
                     />}
                     <Grid container justify="center" style={{padding: 20}} alignItems="center">
-                        <Button variant="contained" color="primary" onClick={() => this.validate()}>Submit Changes!</Button>
+                        <Button variant="contained" color="primary" className={classes.button} onClick={() => this.validate()}>Submit Changes!</Button>
                     </Grid>
                 </Paper>
             </div>
         );
     }
-}
+})

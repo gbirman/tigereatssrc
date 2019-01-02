@@ -37,11 +37,18 @@ cas = CAS()
 cas.init_app(app)
 app.config['CAS_SERVER'] = 'https://fed.princeton.edu/cas/'
 app.secret_key = 'resttserase'
-app.config['CAS_AFTER_LOGIN'] = 'cas_redirect'
+app.config['CAS_AFTER_LOGIN'] = 'cas'
+
+
+@app.route('/cas', methods=['GET'])
+@login_required
+def login():
+    session['netID'] = cas.username
+    return cas.username
 
 
 @app.route('/cas_redirect', methods=['GET'])
-# @login_required
+@login_required
 def cas_redirect():
     uriRoot = environ.get('URIROOT', 'http://localhost:3000')
     return redirect(uriRoot + '/dash', code=302)
@@ -493,7 +500,7 @@ if __name__ == '__main__':
     # print(_get_user_nutrient_progress("5bf8ca12e7179a56e21592c5", "2018-07-11", "2018-07-15"))
     # print(_get_user('5bf8ca12e7179a56e21592c5'))
     # print(change_nutrition_goals('5bf8ca12e7179a56e21592c5', 68, 4, 4, 4))
-    print(_get_user_nutrient_progress('5bf8ca12e7179a56e21592c5', '2018-11-01', '2019-01-02'))
+    # print(_get_user_nutrient_progress('5bf8ca12e7179a56e21592c5', '2018-11-01', '2019-01-02'))
 
     # port = int(os.environ.get('PORT', 5000)) # Needed for heroku
 
