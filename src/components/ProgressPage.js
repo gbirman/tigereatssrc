@@ -429,25 +429,27 @@ class ProgressPage extends React.Component {
                         <Grid 
                             container
                             direction="row"
-                            justify="space-evenly"
+                            justify="space-between"
                             alignItems="stretch"
                             style={{height: 50}}
                         >
-                            <Grid item xs={3}>
+                            <Grid item xs={2}>
                                 <RadioButtons 
                                     setWindowDay={this.setWindowDay}
                                     setWindowWeek={this.setWindowWeek}
                                     setWindowMonth={this.setWindowMonth}
+                                    rollupSize={this.state.rollupSize}
+                                    smallScreen={false}
                                 />
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={5}>
                                 <CheckBoxes 
                                     toggleChannelShow={this.toggleChannelShow}
                                     channelNames={channelNames}
                                     channels={this.state.channels}
                                 />
                             </Grid>
-                            <Grid item xs={3}>
+                            <Grid item xs={4}>
                                 <TrackerTime {...this.state}>Hi</TrackerTime>
                             </Grid>
                         </Grid> 
@@ -478,15 +480,16 @@ class ProgressPage extends React.Component {
                                             alignItems="stretch"
                                             style={{height: "40px"}}
                                         >
-                                            <Grid item xs={7}>
+                                            <Grid item xs={6}>
                                                 <RadioButtons 
                                                     setWindowDay={this.setWindowDay}
                                                     setWindowWeek={this.setWindowWeek}
                                                     setWindowMonth={this.setWindowMonth}
+                                                    rollupSize={this.state.rollupSize}
                                                     smallScreen={true}
                                                 /> 
                                             </Grid>
-                                            <Grid item xs={5}>
+                                            <Grid item xs={6}>
                                                 <TrackerTime 
                                                     {...this.state} 
                                                     smallScreen={true}
@@ -510,6 +513,7 @@ class ProgressPage extends React.Component {
                                             setWindowDay={this.setWindowDay}
                                             setWindowWeek={this.setWindowWeek}
                                             setWindowMonth={this.setWindowMonth}
+                                            rollupSize={this.state.rollupSize}
                                             smallScreen={true}
                                         /> 
                                     </Grid>

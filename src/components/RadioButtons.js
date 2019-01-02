@@ -9,6 +9,8 @@ import classnames from 'classnames';
 import {themecolors} from '../styles/color';
 import { unstable_useMediaQuery as useMediaQuery } from '@material-ui/core/useMediaQuery';
 
+// TODO: Fix radio button switch to daily when shortening screen width 
+
 const styles = theme => ({
     root: {
         padding: 0,
@@ -54,8 +56,8 @@ const styles = theme => ({
 // to either day week or month 
 
 const FormControlLabelPosition = (props) => {
-    const {classes} =  props;
-    const [value, setValue] = React.useState('day'); // these are hooks supported in the react alpha version
+    const {classes, rollupSize, smallScreen} =  props;
+    const [value, setValue] = React.useState(rollupSize); // these are hooks supported in the react alpha version
 
     // change the display for >= sm (e.g. "Day" vs "D")
     const minwidth = useMediaQuery(`(min-width:${props.theme.breakpoints.values.sm}px)`);
@@ -72,7 +74,7 @@ const FormControlLabelPosition = (props) => {
     }
 
   return (
-    <Paper className={classes.paper} elevation={props.smallScreen ? 0 : 1}>
+    <Paper className={classes.paper} elevation={props.theme.breakpoints.down('md') ? 0 : 1}>
         <FormControl 
             component="fieldset"
             style={{width: "100%"}}
@@ -89,21 +91,21 @@ const FormControlLabelPosition = (props) => {
                 value="day"
                 control={<Radio className={classnames(classes.root, classes.daily, classes.checked)}/>}
                 label={minwidth ? "Daily" : "D"}
-                labelPlacement={minwidth ? "top" : "top"}
+                labelPlacement="top"
                 classes={{label: classes.daily}}
                 />
                 <FormControlLabel
                 value="week"
                 control={<Radio color="primary" className={classnames(classes.root, classes.weekly, classes.checked)} />}
                 label={minwidth ? "Weekly" : "W"}
-                labelPlacement={minwidth ? "top" : "top"}
+                labelPlacement="top"
                 classes={{label: classes.weekly}}
                 />
                 <FormControlLabel
                 value="month"
                 control={<Radio color="primary" className={classnames(classes.root, classes.monthly, classes.checked)} />}
                 label={minwidth ? "Monthly" : "M"}
-                labelPlacement={minwidth ? "top" : "top"}
+                labelPlacement="top"
                 classes={{label: classes.monthly}}
                 />
             </RadioGroup>

@@ -57,7 +57,7 @@ const styles = (theme) => ({
 
 const CheckboxLabels = (props) => {
 
-  const minwidth = useMediaQuery(`(min-width:${props.theme.breakpoints.values.lg}px)`);
+  const minwidth = useMediaQuery(`(min-width:${props.theme.breakpoints.values.md}px)`);
 
   const {classes} =  props;
   const {channels, channelNames} = props;
