@@ -39,9 +39,9 @@ app.config['CAS_AFTER_LOGIN'] = 'cas_redirect'
 
 
 @app.route('/cas_redirect', methods=['GET'])
-# @login_required
+@login_required
 def cas_redirect():
-    uriRoot = environ.get('URIROOT', 'http://localhost:3000')
+    uriRoot = environ.get('URIROOT', 'https://tigereats.herokuapp.com')
     return redirect(uriRoot + '/dash', code=302)
 
 
