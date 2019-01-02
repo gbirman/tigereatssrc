@@ -29,7 +29,9 @@ const theme = createMuiTheme({
             dark: "#97aa68"
         }
     },
-    typography: [
+    typography: {
+        fontFamily: [
+        'Karla',
         'Raleway',
         'BlinkMacSystemFont',
         '"Segoe UI"',
@@ -40,7 +42,8 @@ const theme = createMuiTheme({
         '"Apple Color Emoji"',
         '"Segoe UI Emoji"',
         '"Segoe UI Symbol"',
-      ].join(','), 
+      ].join(','),
+    }, 
       overrides: {
         MuiInput: {
           underline: {

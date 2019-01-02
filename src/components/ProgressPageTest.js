@@ -3,43 +3,60 @@ import axios from 'axios';
 import _ from 'lodash';
 import {ChartRow, LabelAxis, Charts, Baseline,
     ValueAxis, ChartContainer, Resizable,
-    Brush, YAxis, BarChart, Legend, styler} from 'react-timeseries-charts';
+    Brush, YAxis, BarChart, styler} from 'react-timeseries-charts';
 import { TimeSeries, avg, sum, Index, filter, TimeRange} from 'pondjs';
 import "moment-duration-format";
 import moment from "moment";
 import Grid from '@material-ui/core/Grid';
+import RadioButtons from "./RadioButtons";
+import CheckBoxes from "./CheckBoxes";
+import ChannelsChart from "./ChannelsChart";
+import BrushChart from "./BrushChart";
+import {nutrientcolors} from '../styles/color';
+import TrackerTime from './TrackerTime';
+import Paper from '@material-ui/core/Paper';
+import { Typography } from '@material-ui/core';
+import NutritionValues from './NutritionValues';
+import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
+import {themecolors} from '../styles/color';
 
 const style = styler([
-    { key: "calories", color: "#f9bf8e" },
-    { key: "carbs", color: "#d9f495" },
-    { key: "fat", color: "#fff58c" },
-    { key: "protein", color: "f7978a"}
+    { key: "calories", color: nutrientcolors.calories},
+    { key: "carbs", color: nutrientcolors.carbs },
+    { key: "fat", color: nutrientcolors.fat },
+    { key: "protein", color: nutrientcolors.protein }
 ]);
 
 // these are the names of the nutrients as specified in MongoDB 
 // with associated metadata 
 const channels = {
-    calories: { units: "kcal", label: "Calories", format: "d", show: true, goal: null,
+    calories: { units: "kcal", label: "Calories", show: true, goal: null,
         dailyseries_null: null, dailyseries: null, weeklyseries_null: null, weeklyseries: null, 
-        monthlyseries_null: null, monthlyseries: null, subseries: null },
-    carbs: { units: "g", label: "Carbohydrates", format: "d", show: true, goal: null,
-    dailyseries_null: null, dailyseries: null, weeklyseries_null: null, weeklyseries: null, 
-    monthlyseries_null: null, monthlyseries: null, subseries: null },
-    fat: { units: "g", label: "Fat", format: "d", show: true, goal: null,
-    dailyseries_null: null, dailyseries: null, weeklyseries_null: null, weeklyseries: null, 
-    monthlyseries_null: null, monthlyseries: null, subseries: null },
-    protein: { units: "g", label: "Protein", format: "d", show: true, goal: null,
-    dailyseries_null: null, dailyseries: null, weeklyseries_null: null, weeklyseries: null, 
-    monthlyseries_null: null, monthlyseries: null, subseries: null }
+        monthlyseries_null: null, monthlyseries: null, subseries: null, amount: null },
+    carbs: { units: "g", label: "Carbs", show: true, goal: null,
+        dailyseries_null: null, dailyseries: null, weeklyseries_null: null, weeklyseries: null, 
+        monthlyseries_null: null, monthlyseries: null, subseries: null, amount: null },
+    fat: { units: "g", label: "Fat", show: true, goal: null,
+        dailyseries_null: null, dailyseries: null, weeklyseries_null: null, weeklyseries: null, 
+        monthlyseries_null: null, monthlyseries: null, subseries: null, amount: null },
+    protein: { units: "g", label: "Protein", show: true, goal: null,
+        dailyseries_null: null, dailyseries: null, weeklyseries_null: null, weeklyseries: null, 
+        monthlyseries_null: null, monthlyseries: null, subseries: null, amount: null }
 }
 
 // these are the names of the nutrients as specified in MongoDB 
-const channelNames = ['protein', 'fat', 'carbs', 'calories']
+const channelNames = ['protein', 'fat', 'carbs', 'calories'];
 
 // // Rollups we'll generate to reduce data for the screen
 // const rollupLevels = ["1d", "3d", "5d", "7d"];
 
 class ProgressPage extends React.Component {
+
+
+    // functions to set window size in state 
+    setWindowDay = () => this.setState(() => ({ rollupSize: "day" }));
+    setWindowWeek = () => this.setState(() => ({ rollupSize: "week" }));
+    setWindowMonth = () => this.setState(() => ({ rollupSize: "month" }));
 
     state = {
         ready: false,
@@ -50,9 +67,10 @@ class ProgressPage extends React.Component {
         totalseries: null,
         trackerIdx: null,
         maxHeight: null,
-        windowSize: 'day',
+        rollupSize: 'day',
         mintime: null,
-        maxtime: null
+        maxtime: null,
+        values: {calories: "--", carbs: "--", fat: "--", protein: "--"}
     };
 
     componentDidMount() {
@@ -125,7 +143,7 @@ class ProgressPage extends React.Component {
 
                     // rollups 
                     let dailyseries_null = initialseries.dailyRollup({
-                        //windowSize: "1d",
+                        //rollupSize: "1d",
                         aggregation: {[channelName]: {[channelName]: avg(filter.ignoreMissing)}}
                     });
 
@@ -205,32 +223,68 @@ class ProgressPage extends React.Component {
     };
 
     handleTrackerChanged = (t) => {
-        const { channels, windowSize, timerange } = this.state
+        const { channels, rollupSize, timerange, values } = this.state
 
         let trackerIdx = null;
 
         let series = null; 
         let channelName = channelNames[0];
-        if (windowSize === 'day') {
+        if (rollupSize === 'day') {
             series = channels[channelName].dailyseries;
-        } else if (windowSize === 'week') {
+        } else if (rollupSize === 'week') {
             series = channels[channelName].weeklyseries;
-        } else if (windowSize === 'month') {
+        } else if (rollupSize === 'month') {
             series = channels[channelName].monthlyseries;
         }
 
-        // make sure tracker is within brush range for display 
         if (t >= timerange.begin() && t <= timerange.end()) {
             trackerIdx = series.bisect(new Date(t));
-            this.setState(() => ({ tracker: t, trackerIdx }));
         } else {
-            this.setState(() => ({ tracker: null, trackerIdx: null }));
+            this.setState(() => ({ tracker: null, trackerIdx: null, values: {
+                calories: "--", carbs: "--", fat: "--", protein: "--" } }));
+            return; 
         }
+
+        // determine which channels to display 
+        const displayChannels = channelNames.filter(channelName => {
+            if (channels[channelName].show) {
+                return true;
+            } else {
+                return false;
+            }
+        })
+
+        displayChannels.map(channelName => {
+
+            let series = null; 
+            let nullseries = null;
+            if (rollupSize === 'day') {
+                series = channels[channelName].dailyseries;
+                nullseries = channels[channelName].dailyseries_null;
+            } else if (rollupSize === 'week') {
+                series = channels[channelName].weeklyseries;
+                nullseries = channels[channelName].weeklyseries_null;
+            } else if (rollupSize === 'month') {
+                series = channels[channelName].monthlyseries;
+                nullseries = channels[channelName].monthlyseries_null;
+            }
+
+            if (nullseries.at(trackerIdx).get(channelName)) {
+                values[`${channelName}`] = 
+                    parseInt(series.at(trackerIdx).get(channelName), 10);
+            } else {
+                values[`${channelName}`] = "--"; 
+            }
+
+        });
+
+        this.setState(() => ({ tracker: t, trackerIdx, values }));
+
     };
 
     // Handles when the brush changes the timerange
     handleTimeRangeChange = (timerange) => {
-        const { channels, windowSize, tracker, mintime, maxtime } = this.state;
+        const { channels, rollupSize, tracker, mintime, maxtime } = this.state;
 
         if (timerange) {
 
@@ -293,227 +347,7 @@ class ProgressPage extends React.Component {
         }
     };
 
-    handleChartResize = (width) => {
-        this.setState({ width });
-    };
-
-    // // get time axis tick formats 
-    // getTimeFormat = (timerange) => {
-    //     if (moment.duration(timerange.duration()).asMonths() < 12) {
-    //         if (moment.duration(timerange.duration()).asDays() < 30 ) {
-    //             return 'day';
-    //         } else {
-    //             return 'month';
-    //         }
-    //     } else {
-    //         return 'year';
-    //     }
-    // }
-
-    renderChart = () => {
-        return this.renderChannelsChart();
-    };
-
-    renderChannelsChart = () => {
-        const { channels, tracker, trackerIdx, timerange, mintime, maxtime, windowSize } = this.state;
-
-        const rows = [];
-
-        // determine which channels to display 
-        const displayChannels = channelNames.filter(channelName => {
-            if (channels[channelName].show) {
-                return true;
-            } else {
-                return false;
-            }
-        })
-        
-        displayChannels.map(channelName => {
-
-            let series = null; 
-            if (windowSize === 'day') {
-                series = channels[channelName].dailyseries;
-            } else if (windowSize === 'week') {
-                series = channels[channelName].weeklyseries;
-            } else if (windowSize === 'month') {
-                series = channels[channelName].monthlyseries;
-            }
-
-            const charts = [];
-            charts.push(
-                <BarChart
-                    key={`bar-${channelName}`}
-                    axis={`${channelName}_axis`}
-                    series={series}
-                    columns={[channelName]}
-                    style={style}
-                    breakLine={true}
-                    minBarHeight={0}
-                />     
-            );
-
-            // Get the value at the current tracker position for the ValueAxis
-            let value = "--";
-            if (trackerIdx !== null) {
-
-                let nullseries = null;
-                if (windowSize === 'day') {
-                    nullseries = channels[channelName].dailyseries_null;
-                } else if (windowSize === 'week') {
-                    nullseries = channels[channelName].weeklyseries_null;
-                } else if (windowSize === 'month') {
-                    nullseries = channels[channelName].monthlyseries_null;
-                }
-
-                if (nullseries.at(trackerIdx).get(channelName)) {
-                    value = parseInt(series.at(trackerIdx).get(channelName), 10);
-                }
-            }
-
-            // Get the summary values for the LabelAxis
-            let subseries = channels[channelName].subseries;
-            const summary = [
-                { label: "Min", value: parseInt(subseries.min(channelName, filter.ignoreMissing), 10) || '--' },
-                { label: "Max", value: parseInt(subseries.max(channelName, filter.ignoreMissing), 10) || '--' },
-                { label: "Avg", value: parseInt(subseries.avg(channelName, filter.ignoreMissing), 10) || '--' }
-            ];
-
-            const containerHeight = 350;
-
-            rows.push(
-                <ChartRow
-                    height={containerHeight / displayChannels.length}
-                    key={`row-${channelName}`}
-                >
-                    <LabelAxis
-                        id={`${channelName}_axis`}
-                        label={channels[channelName].label}
-                        values={summary}
-                        min={0}
-                        max={channels[channelName].max}
-                        width={140}
-                        type="linear"
-                        format="d"
-                    />
-                    <Charts>
-                        {charts}
-                        <Baseline
-                            key={`line-${channelName}`}
-                            axis={`${channelName}_axis`}
-                            value={channels[channelName].goal}
-                            label={`Goal: ${parseInt(channels[channelName].goal)}`}
-                        />
-                    </Charts>
-                    <ValueAxis
-                        id={`${channelName}_valueaxis`}
-                        value={value}
-                        detail={channels[channelName].units}
-                        width={80}
-                        min={0}
-                        max={0} // ??
-                    />
-                </ChartRow>
-            );
-
-        });
-
-        return (
-            <ChartContainer
-                timeRange={timerange}
-                utc={true}
-                timeAxisTickCount={2}
-                trackerPosition={tracker}
-                onTimeRangeChanged={this.handleTimeRangeChange}
-                onChartResize={width => this.handleChartResize(width)}
-                onTrackerChanged={this.handleTrackerChanged}
-                enablePanZoom={true}
-            >
-                {rows}
-            </ChartContainer>
-        );
-        
-    };
-
-    renderBrush = () => {
-
-        const { totalseries, totalrange, 
-            timerange, maxHeight, tracker, mintime, maxtime } = this.state;
-
-        return (
-            <ChartContainer
-                timeRange={totalrange}
-                format={"%b-%y"}
-                trackerPosition={tracker}
-            > 
-                <ChartRow height="100" debug={false}>
-                    <Brush
-                        timeRange={timerange}
-                        allowSelectionClear={true}
-                        onTimeRangeChanged={this.handleTimeRangeChange}
-                    />
-                    <YAxis
-                        id="axis1"
-                        label="Totals"
-                        min={0}
-                        max={maxHeight}
-                        width={70}
-                        type="linear"
-                        format="d"
-                    />
-                    <Charts>
-                        <BarChart
-                            axis="axis1"
-                            columns={channelNames.slice(0).reverse()} // matches alignment of top
-                            style={style}
-                            series={totalseries}
-                            minBarHeight={0}
-                        />
-                    </Charts>
-                </ChartRow>
-            </ChartContainer>
-        );
-    };
-
-    renderModeOptions = () => {
-        const linkStyle = {
-            fontWeight: 600,
-            color: "grey",
-            cursor: "default"
-        };
-
-        const linkStyleActive = {
-            color: "blue",
-            cursor: "pointer"
-        };
-
-        return (
-            <div style={{ fontSize: 20, color: "#f7978a" }}>
-                <span
-                    style={this.state.windowSize !== "day" ? linkStyleActive : linkStyle}
-                    onClick={() => this.setState(() => ({ windowSize: "day" }))}
-                > 
-                    day
-                </span>
-                <span> | </span>
-                <span
-                    style={this.state.windowSize !== "week" ? linkStyleActive : linkStyle}
-                    onClick={() => this.setState(() => ({ windowSize: "week" }))}
-                >
-                    week
-                </span>
-                <span> | </span>
-                <span
-                    style={this.state.windowSize !== "month" ? linkStyleActive : linkStyle}
-                    onClick={() => this.setState(() => ({ windowSize: "month" }))}
-                >
-                    month
-                </span>
-            </div>
-        );
-
-    };
-
-    onLegendSelection = channelName => {
+    toggleChannelShow = channelName => {
         let channels = this.state.channels;
 
         // if channelNames becomes too big 
@@ -526,7 +360,7 @@ class ProgressPage extends React.Component {
                 return false;
             }
         }).length <= 1) {
-            // do something: TBD 
+            // do something if all unchecked: TBD 
         } 
 
         channels[channelName].show = !channels[channelName].show; 
@@ -534,8 +368,10 @@ class ProgressPage extends React.Component {
     }
 
     render() {
+    
+        console.log(this.props.width);
 
-        const { ready, channels, windowSize, tracker, timerange } = this.state;
+        const { ready, channels, rollupSize, tracker, timerange } = this.state;
 
         if (!ready) {
             return (
@@ -545,64 +381,172 @@ class ProgressPage extends React.Component {
                 );
         }
 
-        // Generate the legend
-        const legend = channelNames.map(channelName => ({
-            key: channelName,
-            label: channels[channelName].label
-        }));
-
-        let trackertime = moment.utc(+tracker)
-
-        let selectiondate = null; 
-        if (windowSize === 'day') {
-            selectiondate = trackertime.format('MM/DD/YY');
-        } else if (windowSize === 'week') {
-            let weekstart = null;
-            let weekend = null
-            if (trackertime.isSameOrAfter(trackertime.clone().day(4))) {
-                weekstart = trackertime.clone().day(4); 
-                weekend = trackertime.clone().day(10); 
-            } else {
-                weekstart = trackertime.clone().day(-3); 
-                weekend = trackertime.clone().day(3); 
-            }
-            selectiondate = 
-                `${weekstart.format('ddd MM/DD/YY')} - ${weekend.format('ddd MM/DD/YY')}`;
-        } else if (windowSize === 'month') {
-            selectiondate = trackertime.format('MMM-YY');
-        }
-
         return (
             <div>
-                <div>
-                    {this.renderModeOptions()}
-                </div>
-
-                <Legend
-                    type={"dot"}
-                    style={style}
-                    categories={legend}
-                    onSelectionChange={this.onLegendSelection}
-                />
-
-                <div>
-                    {tracker >= timerange.begin() && tracker <= timerange.end()
-                        ? `${selectiondate}`
-                        : null}
-                </div>
-
-                <Resizable>
-                    {ready ? this.renderChart() : <div>Loading.....</div>}
-                </Resizable>
-                
-                <Resizable>
-                    {ready ? this.renderBrush() : <div />}
-                </Resizable>
-                
+                <Grid
+                    container
+                    direction="column"
+                    justify="flex-start"
+                    alignItems="stretch"
+                    style={{height: "100%"}}
+                >
+                    <Grid item xs={12}> 
+                        {isWidthUp('md', this.props.width) 
+                        ?
+                        <Grid 
+                            container
+                            direction="row"
+                            justify="space-evenly"
+                            alignItems="stretch"
+                            style={{height: 50}}
+                        >
+                            <Grid item xs={3}>
+                                <RadioButtons 
+                                    setWindowDay={this.setWindowDay}
+                                    setWindowWeek={this.setWindowWeek}
+                                    setWindowMonth={this.setWindowMonth}
+                                />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <CheckBoxes 
+                                    toggleChannelShow={this.toggleChannelShow}
+                                />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <TrackerTime {...this.state}>Hi</TrackerTime>
+                            </Grid>
+                        </Grid> 
+                        :
+                        <Grid 
+                            container
+                            direction="row"
+                            justify="space-evenly"
+                            alignItems="stretch"
+                            style={{backgroundColor: `${themecolors.darkgray}`, height: "120px"}}
+                        >
+                            <Grid item xs={isWidthUp('sm', this.props.width) ? 12 : 9}>
+                                <Grid 
+                                    container
+                                    direction="column"
+                                    justify="space-evenly"
+                                    alignItems="stretch"
+                                >
+                                    {isWidthUp('sm', this.props.width)
+                                    ?
+                                    <React.Fragment>
+                                    <Grid item xs={12}>
+                                        <Grid 
+                                            container
+                                            direction="row"
+                                            justify="space-evenly"
+                                            alignItems="stretch"
+                                            style={{height: "80px"}}
+                                        >
+                                            <Grid item xs={7}>
+                                                <RadioButtons 
+                                                    setWindowDay={this.setWindowDay}
+                                                    setWindowWeek={this.setWindowWeek}
+                                                    setWindowMonth={this.setWindowMonth}
+                                                    smallScreen={true}
+                                                /> 
+                                            </Grid>
+                                            <Grid item xs={5}>
+                                                <TrackerTime 
+                                                    {...this.state} 
+                                                    smallScreen={true}
+                                                />
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <CheckBoxes 
+                                            toggleChannelShow={this.toggleChannelShow}
+                                            smallScreen={true}
+                                        />
+                                    </Grid>
+                                    </React.Fragment>
+                                    :
+                                    <React.Fragment>
+                                    <Grid item xs={12}>
+                                        <RadioButtons 
+                                            setWindowDay={this.setWindowDay}
+                                            setWindowWeek={this.setWindowWeek}
+                                            setWindowMonth={this.setWindowMonth}
+                                            smallScreen={true}
+                                        /> 
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <CheckBoxes 
+                                            toggleChannelShow={this.toggleChannelShow}
+                                            smallScreen={true}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TrackerTime 
+                                            {...this.state} 
+                                            smallScreen={true}
+                                        />
+                                    </Grid>
+                                    </React.Fragment>
+                                    }
+                                </Grid>
+                            </Grid>
+                            {isWidthUp('sm', this.props.width)
+                            ?
+                            <div/>
+                            :
+                            <Grid item xs={3}>
+                                <Grid 
+                                    container
+                                    direction="column"
+                                    justify="space-evenly"
+                                    alignItems="stretch"
+                                >
+                                    <Grid item xs={12}>
+                                        <NutritionValues {...this.state} nutrient="Protein"/>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <NutritionValues {...this.state} nutrient="Fat"/>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <NutritionValues {...this.state} nutrient="Carbs"/>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <NutritionValues {...this.state} nutrient="Calories"/>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                            }
+                        </Grid>
+                        }   
+                    </Grid> 
+                    <Grid item xs={12}>
+                        <ChannelsChart 
+                            {...this.state}
+                            handleTimeRangeChange={this.handleTimeRangeChange}
+                            handleTrackerChanged={this.handleTrackerChanged}
+                            channelNames={channelNames}
+                            style={style}
+                        />
+                    </Grid> 
+                    {isWidthUp('md', this.props.width) 
+                    ?
+                    <Grid item xs={12}>
+                        <BrushChart 
+                            {...this.state}
+                            handleTimeRangeChange={this.handleTimeRangeChange}
+                            channelNames={channelNames}
+                            style={style}
+                        />
+                     </Grid>
+                     :
+                     <div/>
+                    }
+            </Grid> 
             </div>
         );
 
     };
 }
 
-export default ProgressPage;
+export default withWidth({withTheme: true})(ProgressPage);
