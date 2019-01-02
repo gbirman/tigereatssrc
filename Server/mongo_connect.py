@@ -42,12 +42,13 @@ app.config['CAS_AFTER_LOGIN'] = 'cas'
 @login_required
 def login():
     session['netID'] = cas.username
+    return cas.username
 
 
 @app.route('/cas_redirect', methods=['GET'])
 @login_required
 def cas_redirect():
-    uriRoot = environ.get('URIROOT', 'http://localhost:8080')
+    uriRoot = environ.get('URIROOT', 'http://localhost:3000')
     return redirect(uriRoot + '/dash', code=302)
 
 
