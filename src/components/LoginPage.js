@@ -73,8 +73,7 @@ export default withStyles(styles)(class LoginPage extends React.Component {
                         <div><h1>Welcome to <span style={{padding: 0, margin: 0, color: "#d9f495"}}>Tiger</span>Eats!</h1></div>
                     </Paper>
                     <Grid item xs={3} >
-
-                        <Button className={classes.loginButton} variant="contained" color="primary" onClick={() => axios.get('http://127.0.0.1:5000/cas').catch((error) => {console.error(error);})}>Login with CAS</Button>
+                        <Button className={classes.loginButton} variant="contained" color="primary" onClick={() => axios.get('/cas').catch((error) => {console.error(error);})}>Login with CAS</Button>
                     </Grid>
                 </Grid>
             </div>
