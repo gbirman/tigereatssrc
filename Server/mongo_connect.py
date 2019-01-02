@@ -35,7 +35,13 @@ cas = CAS()
 cas.init_app(app)
 app.config['CAS_SERVER'] = 'https://fed.princeton.edu/cas/'
 app.secret_key = 'resttserase'
-app.config['CAS_AFTER_LOGIN'] = 'cas_redirect'
+app.config['CAS_AFTER_LOGIN'] = 'cas'
+
+
+@app.route('/cas', methods=['GET'])
+@login_required
+def login():
+    session['netID'] = cas.username
 
 
 @app.route('/cas_redirect', methods=['GET'])
