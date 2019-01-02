@@ -35,9 +35,58 @@ export default class ProgressPage extends React.Component {
         selectedOption: [],
         maxVals: {},
         maxVal: 0, 
-        waitingForData: true
+        waitingForData: true,
     };
-      
+    
+    // intialize state using axios response 
+    initializeState = (details) => {
+
+        // get column names via initial ordering of nutrients 
+        let nutrient_dict = Object.entries(details)[0][1] // nutrient dictionary of first datapoint
+        const columnNames = []; // nutrient types 
+        const maxVals = {}; // max value of each nutrient type
+        for (const [nutrient_name, _] of Object.entries(nutrient_dict)) {
+            const name = format(nutrient_name);
+            columnNames.push(name);
+            maxVals[name] = 0
+        }
+        
+        // convert data to useable form (array)
+        const points = [];
+        for (const [t, nutrients] of Object.entries(details)) {
+            const point = [new Date(t)]; 
+            for (const [nutrient_name, nutrient_amount] of Object.entries(nutrients)) {
+                const name = format(nutrient_name)
+                if (nutrient_amount > maxVals[name]) {
+                    maxVals[name] = nutrient_amount;  
+                }                 
+                point.push(nutrient_amount);
+            }
+            points.push(point);
+        }
+        // console.log(points)
+        // points.map(p => console.log(p));
+        // console.log(Math.max(...points[0].slice(1, points[0].length)));
+
+        // Process out data into a TimeSeries
+        const name = "series";
+        const columns = ["time", ...columnNames];
+        const series = new TimeSeries({ name, columns, points });
+
+        // get maximum value of the data points 
+        const validMax = [] 
+        for (const [_, value] of Object.entries(maxVals)) {
+            validMax.push(value)
+        }
+        const maxVal = validMax.reduce((a, b) => a + b, 0); // get the sum
+
+        // set state and render using callback function 
+        this.setState(() => ({series: series, columnNames: columnNames, 
+            cols: { up: columnNames, down: [] }, 
+            selectedOption: columnNames.map(c => ({ value: c, label: c })),
+            maxVals: maxVals, maxVal: maxVal, waitingForData: false}));
+    }
+
     // when options are changed
     handleChange = (selectedOption) => {
 
@@ -54,7 +103,6 @@ export default class ProgressPage extends React.Component {
         let maxVal = 0
         if (validMax.length === 0) maxVal = this.state.maxVal;
         else maxVal = validMax.reduce((a, b) => a + b, 0); // get the sum
-        console.log(maxVal)
 
         let a = Object.entries(selectedOption).map( ([key]) => selectedOption[key]['label'] );
         this.setState(() => ({cols: { up: a, down: [] }, maxVal: maxVal}));
@@ -73,55 +121,8 @@ export default class ProgressPage extends React.Component {
                 headers: {'Content-type': 'application/json'}
             }
         ).then((data) => {
-
             let details = data['data'];
-            
-            // get column names via initial ordering of nutrients 
-            let nutrient_dict = Object.entries(details)[0][1] // nutrient dictionary of first datapoint
-            const columnNames = []; // nutrient types 
-            const maxVals = {}; // max value of each nutrient type
-            for (const [nutrient_name, _] of Object.entries(nutrient_dict)) {
-                const name = format(nutrient_name);
-                columnNames.push(name);
-                maxVals[name] = 0
-            }
-            
-            // convert data to useable form (array)
-            const points = [];
-            for (const [t, nutrients] of Object.entries(details)) {
-                const point = [new Date(t)]; 
-                for (const [nutrient_name, nutrient_amount] of Object.entries(nutrients)) {
-                    const name = format(nutrient_name)
-                    if (nutrient_amount > maxVals[name]) {
-                        maxVals[name] = nutrient_amount;  
-                    }                 
-                    point.push(nutrient_amount);
-                }
-                points.push(point);
-            }
-            // console.log(points)
-            // points.map(p => console.log(p));
-            // console.log(Math.max(...points[0].slice(1, points[0].length)));
-
-            // Process out data into a TimeSeries
-            const name = "series";
-            const columns = ["time", ...columnNames];
-            const series = new TimeSeries({ name, columns, points });
-
-            // get maximum value of the data points 
-            const validMax = [] 
-            for (const [_, value] of Object.entries(maxVals)) {
-                validMax.push(value)
-            }
-            const maxVal = validMax.reduce((a, b) => a + b, 0); // get the sum
-            console.log(maxVals)
-
-            // set state and render using callback function 
-            this.setState(() => ({series: series, columnNames: columnNames, 
-                cols: { up: columnNames, down: [] }, 
-                selectedOption: columnNames.map(c => ({ value: c, label: c })),
-                maxVals: maxVals, maxVal: maxVal, waitingForData: false}));
-
+            this.initializeState(details);
         })
 
     }
@@ -204,3 +205,5 @@ export default class ProgressPage extends React.Component {
     }
 
 }
+
+console.log(new ProgressPage());

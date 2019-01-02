@@ -4,7 +4,7 @@ import DashboardPage from '../components/DashboardPage';
 import NavHeader from '../components/NavHeader';
 import StudentGoalsPage from '../components/StudentGoalsPage';
 import ChangeGoalsPage from '../components/ChangeGoalsPage';
-import ProgressPage from '../components/ProgressPage';
+import ProgressPage from '../components/ProgressPageTest';
 import TestPage from '../components/TestPage';
 import LoginPage from '../components/LoginPage';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
@@ -13,8 +13,6 @@ import amber from '@material-ui/core/colors/amber';
 import createPalette from '@material-ui/core/styles';
 import createTypography from '@material-ui/core/Typography';
 import axios from 'axios';
-
-
 
 const theme = createMuiTheme({
     palette: {
@@ -29,7 +27,9 @@ const theme = createMuiTheme({
             dark: "#97aa68"
         }
     },
-    typography: [
+    typography: {
+        fontFamily: [
+        'Karla',
         'Raleway',
         'BlinkMacSystemFont',
         '"Segoe UI"',
@@ -40,7 +40,8 @@ const theme = createMuiTheme({
         '"Apple Color Emoji"',
         '"Segoe UI Emoji"',
         '"Segoe UI Symbol"',
-      ].join(','), 
+      ].join(','),
+    }, 
       overrides: {
         MuiInput: {
           underline: {
@@ -56,8 +57,6 @@ const theme = createMuiTheme({
           },
         }}
 });
-
-console.log(theme);
 
 export default class AppRouter extends React.Component {
 
