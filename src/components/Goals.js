@@ -95,7 +95,7 @@ export default withStyles(styles)(class Goals extends React.Component {
                     </Grid>
                 <Grid item>
                     <NavLink 
-                    to= {"/progress/" + this.props.user_id} 
+                    to= {"/progress/" + this.props._id} 
                     style={{textDecoration: 'none'}}><Button className={classes.buttonStyle} variant="contained" color="primary">See Progress</Button></NavLink>
                 </Grid>
             </Grid>
