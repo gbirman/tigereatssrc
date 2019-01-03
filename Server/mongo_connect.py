@@ -4,18 +4,20 @@ from bson import ObjectId
 from datetime import datetime, date, timedelta
 from os import environ
 import random
+import time
 
 from flask import Flask, jsonify, request, redirect, session
 from flask.json import JSONEncoder
 from flask_pymongo import PyMongo
 from flask_cas import login_required, CAS
 from flask_cors import CORS
-
+from flask.sessions import SessionInterface
+from beaker.middleware import SessionMiddleware
 from pymongo import MongoClient 
 from urllib.parse import quote_plus
 from pymongo.errors import ConnectionFailure
 
-import time
+from CASClient import CASClient
 
 
 class MyJSONEncoder(JSONEncoder):
