@@ -54,6 +54,29 @@ class CASClient:
 
     # -------------------------------------------------------------------
 
+    # dummy function to help the decorator
+    def return_redirect(self):
+        login_url = self.cas_url + 'login' \
+                    + '?service=' + urllib.parse.quote(self.stripTicket(request))
+
+        return redirect(login_url)
+
+    # -------------------------------------------------------------------
+
+    # decorator
+    def cas_required(self, function):
+        @wraps(function)
+        def wrap(*args, **kwargs):
+            username = self.authenticate()
+            if not username:
+                return self.return_redirect()
+            else:
+                return function(*args, **kwargs)
+
+        return wrap
+
+    # -------------------------------------------------------------------
+
     # Authenticate the remote user, and return the user's username.
     # Do not return unless the user is successfully authenticated.
 
@@ -79,7 +102,7 @@ class CASClient:
                 session['username'] = username
                 return username
 
-        # We'd normally redirect but we have the other function now
+        # replace this with "return None" if using the decorator
         login_url = self.cas_url + 'login' \
                     + '?service=' + urllib.parse.quote(self.stripTicket(request))
 

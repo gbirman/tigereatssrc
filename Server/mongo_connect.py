@@ -80,11 +80,11 @@ def get_netid():
 
 
 # I'm messing something up on the decorator
-# @app.route('/login', methods=['GET'])
+@app.route('/login_casclient', methods=['GET'])
 # @CASClient.cas_required
-# def login():
-#     uriRoot = environ.get('URIROOT', 'http://localhost:3000')
-#     return redirect(uriRoot + '/dash', code=302)
+def login_casclient():
+    uriRoot = environ.get('URIROOT', 'http://localhost:3000')
+    return redirect(uriRoot + '/dash', code=302)
 
 
 @app.route('/cas', methods=['GET'])
