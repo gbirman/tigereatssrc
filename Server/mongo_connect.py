@@ -39,21 +39,20 @@ app.config['CAS_SERVER'] = 'https://fed.princeton.edu/cas/'
 app.secret_key = 'uhuhuhuhuhuhiwannaerykahbadu'
 app.config['CAS_AFTER_LOGIN'] = 'login'
 
+cas = CAS()
+cas.init_app(app)
+app.config['CAS_SERVER'] = 'https://fed.princeton.edu/cas/'
+app.secret_key = 'uhuhuhuhuhuhiwannaerykahbadu'
+app.config['CAS_AFTER_LOGIN'] = 'login'
+
 
 @app.route('/cas', methods=['GET'])
-# @login_required
+@login_required
 # <Button className={classes.loginButton} variant="contained" color="primary" onClick={() => axios.get('/cas').catch((error) => {console.error(error);})}>Login with CAS</Button>
 def login():
     session['netID'] = cas.username
     uriRoot = environ.get('URIROOT', 'http://localhost:3000')
     # print('asadsasdfaw')
-    return redirect(uriRoot + '/dash', code=302)
-
-
-@app.route('/cas_redirect', methods=['GET'])
-@login_required
-def cas_redirect():
-    uriRoot = environ.get('URIROOT', 'http://localhost:3000')
     return redirect(uriRoot + '/dash', code=302)
 
 
