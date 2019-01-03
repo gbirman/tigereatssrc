@@ -50,6 +50,7 @@ export default class TableModule extends React.Component {
 
         if (this.state.orderBy === property && this.state.order === 'desc') order = 'asc';
 
+        console.log(order + " " + orderBy);
         this.setState({order, orderBy})
     };
 

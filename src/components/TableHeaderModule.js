@@ -20,17 +20,17 @@ const rows = [
     { id: 'gender', numeric: false, disablePadding: true, label: 'Gender' },
     { id: 'year', numeric: false, disablePadding: true, label: 'Class Year' },
     { id: 'team', numeric: false, disablePadding: true, label: 'Team' },
-    { id: 'meals_logged_per_day', numeric: false, disablePadding: true, label: 'Meals Logged / Day'},
     { id: 'calorie_goal', numeric: false, disablePadding: true, label: 'Calories'},
     { id: 'protein_goal', numeric: false, disablePadding: true, label: 'Protein'},
     { id: 'carbs_goal', numeric: false, disablePadding: true, label: 'Carbs'},
     { id: 'fats_goal', numeric: false, disablePadding: true, label: 'Fat'},
-    { id: 'email', numeric: false, disablePadding: false, label: ''}
+    { id: 'change_goals', numeric: false, disablePadding: false, label: 'Change Goals'},
+    { id: 'mail', numeric: false, disablePadding: false, label: 'Send Email'},
   ];
 
 const styles = theme => ({
     labelRoot: {
-        color: '#4CA279',
+        color: '#4CA279 !important',
         fontFamily: 'Karla, sans-serif',
         textAlign: 'center'
 
@@ -52,15 +52,14 @@ export default withStyles(styles)(class TableHeaderMoudle extends React.Componen
         return (
             <TableHead>
                 <TableRow >
-
                     {rows.map((row) => {
                         return (
                             <TableCell
                                 key={row.id}
                                 numeric={row.numeric}
-                                padding={row.disablePadding ? 'none' : 'default'}
+                                padding={'none'}
                                 sortDirection={this.props.orderBy === row.id ? this.props.order : false}
-                                style={{textAlign: 'center'}}
+                                align="center"
                             >
                                 <Tooltip
                                     title="Sort"
@@ -69,7 +68,7 @@ export default withStyles(styles)(class TableHeaderMoudle extends React.Componen
                                     <TableSortLabel
                                         className={classes.labelRoot}
                                         classes={{active: classes.labelActive}}
-                                        active={this.props.orderBy === row.id}
+                                        active={this.props.orderBy === row.id && !(row.id === 'change_goals' || row.id === 'email')}
                                         direction={this.props.order}
                                         onClick={this.createSortHandler(row.id)}
                                     >

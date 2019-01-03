@@ -4,7 +4,9 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import { Link, NavLink } from 'react-router-dom';
 import EmailIcon from '@material-ui/icons/Email';
+import EditIcon from '@material-ui/icons/Edit';
 import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 
 
 const styles = theme => ({
@@ -28,13 +30,12 @@ const styles = theme => ({
     },
     nameCell: {
         textDecoration: 'none',
-        color: '#4CA279'
+        color: '#4CA279',
     }
 });
 
 
 function stableSort(array, cmp) {
-    console.log(array);
     const stabilizedThis = array.map((el, index) => [el, index]);
     stabilizedThis.sort((a,b) => {
         const order = cmp(a[0], b[0]);
@@ -62,6 +63,7 @@ export default withStyles(styles)(class TableBodyModule extends React.Component 
 
     render () {
         const {classes} = this.props;
+        console.log(this.props.data);
         return (
             <TableBody >
                 { 
@@ -69,67 +71,34 @@ export default withStyles(styles)(class TableBodyModule extends React.Component 
                         .map(n => {
                             
                             return (
+                                
                                     <TableRow
                                         hover
                                         onClick={event => this.isSelected(n.id)}
                                         tabIndex={-1}
                                         key={n.id}
                                         className={classes.row}
-                                        
+                                        component={Link} to={"/test/" + n._id}
+                                        style={{ textDecoration: 'none' }}
                                     >
-                                        <TableCell >
-                                            <NavLink
-                                                className={classes.nameCell}
-                                                to={"/test/" + n._id}
-                                            >
-                                                {n.fullname}
-                                            </NavLink> 
+                                        <TableCell className={classes.nameCell} align="center" >{n.fullname}</TableCell>
+                                        <TableCell className={classes.cell} align="center">{n.gender}</TableCell>
+                                        <TableCell className={classes.cell} align="center">{n.year}</TableCell>
+                                        <TableCell className={classes.cell} align="center">{n.team}</TableCell>
+                                        <TableCell className={classes.cell} align="center">{n.calorie_goal}</TableCell>
+                                        <TableCell className={classes.cell} align="center">{n.protein_goal}</TableCell>
+                                        <TableCell className={classes.cell} align="center">{n.carbs_goal}</TableCell>
+                                        <TableCell className={classes.cell} align="center">{n.fats_goal}</TableCell>
+                                        <TableCell className={classes.iconCell} align="center" component={Link} to={"/changeGoals/" + n._id + "/" + n.fullname + "/" + n.calorie_goal + "/" + n.protein_goal + "/" + n.fats_goal + "/" + n.carbs_goal}>
+                                            <EditIcon clickable="true"/>  
                                         </TableCell>
-                                        <TableCell className={classes.cell}>{n.gender}</TableCell>
-                                        <TableCell className={classes.cell}>{n.year}</TableCell>
-                                        <TableCell className={classes.cell}>{n.team}</TableCell>
-                                        <TableCell className={classes.cell}>{"Placeholder"}</TableCell>
-                                        <TableCell className={classes.cell}>
-                                            <NavLink
-                                                to={"/changeGoals/" + n._id + "/" + n.fullname + "/" + n.calorie_goal + "/" + n.protein_goal + "/" + n.fats_goal + "/" + n.carbs_goal}
-                                                className={classes.linkCell}
-                                            >
-                                                {n.calorie_goal}
-                                            </NavLink> 
-                                        </TableCell>
-                                        <TableCell className={classes.cell}>
-                                            <NavLink
-                                                to={"/changeGoals/" + n._id + "/" + n.fullname + "/" + n.calorie_goal + "/" + n.protein_goal + "/" + n.fats_goal + "/" + n.carbs_goal}
-                                                className={classes.linkCell}
-                                            >
-                                                {n.protein_goal}
-                                            </NavLink> 
-                                        </TableCell>
-                                        <TableCell className={classes.cell} style={{textAlign: 'center'}}>
-                                            <NavLink
-                                                to={"/changeGoals/" + n._id + "/" + n.fullname + "/" + n.calorie_goal + "/" + n.protein_goal + "/" + n.fats_goal + "/" + n.carbs_goal}
-                                                className={classes.linkCell}
-                                            >
-                                                {n.carbs_goal}
-                                            </NavLink> 
-                                        </TableCell>
-                                        <TableCell className={classes.cell}>
-                                            <NavLink
-                                                to={"/changeGoals/" + n._id + "/" + n.fullname + "/" + n.calorie_goal + "/" + n.protein_goal + "/" + n.fats_goal + "/" + n.carbs_goal}
-                                                className={classes.linkCell}
-                                            >
-                                                {n.fats_goal}
-                                            </NavLink> 
-                                        </TableCell>
-                                        <TableCell className={classes.iconCell}>
+                                        <TableCell className={classes.iconCell} align="center" component={Link} to={"/dash"}>
                                             <EmailIcon 
                                                 clickable="true"
-                                                style={{}} 
-                                                onClick={(e) => {window.location.href = "mailto:" + n.email + "?subject=[TigerEats] A Message from your nutritionist!&body=Hi " + n.firstname + ",\n";}}
+                                                onClick={(e) => {window.location.href = "mailto:" + n.email + "?subject=[TigerEats] A Message from your nutritionist!";}}
                                             />
                                         </TableCell>
-                                        
-                                    </TableRow>
+                                    </TableRow> 
                             );
                         })
                 }
