@@ -70,25 +70,21 @@ CORS(app)
 
 
 @app.route('/get_netid', methods=['GET'])
-# @login_required
 # <Button className={classes.loginButton} variant="contained" color="primary" href='http://localhost:5000/login'>Login with CAS</Button>
 # <Button className={classes.loginButton} variant="contained" color="primary" onClick={() => axios.get('/cas').catch((error) => {console.error(error);})}>Login with CAS</Button>
 def get_netid():
     session = request.environ.get('beaker.session')
     casClient = CASClient()
     username = casClient.authenticate(request, redirect, session)
-    # print(username)
-    # print('we are here')
     return username
-    # uriRoot = environ.get('URIROOT', 'http://localhost:3000')
-    # return redirect(uriRoot + '/dash', code=302)
 
 
-@app.route('/login', methods=['GET'])
-@CASClient.cas_required
-def login():
-    uriRoot = environ.get('URIROOT', 'http://localhost:3000')
-    return redirect(uriRoot + '/dash', code=302)
+# I'm messing something up on the decorator
+# @app.route('/login', methods=['GET'])
+# @CASClient.cas_required
+# def login():
+#     uriRoot = environ.get('URIROOT', 'http://localhost:3000')
+#     return redirect(uriRoot + '/dash', code=302)
 
 
 @app.route('/cas', methods=['GET'])
