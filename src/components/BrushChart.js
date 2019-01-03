@@ -10,8 +10,8 @@ const styles = theme => ({
     paper: {
         backgroundColor: `${themecolors.darkgray}`,
         height: "100%",
-        marginLeft: theme.spacing.unit * 2,
-        marginRight: theme.spacing.unit * 2,
+        marginLeft: "1%",
+        marginRight: "1%",
     }
 });
 

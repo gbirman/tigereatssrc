@@ -64,8 +64,8 @@ const TrackerTime = (props) => {
                 weekend = trackertime.clone().day(3); 
             }
             selectiondate = 
-                //`${weekstart.format('ddd MM/DD/YY')} - ${weekend.format('ddd MM/DD/YY')}`;
-                `${weekstart.format('MM/DD/YY')} - ${weekend.format('MM/DD/YY')}`;
+                `${weekstart.format('ddd MM/DD/YY')} - ${weekend.format('ddd MM/DD/YY')}`;
+                //`${weekstart.format('MM/DD/YY')} - ${weekend.format('MM/DD/YY')}`;
             fontSize = '2vw';
         } else if (rollupSize === 'month') {
             selectiondate = trackertime.format('MMM-YY');
