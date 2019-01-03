@@ -23,7 +23,7 @@ const styles = theme => ({
     },
     personIcon: {
         color: "#59BF8E",
-        marginRight: '1vh'
+        marginRight: '2vh'
     },
     searchField: {
         color: '#4CA279',
