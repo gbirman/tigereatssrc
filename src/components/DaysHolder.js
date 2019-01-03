@@ -1,5 +1,6 @@
 import React from 'react';
 import DayHolder from './DayHolder';
+import Grid from '@material-ui/core/Grid';
 
 
 export default class DaysHolder extends React.Component {
@@ -36,48 +37,60 @@ export default class DaysHolder extends React.Component {
 
 
 
-        // TODO: Pass in Date
-        /* 
-         <DayHolder 
-            breakfastFood = {['Eggs', 'Hash Browns']}
-            lunchFood = {['Turkey Sandwich']}
-            dinnerFood = {['Spaghetti and Meatballs']}
-            />
-            <DayHolder
-            breakfastFood = {['Eggs Benedict']}
-            lunchFood = {['Cheese Quesadilla']}
-            dinnerFood = {['Teriyaki Chicken']}
-            />
-
-        */
-
-            /* Confirming dinner isn't just missing for one of the days
+    
 
 
 
 
-            */
+     
 
-        // TODO: Use automated dates, looking at the last four days
+        // TODO: Use automated dates, looking at the last five days (or confirm that that have at least one meal logged (meaning dayInfo[0] exists))
+        // 
         return (
             <div>
-            <DayHolder key={this.props.date} 
-                date = {this.props.date}
-                dayInfo={this.props.dayInfo1}
-            /> 
-            
-            <DayHolder key="2018-07-11" 
-                date = "2018-07-11"
-                dayInfo={this.props.dayInfo2}
-            />
-            <DayHolder key="2018-07-12"
-                date = "2018-07-12"
-                dayInfo={this.props.dayInfo3}
-            />
-            <DayHolder key="2018-07-13"
-                date = "2018-07-13"
-                dayInfo={this.props.dayInfo4}
-            />
+                <Grid 
+                container
+                direction = "column"
+                alignItems= "center"
+                spacing = {24}
+                >
+
+                    <Grid item>
+                        <DayHolder key={this.props.dateArray[0]}
+                            date = {this.props.dateArray[0]}
+                            dayInfo={this.props.dayInfo0}
+                        /> 
+                    </Grid>
+                    
+                    <Grid item>
+                        <DayHolder key={this.props.dateArray[1]}
+                            date = {this.props.dateArray[1]}
+                            dayInfo={this.props.dayInfo1}
+                        />
+                    </Grid>
+
+                    <Grid item>
+                        <DayHolder key={this.props.dateArray[2]}
+                            date = {this.props.dateArray[2]}
+                            dayInfo={this.props.dayInfo2}
+                        />
+                    </Grid>
+
+                    <Grid item>
+                        <DayHolder key={this.props.dateArray[3]}
+                            date = {this.props.dateArray[3]}
+                            dayInfo={this.props.dayInfo3}
+                        />
+                    </Grid>
+
+                    <Grid item>
+                    <DayHolder key={this.props.dateArray[4]}
+                        date = {this.props.dateArray[4]}
+                        dayInfo={this.props.dayInfo4}
+                    />
+                </Grid>
+
+                </Grid>
 
             </div>
 

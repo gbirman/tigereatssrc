@@ -2,29 +2,39 @@ import React from 'react';
 import StudentDetails from './StudentDetails';
 import DaysHolder from './DaysHolder';
 import axios from 'axios';
+import Grid from '@material-ui/core/Grid';
+
+
 
 export default class StudentGoalsPage extends React.Component {
 
     state = {
-        dayInfo1: 'joe',   // []  if i had it as [], or {}, it wouldn't work!!!!
-        dayNutrients: 'jim', // get rid of this
-        breakfastInfo: 'bill', // get rid of this
-        userInfo: "bilal",
-        // dayInfoArray: [] // Testing for multiple days
+        dayInfo0: 'joe',   // []  if i had it as [], or {}, it wouldn't work!!!!
+        dayInfo1: 'joe',
         dayInfo2: 'joe',
         dayInfo3: 'joe',
-        dayInfo4: 'joe'
+        dayInfo4: 'five',
+        userInfo: "bilal",
+        dateArray: [this.getToday(0), this.getToday(1), this.getToday(2), this.getToday(3), this.getToday(4)]
     };
 
     // Save student data for a page refresh?
     componentDidMount() {
-        this.getDayInfo(this.props.match.params.id, "2018-07-10", 1); // get date there
-        this.getDayInfo(this.props.match.params.id, "2018-07-11", 2);
-        this.getDayInfo(this.props.match.params.id, "2018-07-12", 3);
-        this.getDayInfo(this.props.match.params.id, "2018-07-13", 4);
-        this.getUserInfo(this.props.match.params.id); 
+        // console.log("---------------------------DATES---------------------"); // debugging
+        // console.log(this.getToday(0));
+        // console.log(this.getToday(1));
+        // console.log(this.getToday(2));
+        // console.log(this.getToday(3));
+        // console.log(this.getToday(4));  
 
+        this.getDayInfo(this.props.match.params.id, this.state.dateArray[0], 0); // get date there
+        this.getDayInfo(this.props.match.params.id, this.state.dateArray[1], 1);
+        this.getDayInfo(this.props.match.params.id, this.state.dateArray[2], 2);
+        this.getDayInfo(this.props.match.params.id, this.state.dateArray[3], 3);
+        this.getDayInfo(this.props.match.params.id, this.state.dateArray[4], 4);
+        this.getUserInfo(this.props.match.params.id); 
     }
+
     componentDidUpdate(prevProps, prevState) {    
     }
 
@@ -47,9 +57,14 @@ export default class StudentGoalsPage extends React.Component {
             
             this.setState((prevState) => {
               return {  
+                dayInfo0: prevState.dayInfo0,
                 dayInfo1: prevState.dayInfo1,
+                dayInfo2: prevState.dayInfo2,
+                dayInfo3: prevState.dayInfo3,
+                dayInfo4: prevState.dayInfo4,
+                dateArray: prevState.dateArray,
                 userInfo: details,
-               dayInfoArray: prevState.dayInfoArray // Testing for multiple days
+               // dayInfoArray: prevState.dayInfoArray // Testing for multiple days
               }
             });    
         })}
@@ -80,62 +95,75 @@ export default class StudentGoalsPage extends React.Component {
                 let dayInfoUpdated = [];
  
 
-                if (day == 1) {
+                if (day == 0) {
                 this.setState((prevState) => {
                         return {  
 
-                        dayInfo1: data['data'], 
+                        dayInfo0: data['data'], 
+                        dayInfo1: prevState.dayInfo1,
                         dayInfo2: prevState.dayInfo2,
                         dayInfo3: prevState.dayInfo3,
-                        dayInfo4: prevState.dayInfo4,
-                        dayNutrients: details[0],
-                        breakfastInfo: details[1]
-                        //dayInfoArray: prevState.dayInfoArray.push(data['data']) // Testing for multiple days
+                        dayInfo4:prevState.dayInfo4,
+                        dateArray: prevState.dateArray
+
                         }
                 });    
                 }
 
-                if (day == 2) {
+                if (day == 1) {
                     this.setState((prevState) => {
                             return {  
-                            dayInfo1: prevState.dayInfo1,
-                            dayInfo2: data['data'], 
+                            dayInfo0: prevState.dayInfo0,
+                            dayInfo1: data['data'], 
+                            dayInfo2: prevState.dayInfo2,
                             dayInfo3: prevState.dayInfo3,
-                            dayInfo4: prevState.dayInfo4,
-                            dayNutrients: details[0],
-                            breakfastInfo: details[1]
-                            //dayInfoArray: prevState.dayInfoArray.push(data['data']) // Testing for multiple days
+                            dayInfo4:prevState.dayInfo4,
+                            dateArray: prevState.dateArray
+
                             }
                     });    
                     }
 
-                    if (day == 3) {
+                    if (day == 2) {
                         this.setState((prevState) => {
                                 return {  
+                                dayInfo0: prevState.dayInfo0,
                                 dayInfo1: prevState.dayInfo1,
-                                dayInfo2: prevState.dayInfo2,
-                                dayInfo3: data['data'], 
-                                dayInfo4: prevState.dayInfo4,
-                                dayNutrients: details[0],
-                                breakfastInfo: details[1]
-                                //dayInfoArray: prevState.dayInfoArray.push(data['data']) // Testing for multiple days
+                                dayInfo2: data['data'], 
+                                dayInfo3: prevState.dayInfo3,
+                                dayInfo4:prevState.dayInfo4,
+                                dateArray: prevState.dateArray
+
                                 }
                         });    
+                        }
+
+                        if (day == 3) {
+                            this.setState((prevState) => {
+                                    return {  
+                                    dayInfo0: prevState.dayInfo0,
+                                    dayInfo1: prevState.dayInfo1,
+                                    dayInfo2: prevState.dayInfo2,
+                                    dayInfo3: data['data'],
+                                    dayInfo4:prevState.dayInfo4,
+                                    dateArray: prevState.dateArray
+                                   
+                                    }
+                            });    
                         }
 
                         if (day == 4) {
                             this.setState((prevState) => {
                                     return {  
+                                    dayInfo0: prevState.dayInfo0,
                                     dayInfo1: prevState.dayInfo1,
                                     dayInfo2: prevState.dayInfo2,
                                     dayInfo3: prevState.dayInfo3,
                                     dayInfo4: data['data'],
-                                    dayNutrients: details[0],
-                                    breakfastInfo: details[1]
-                                    //dayInfoArray: prevState.dayInfoArray.push(data['data']) // Testing for multiple days
-                                    }
-                            });    
-                            }
+                                    dateArray: prevState.dateArray
+                                 }
+                              });    
+                        }
 
 
 
@@ -148,24 +176,36 @@ export default class StudentGoalsPage extends React.Component {
            // console.log(daysPreprocessed); // DEBUGGING
 
     // This gets today - I don't yet use it because we don't neccessarily have data for the last 4 days
-    getToday() { // can be changed to get yesterdays date, etc (I'm sure there's a method we can use)
-        let today = new Date();
-        let dd = today.getDate();
-        let mm = today.getMonth()+1; //January is 0!
-        let yyyy = today.getFullYear();
+    getToday(daysBefore) { // can be changed to get yesterdays date, etc (I'm sure there's a method we can use)
+       let  today = new Date();
+       let  actualDay = new Date(today);
+        actualDay.setDate(today.getDate() - daysBefore);
+    
+    
+        // let today = new Date();
+        let dd = actualDay.getDate();
+        let mm = actualDay.getMonth()+1; //January is 0!
+        let yyyy = actualDay.getFullYear();
         if(dd<10) {
             dd = '0'+dd
         } 
         if(mm<10) {
             mm = '0'+mm
         } 
-        today = yyyy + "-" + mm + "-" + dd;
+        let todayFormatted = yyyy + "-" + mm + "-" + dd;
        // console.log("Today is: " + today); // Debugging
-        return today;
+        return todayFormatted;
     }
 
     render() {
-        
+
+        const textStyle = {
+            color: "#59BF8E",
+            fontFamily: 'Karla, sans-serif',
+            textDecorationLine: 'underline',
+        }
+
+
        // console.log("Paulo's UID = " + JSON.stringify(this.props.match.params.id));
         let user_id = this.props.match.params.id; // From dashboard
 
@@ -179,16 +219,17 @@ export default class StudentGoalsPage extends React.Component {
 
 
         // Debugging meal info acqusition:
-        // console.log("\n 7/10 \n" + JSON.stringify(this.state.dayInfo1));
-        // console.log("\n 7/11 \n:" + JSON.stringify(this.state.dayInfo2));
-        // console.log("\n 7/12 \n:" + JSON.stringify(this.state.dayInfo3));
-        // console.log("\n 7/13 \n:" + JSON.stringify(this.state.dayInfo4));
+        // console.log("\n 7/10 \n" + JSON.stringify(this.state.dayInfo0));
+        // console.log("\n 7/11 \n:" + JSON.stringify(this.state.dayInfo1));
+        // console.log("\n 7/12 \n:" + JSON.stringify(this.state.dayInfo2));
+        // console.log("\n 7/13 \n:" + JSON.stringify(this.state.dayInfo3));
 
 
         // TODO: dayInfoArray = {this.state.dayInfoArray}
 
-        return (
-           <div>
+        /*
+        Old table code
+<div>
 
            <table border = "3" align = "center">
             <tbody>
@@ -208,15 +249,61 @@ export default class StudentGoalsPage extends React.Component {
                 <DaysHolder 
                 user_id = {user_id}
                 date = {date}
+                dayInfo0 = {this.state.dayInfo0}
                 dayInfo1 = {this.state.dayInfo1}
                 dayInfo2 = {this.state.dayInfo2}
                 dayInfo3 = {this.state.dayInfo3}
-                dayInfo4 = {this.state.dayInfo4}
                 
                 />
                 </tr>
             </tbody>
            </table>
+
+                      
+           </div>
+
+
+
+        */
+
+        
+
+        return (
+           <div>
+
+           <Grid 
+           container
+           direction="column"
+           justify="center"
+           alignItems="stretch"
+           >
+           <Grid item>
+                    <StudentDetails
+                    user_id = {user_id}
+                    userInfo = {this.state.userInfo}
+                    fullName = {fullName}
+                    dayInfo = {this.state.dayInfo0}
+                    />
+            </Grid>
+
+
+            <Grid item style={textStyle} align = "center">
+                <h2> Logged Meals</h2>
+            </Grid>
+
+            <Grid item>
+                <DaysHolder 
+                user_id = {user_id}
+                dateArray = {this.state.dateArray}
+                dayInfo0 = {this.state.dayInfo0}
+                dayInfo1 = {this.state.dayInfo1}
+                dayInfo2 = {this.state.dayInfo2}
+                dayInfo3 = {this.state.dayInfo3}
+                dayInfo4 = {this.state.dayInfo4}
+                />
+            </Grid>
+
+           </Grid>
 
                       
            </div>
