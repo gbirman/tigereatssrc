@@ -102,7 +102,8 @@ class CASClient:
                 session['username'] = username
                 return username
 
-        # replace this with "return None" if using the decorator
+        # if using the decorator, this should just have "return None" below
+        # if not using decorator, replace "return None" with what is in return_redirect
         login_url = self.cas_url + 'login' \
                     + '?service=' + urllib.parse.quote(self.stripTicket(request))
 
