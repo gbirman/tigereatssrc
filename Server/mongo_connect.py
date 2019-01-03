@@ -9,7 +9,7 @@ import time
 from flask import Flask, jsonify, request, redirect, session
 from flask.json import JSONEncoder
 from flask_pymongo import PyMongo
-from flask_cas import login_required, CAS
+from flask_cas import login_required, CAS, login, logout
 from flask_cors import CORS
 from flask.sessions import SessionInterface
 from beaker.middleware import SessionMiddleware
@@ -68,21 +68,22 @@ app.session_interface = BeakerSessionInterface()
 mongo = PyMongo(app)
 CORS(app)
 
+casClient = CASClient()
 
 @app.route('/get_netid', methods=['GET'])
 # <Button className={classes.loginButton} variant="contained" color="primary" href='http://localhost:5000/login'>Login with CAS</Button>
 # <Button className={classes.loginButton} variant="contained" color="primary" onClick={() => axios.get('/cas').catch((error) => {console.error(error);})}>Login with CAS</Button>
 def get_netid():
     session = request.environ.get('beaker.session')
-    casClient = CASClient()
     username = casClient.authenticate(request, redirect, session)
     return username
 
 
 # I'm messing something up on the decorator
 @app.route('/login_casclient', methods=['GET'])
-# @CASClient.cas_required
+@casClient.cas_required
 def login_casclient():
+    session = request.environ.get('beaker.session')
     uriRoot = environ.get('URIROOT', 'http://localhost:3000')
     return redirect(uriRoot + '/dash', code=302)
 
