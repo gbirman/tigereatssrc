@@ -433,7 +433,7 @@ class ProgressPage extends React.Component {
                             alignItems="stretch"
                             style={{height: 50}}
                         >
-                            <Grid item xs={2}>
+                            <Grid item xs={2.5}>
                                 <RadioButtons 
                                     setWindowDay={this.setWindowDay}
                                     setWindowWeek={this.setWindowWeek}
