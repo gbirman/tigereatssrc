@@ -39,11 +39,54 @@ app.config['CAS_SERVER'] = 'https://fed.princeton.edu/cas/'
 app.secret_key = 'uhuhuhuhuhuhiwannaerykahbadu'
 app.config['CAS_AFTER_LOGIN'] = 'login'
 
-cas = CAS()
-cas.init_app(app)
-app.config['CAS_SERVER'] = 'https://fed.princeton.edu/cas/'
-app.secret_key = 'uhuhuhuhuhuhiwannaerykahbadu'
-app.config['CAS_AFTER_LOGIN'] = 'login'
+session_opts = {
+    'session.type': 'file',
+    'session.cookie_expires': True,
+    'session.data_dir': './data',
+    'session.auto': True
+}
+
+
+class BeakerSessionInterface(SessionInterface):
+	def open_session(self, app, request):
+		session = request.environ['beaker.session']
+		return session
+
+	def save_session(self, app, session, response):
+		session.save()
+
+
+# secret key for storing sessions.
+secret_key = environ.get('SECRET_KEY', "erykahbadu")
+app.secret_key = secret_key
+
+app.wsgi_app = SessionMiddleware(app.wsgi_app, session_opts)
+app.session_interface = BeakerSessionInterface()
+
+mongo = PyMongo(app)
+CORS(app)
+
+
+@app.route('/get_netid', methods=['GET'])
+# @login_required
+# <Button className={classes.loginButton} variant="contained" color="primary" href='http://localhost:5000/login'>Login with CAS</Button>
+# <Button className={classes.loginButton} variant="contained" color="primary" onClick={() => axios.get('/cas').catch((error) => {console.error(error);})}>Login with CAS</Button>
+def get_netid():
+    session = request.environ.get('beaker.session')
+    casClient = CASClient()
+    username = casClient.authenticate(request, redirect, session)
+    # print(username)
+    # print('we are here')
+    return username
+    # uriRoot = environ.get('URIROOT', 'http://localhost:3000')
+    # return redirect(uriRoot + '/dash', code=302)
+
+
+@app.route('/login', methods=['GET'])
+@CASClient.cas_required
+def login():
+    uriRoot = environ.get('URIROOT', 'http://localhost:3000')
+    return redirect(uriRoot + '/dash', code=302)
 
 
 @app.route('/cas', methods=['GET'])
