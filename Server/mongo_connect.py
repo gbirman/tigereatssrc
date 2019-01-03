@@ -58,7 +58,7 @@ class BeakerSessionInterface(SessionInterface):
 		session.save()
 
 
-# secret key for storing sessions.
+# secret key
 secret_key = environ.get('SECRET_KEY', "erykahbadu")
 app.secret_key = secret_key
 
