@@ -67,6 +67,8 @@ app.session_interface = BeakerSessionInterface()
 
 
 
+# casClient = CASClient()  # in order to make the decorator work
+
 @app.route('/get_netid', methods=['GET'])
 # <Button className={classes.loginButton} variant="contained" color="primary" href='http://localhost:5000/login'>Login with CAS</Button>
 # <Button className={classes.loginButton} variant="contained" color="primary" onClick={() => axios.get('/cas').catch((error) => {console.error(error);})}>Login with CAS</Button>
@@ -77,11 +79,16 @@ def get_netid():
     return username
 
 
-# I'm messing something up on the decorator
 @app.route('/login_casclient', methods=['GET'])
 # @casClient.cas_required
 def login_casclient():
     session = request.environ.get('beaker.session')
+    casClient = CASClient()
+    username = casClient.authenticate(request, redirect, session)
+    print('we are here')
+    print(type(username))
+    if type(username) is not bytes:
+        return username
     uriRoot = environ.get('URIROOT', 'http://localhost:3000')
     return redirect(uriRoot + '/dash', code=302)
 
@@ -92,7 +99,6 @@ def login_casclient():
 def login():
     session['netID'] = cas.username
     uriRoot = environ.get('URIROOT', 'http://localhost:3000')
-    # print('asadsasdfaw')
     return redirect(uriRoot + '/dash', code=302)
 
 

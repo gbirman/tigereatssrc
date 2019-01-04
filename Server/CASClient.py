@@ -11,6 +11,7 @@ from os import path
 from datetime import date, datetime
 
 from functools import wraps
+from flask import Flask, jsonify, request, redirect, session
 
 
 # -----------------------------------------------------------------------
@@ -104,6 +105,8 @@ class CASClient:
 
         # if using the decorator, this should just have "return None" below
         # if not using decorator, replace "return None" with what is in return_redirect
+
+        # return None
         login_url = self.cas_url + 'login' \
                     + '?service=' + urllib.parse.quote(self.stripTicket(request))
 
