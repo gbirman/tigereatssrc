@@ -44,7 +44,6 @@ const channels = {
 // these are the names of the nutrients as specified in MongoDB 
 const channelNames = ['protein', 'fat', 'carbs', 'calories'];
 
-
 // this is the main display for the user's progress page 
 
 class ProgressPage extends React.Component {
@@ -66,7 +65,9 @@ class ProgressPage extends React.Component {
         rollupSize: 'day',
         mintime: null,
         maxtime: null,
-        values: {calories: "--", carbs: "--", fat: "--", protein: "--"} 
+        values: {calories: "--", carbs: "--", fat: "--", protein: "--"},
+        initial_width: window.innerWidth/4,
+        initial_height: window.innerHeight/4
     };
 
     componentDidMount() {
@@ -387,7 +388,7 @@ class ProgressPage extends React.Component {
 
     render() {
     
-        const { ready, channels, rollupSize, tracker, timerange } = this.state;
+        const { ready, channels, rollupSize, tracker, timerange} = this.state;
 
         // wait for the data to be retrieved/aggregated, show 
         // a loading bar while waiting 
@@ -395,13 +396,13 @@ class ProgressPage extends React.Component {
             return (
                 <div>
                     <CircularProgress style={{
-                        width: "300px",
-                        height: "300px",
+                        width: `${window.innerWidth/4}px`,
+                        height: `${window.innerHeight/4}px`,
                         position: "absolute",
                         left: "50%",
                         top: "50%", 
-                        marginLeft: "-150px",
-                        marginTop: "-150px",
+                        marginLeft: `${-window.innerWidth/8}px`,
+                        marginTop: `${-window.innerHeight/8}px`,
                         color: `${this.props.theme.palette.primary.main}`
                         }} />
                 </div>
