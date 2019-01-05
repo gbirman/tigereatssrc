@@ -80,12 +80,12 @@ def get_netid():
 @app.route('/login_casclient', methods=['GET'])
 # @casClient.cas_required
 def login_casclient():
-    uriRoot = environ.get('URIROOT', 'http://localhost:3000')
+    uriRoot = environ.get('URIROOT', 'http://tigereats.herokuapp.com')
     return redirect(uriRoot + '/dash', code=302)
 
 
 @app.route('/cas', methods=['GET'])
-# @login_required
+@login_required
 def login():
     session['netID'] = cas.username
     uriRoot = environ.get('URIROOT', 'http://localhost:3000')
