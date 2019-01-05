@@ -65,13 +65,6 @@ app.secret_key = secret_key
 app.wsgi_app = SessionMiddleware(app.wsgi_app, session_opts)
 app.session_interface = BeakerSessionInterface()
 
-mongo = PyMongo(app)
-CORS(app)
-
-
-# FUUUUUUCKKKKK
-
-
 # casClient = CASClient()  # in order to make the decorator work
 
 @app.route('/get_netid', methods=['GET'])
