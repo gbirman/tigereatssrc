@@ -16,13 +16,6 @@
         ]
     },
     "default": {
-        "beaker": {
-            "hashes": [
-                "sha256:6072892918225f5a055413082f2ff285f3ebca6a3873a0d6e163253ba83f0450"
-            ],
-            "index": "pypi",
-            "version": "==1.10.0"
-        },
         "click": {
             "hashes": [
                 "sha256:2335065e6395b9e67ca716de5f7526736bfa6ceead690adf616d925bdc622b13",

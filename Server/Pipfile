@@ -8,8 +8,7 @@ flask = "*"
 flask-pymongo = "*"
 flask-cors = "*"
 flask-cas = "*"
-gunicorn = "*" 
-beaker = "*"
+gunicorn = "*"
 
 [dev-packages]
 pylint = "*"
