@@ -67,6 +67,7 @@ app.session_interface = BeakerSessionInterface()
 
 # casClient = CASClient()  # in order to make the decorator work
 
+
 @app.route('/get_netid', methods=['GET'])
 # <Button className={classes.loginButton} variant="contained" color="primary" href='http://localhost:5000/login'>Login with CAS</Button>
 # <Button className={classes.loginButton} variant="contained" color="primary" onClick={() => axios.get('/cas').catch((error) => {console.error(error);})}>Login with CAS</Button>
@@ -548,6 +549,4 @@ if __name__ == '__main__':
     # print(change_nutrition_goals('5bf8ca12e7179a56e21592c5', 68, 4, 4, 4))
     # print(_get_user_nutrient_progress('5bf8ca12e7179a56e21592c5', '2018-11-01', '2019-01-02'))
 
-    # port = int(os.environ.get('PORT', 5000)) # Needed for heroku
-
-    app.run(debug=True) #, port=port) # Needed for heroku
+    app.run(debug=True)
