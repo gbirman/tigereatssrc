@@ -78,7 +78,7 @@ def get_netid():
 
 
 @app.route('/login_casclient', methods=['GET'])
-@casClient.cas_required
+# @casClient.cas_required
 def login_casclient():
     uriRoot = environ.get('URIROOT', 'http://localhost:3000')
     return redirect(uriRoot + '/dash', code=302)
