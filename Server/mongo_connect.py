@@ -65,36 +65,27 @@ app.secret_key = secret_key
 app.wsgi_app = SessionMiddleware(app.wsgi_app, session_opts)
 app.session_interface = BeakerSessionInterface()
 
-# casClient = CASClient()  # in order to make the decorator work
 
+casClient = CASClient()  # in order to make the decorator work
 
 @app.route('/get_netid', methods=['GET'])
 # <Button className={classes.loginButton} variant="contained" color="primary" href='http://localhost:5000/login'>Login with CAS</Button>
 # <Button className={classes.loginButton} variant="contained" color="primary" onClick={() => axios.get('/cas').catch((error) => {console.error(error);})}>Login with CAS</Button>
+@casClient.cas_required
 def get_netid():
-    session = request.environ.get('beaker.session')
-    casClient = CASClient()
-    username = casClient.authenticate(request, redirect, session)
+    username = casClient.authenticate()
     return username
 
 
 @app.route('/login_casclient', methods=['GET'])
-# @casClient.cas_required
+@casClient.cas_required
 def login_casclient():
-    session = request.environ.get('beaker.session')
-    casClient = CASClient()
-    username = casClient.authenticate(request, redirect, session)
-    print('we are here')
-    print(type(username))
-    if type(username) is not bytes:
-        return username
     uriRoot = environ.get('URIROOT', 'http://localhost:3000')
     return redirect(uriRoot + '/dash', code=302)
 
 
 @app.route('/cas', methods=['GET'])
 @login_required
-# <Button className={classes.loginButton} variant="contained" color="primary" onClick={() => axios.get('/cas').catch((error) => {console.error(error);})}>Login with CAS</Button>
 def login():
     session['netID'] = cas.username
     uriRoot = environ.get('URIROOT', 'http://localhost:3000')
@@ -135,6 +126,7 @@ def _fill_database():
 
 
 @app.route('/api/getUsers', methods=['GET'])
+# @casClient.cas_required
 def get_users():
 
     filters = request.args['restrictions']
@@ -405,6 +397,7 @@ def get_user_nutrient_progress():
 @app.route('/api/get_user_nutrient_progress_all_dummy', methods=['GET'])
 def get_user_nutrient_progress_all_dummy():
     return open('dummy-data.txt', 'r').read()
+
 
 @app.route('/api/get_user_nutrient_progress_all', methods=['GET'])
 def get_user_nutrient_progress_all():
