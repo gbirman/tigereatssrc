@@ -66,6 +66,8 @@ app.wsgi_app = SessionMiddleware(app.wsgi_app, session_opts)
 app.session_interface = BeakerSessionInterface()
 
 
+# FUUUUUUCKKKKK
+
 
 @app.route('/get_netid', methods=['GET'])
 # <Button className={classes.loginButton} variant="contained" color="primary" href='http://localhost:5000/login'>Login with CAS</Button>
