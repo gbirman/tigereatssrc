@@ -183,6 +183,10 @@ def get_users():
         name = filters['name'].lower()
     else:
         name = ''
+    if 'watchlist' in filters:
+        watchlist = filters['watchlist']
+    else:
+        watchlist = None
 
     try:
         cursor = mongo.db.users.find()
@@ -196,6 +200,8 @@ def get_users():
             if year_list is not None and int(user['year']) in year_list:
                 add_user = False
             if (name not in user['firstname'].lower()) and (name not in user['lastname'].lower()):
+                add_user = False
+            if watchlist is not None and user['watchlist'] != watchlist:
                 add_user = False
             if add_user:
                 for field in ['calorie_goal', 'protein_goal', 'fats_goal', 'carbs_goal']:
@@ -490,6 +496,19 @@ def change_nutrition_goals():
     data['protein_goal'] = new_protein_goal
     data['carbs_goal'] = new_carbs_goal
     data['fats_goal'] = new_fats_goal
+
+    return _update_data(users, user_id, data)
+
+
+@app.route('/api/change_watchlist', methods=['POST'])
+def change_watchlist():
+
+    args = request.get_json()
+    user_id = args['user_id']
+    watchlist_status = bool(args['watchlist_status'])
+
+    users, data = _prep_data_to_update(user_id)
+    data['watchlist'] = watchlist_status
 
     return _update_data(users, user_id, data)
 
