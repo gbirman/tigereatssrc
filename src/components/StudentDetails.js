@@ -77,6 +77,7 @@ export default class StudentDetails extends React.Component {
                         <PersonTile 
                         name={this.props.fullName}
                         email = {this.props.userInfo[0]}
+                        user_id = {this.props.user_id}
                         />
                     </Grid>
 

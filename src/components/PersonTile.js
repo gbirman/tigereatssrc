@@ -1,6 +1,10 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import PersonPic from './images/Jamie.jpg';
+import Jamie from './images/Jamie.jpg';
+import Gabe from './images/Gabe.jpg';
+import Ishan from './images/Ishan.jpg';
+import Paulo from './images/Paulo.jpg';
+import PersonPlaceholder from './images/PersonPlaceholder.jpg';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -24,6 +28,30 @@ const textStyle = {
 export default withStyles(styles)(class PersonTile extends React.Component {
 
 
+    returnPicture() {
+
+        if (this.props.user_id == "5c09f2e5e7179a6ca0843224") { // Jamie
+            return (<img src={Jamie} width = "100" height = "100" alt="Profile" />);
+        
+        }
+
+        if (this.props.user_id == "5bf8ca52e7179a56e21592c8") { // Gabe
+            return (<img src={Gabe} width = "100" height = "100" alt="Profile" />);
+        }
+
+        if (this.props.user_id == "5bf8ca12e7179a56e21592c5") { // Ishan
+            return (<img src={Ishan} width = "100" height = "100" alt="Profile" />);
+        }
+
+        if (this.props.user_id == "5c09f2aae7179a6ca08431f1") { // Paulo
+            return (<img src={Paulo} width = "100" height = "100" alt="Profile" />);
+        }
+        
+        else { // Placeholder
+        return (<img src={PersonPlaceholder} width = "100" height = "100" alt="Profile" />);
+        }
+    }
+
     render() {
         const {classes} = this.props;
         // Error messages made me get rid of outer div here
@@ -41,7 +69,7 @@ export default withStyles(styles)(class PersonTile extends React.Component {
                     <Grid item><p></p></Grid>
                     <Grid item><p></p></Grid>
                     <Grid item>
-                        <img src={PersonPic} width = "100" height = "100" alt="Profile" />
+                        <p>{this.returnPicture()}</p>
                     </Grid>
                     
                     <Grid item>
