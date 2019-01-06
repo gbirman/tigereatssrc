@@ -164,6 +164,8 @@ def get_users():
             if (name not in user['firstname'].lower()) and (name not in user['lastname'].lower()):
                 add_user = False
             if add_user:
+                for field in ['calorie_goal', 'protein_goal', 'fats_goal', 'carbs_goal']:
+                    user[field] = round(user[field], 2)
                 users.append(user)
         return jsonify(users)
 
@@ -179,7 +181,10 @@ def _get_user(args):
 @app.route('/api/get_all_user_info', methods=['GET'])
 def get_user_info():
     user = _get_user(request.args)
-    user_info = [user['email'], user['firstname'], user['lastname'], user['gender'], user['height'], \
+    for field in ['calorie_goal', 'protein_goal', 'fats_goal', 'carbs_goal']:
+        user[field] = round(user[field], 2)
+    user_info = [user['email'], user['firstname'], user['lastname'], user['gender'], \
+                 user['height'], \
                  user['weight'], user['restrictions'], user['calorie_goal'], user['protein_goal'], \
                  user['fats_goal'], user['carbs_goal'], user['weight_goal'], user['year'], user['team']]
     return jsonify(user_info)
@@ -212,7 +217,7 @@ def get_user_gender():
 @app.route('/api/get_user_height', methods=['GET'])
 def get_user_height():
     user = _get_user(request.args)
-    return jsonify(user['height'])
+    return jsonify(round(user['height'], 2))
 
 
 @app.route('/api/get_user_weight', methods=['GET'])
