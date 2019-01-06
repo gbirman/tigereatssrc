@@ -145,8 +145,12 @@ def _delete_items():
         mongo.db.meal_day_summary.delete_many({"date": this_date})
 
 
-@app.route('/verify_login', methods=['GET'])
+@app.route('/api/verify_login', methods=['GET'])
 def verify_login(email, password):
+
+    data = request.args
+    email = data['email']
+    password = data['password']
 
     try:
         startdate = mongo.db.authorized_users.find({
@@ -226,7 +230,8 @@ def get_user_info():
     user_info = [user['email'], user['firstname'], user['lastname'], user['gender'], \
                  user['height'], \
                  user['weight'], user['restrictions'], user['calorie_goal'], user['protein_goal'], \
-                 user['fats_goal'], user['carbs_goal'], user['weight_goal'], user['year'], user['team']]
+                 user['fats_goal'], user['carbs_goal'], user['weight_goal'], user['year'], user['team'], \
+                 user['watchlist']]
     return jsonify(user_info)
 
 
@@ -402,6 +407,36 @@ def get_user_day_meal_data():
     return jsonify(_get_user_day_meal_data(id, date))
 
 
+def _get_user_meal_notes(user_id, date, meal):
+
+    try:
+        meal_notes = mongo.db.meal_notes.find({
+            "$and": [
+                {'userId' : ObjectId(user_id)},
+                {'date' : date},
+                {'meal' : meal}
+            ]
+        })[0]['note']
+        return meal_notes
+    except:
+        return None
+
+
+def _get_user_day_meal_notes(user_id, date):
+    breakfast = _get_user_meal_notes(user_id, date, 'breakfast')
+    lunch = _get_user_meal_notes(user_id, date, 'lunch')
+    dinner = _get_user_meal_notes(user_id, date, 'dinner')
+    return [breakfast, lunch, dinner]
+
+
+@app.route('/api/get_user_day_meal_notes', methods=['GET'])
+def get_user_day_meal_notes(user_id, date):
+    args = request.args
+    user_id = args['user_id']
+    date = args['date']
+    return _get_user_day_meal_notes(user_id, date)
+
+
 def _convert_to_date(mydate: str):
     date_list = mydate.split('-')
     date_list = map(lambda x : int(x), date_list)
@@ -513,6 +548,23 @@ def change_watchlist():
     return _update_data(users, user_id, data)
 
 
+@app.route('/api/change_mealnote', methods=['POST'])
+def change_mealnote():
+
+    args = request.get_json()
+    user_id = args['user_id']
+    date = args['date']
+    meal = args['meal']
+
+    meal_notes = mongo.db.meal_notes
+    data = mongo.db.meal_notes.find({"_id": ObjectId(user_id)})[0]
+
+    return True  # need to finish
+    # data['watchlist'] = watchlist_status
+    #
+    # return _update_data(users, user_id, data)
+
+
 @app.route('/api/change_weight_goal', methods=['POST'])
 def change_weight_goal():
 
@@ -598,10 +650,14 @@ if __name__ == '__main__':
     # print(_get_user_nutrient_progress('5bf8ca12e7179a56e21592c5', '2018-11-01', '2019-01-02'))
     # print(verify_login("isinha@princeton.edu", "password"))
     # print(verify_login("isinhasda@princeton.edu", "password"))
+    # print(_get_user_meal_notes('5bf8ca12e7179a56e21592c5', '2019-01-05', 'breakfast'))
+    # print(_get_user_day_meal_notes('5bf8ca12e7179a56e21592c5', '2019-01-05'))
 
     # lp = LineProfiler()
     # lp_wrapper = lp(get_user_nutrient_progress_all_new)
     # lp_wrapper('5bf8ca12e7179a56e21592c5')
     # lp.print_stats()
+
+
 
     app.run(debug=True)
