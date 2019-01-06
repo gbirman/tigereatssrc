@@ -17,8 +17,6 @@ from pymongo import MongoClient
 from urllib.parse import quote_plus
 from pymongo.errors import ConnectionFailure
 
-from CASClient import CASClient
-
 
 class MyJSONEncoder(JSONEncoder):
     def default(self, obj):
@@ -35,11 +33,6 @@ app.config['MONGO_URI'] = 'mongodb://pfrazao:y7gnykTXHj8j7EK@ds053380.mlab.com:5
 mongo = PyMongo(app)
 CORS(app)
 
-cas = CAS()
-cas.init_app(app)
-app.config['CAS_SERVER'] = 'https://fed.princeton.edu/cas/'
-app.secret_key = 'uhuhuhuhuhuhiwannaerykahbadu'
-app.config['CAS_AFTER_LOGIN'] = 'login'
 
 session_opts = {
     'session.type': 'file',
@@ -47,7 +40,6 @@ session_opts = {
     'session.data_dir': './data',
     'session.auto': True
 }
-
 
 class BeakerSessionInterface(SessionInterface):
 	def open_session(self, app, request):
@@ -64,32 +56,6 @@ app.secret_key = secret_key
 
 app.wsgi_app = SessionMiddleware(app.wsgi_app, session_opts)
 app.session_interface = BeakerSessionInterface()
-
-
-casClient = CASClient()  # in order to make the decorator work
-
-@app.route('/get_netid', methods=['GET'])
-# <Button className={classes.loginButton} variant="contained" color="primary" href='http://localhost:5000/login'>Login with CAS</Button>
-# <Button className={classes.loginButton} variant="contained" color="primary" onClick={() => axios.get('/cas').catch((error) => {console.error(error);})}>Login with CAS</Button>
-@casClient.cas_required
-def get_netid():
-    username = casClient.authenticate()
-    return username
-
-
-@app.route('/login_casclient', methods=['GET'])
-@casClient.cas_required
-def login_casclient():
-    uriRoot = environ.get('URIROOT', 'http://localhost:3000')
-    return redirect(uriRoot + '/dash', code=302)
-
-
-@app.route('/cas', methods=['GET'])
-@login_required
-def login():
-    session['netID'] = cas.username
-    uriRoot = environ.get('URIROOT', 'http://localhost:3000')
-    return redirect(uriRoot + '/dash', code=302)
 
 
 def _fill_database_meals():
