@@ -24,6 +24,10 @@ const textStyle = {
     lineHeight: 0.6
 }
 
+const imageStyle = {
+    borderRadius: "20%",
+}
+
 
 export default withStyles(styles)(class PersonTile extends React.Component {
 
@@ -31,24 +35,24 @@ export default withStyles(styles)(class PersonTile extends React.Component {
     returnPicture() {
 
         if (this.props.user_id == "5c09f2e5e7179a6ca0843224") { // Jamie
-            return (<img src={Jamie} width = "100" height = "100" alt="Profile" />);
+            return (<img src={Jamie} style = {imageStyle} width = "120" height = "120" alt="Profile" />);
         
         }
 
         if (this.props.user_id == "5bf8ca52e7179a56e21592c8") { // Gabe
-            return (<img src={Gabe} width = "100" height = "100" alt="Profile" />);
+            return (<img src={Gabe} style = {imageStyle} width = "120" height = "120" alt="Profile" />);
         }
 
         if (this.props.user_id == "5bf8ca12e7179a56e21592c5") { // Ishan
-            return (<img src={Ishan} width = "100" height = "100" alt="Profile" />);
+            return (<img src={Ishan} style = {imageStyle} width = "120" height = "120" alt="Profile" />);
         }
 
         if (this.props.user_id == "5c09f2aae7179a6ca08431f1") { // Paulo
-            return (<img src={Paulo} width = "100" height = "100" alt="Profile" />);
+            return (<img src={Paulo} style = {imageStyle} width = "120" height = "120" alt="Profile" />);
         }
         
         else { // Placeholder
-        return (<img src={PersonPlaceholder} width = "100" height = "100" alt="Profile" />);
+        return (<img src={PersonPlaceholder} style = {imageStyle} width = "120" height = "120" alt="Profile" />);
         }
     }
 

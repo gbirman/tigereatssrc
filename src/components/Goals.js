@@ -39,11 +39,24 @@ export default withStyles(styles)(class Goals extends React.Component {
     // Add actual goal data and adjust bars accordingly
     render() {
         const {classes} = this.props;
-        const barData = [{x: (this.props.todayNutrients.fat * 100/this.props.fats_goal) , y: 10}, 
+
+        const barData = this.props.todayNutrients.fat ?   
+
+         [{x: (this.props.todayNutrients.fat * 100/this.props.fats_goal) , y: 10}, 
             {x: (this.props.todayNutrients.carbs * 100/this.props.carbs_goal), y: 5 }, 
             {x:  (this.props.todayNutrients.protein * 100/ this.props.protein_goal), y: 15 }, 
-            {x:  (this.props.todayNutrients.calories * 100/this.props.calorie_goal), y: 20 }];
+            {x:  (this.props.todayNutrients.calories * 100/this.props.calorie_goal), y: 20 }]
         
+        : [ // default values in case it hasn't loaded yet
+            {x: 0 , y: 10}, 
+            {x: 0, y: 5 }, 
+            {x:  0, y: 15 }, 
+            {x:  0, y: 20 }
+        ];
+
+
+
+
             function myFormatterX(t, i) { // for the bar graph
                 return (
                   <tspan x="0" dy="1em">{t}%</tspan>
