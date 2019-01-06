@@ -4,6 +4,7 @@ import TableModule from './TableModule';
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
+import Input from '@material-ui/core/Input';
 import { Grid } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
@@ -16,12 +17,15 @@ const styles = theme => ({
         fontFamily: 'Karla, sans-serif',
         color: 'white',
         border: 'solid',
-        borderColor: '#d9f495'
+        borderColor: '#d9f495',
+        fontSize: '1em',
+        paddingTop: '1vh',
+        paddingBottom: '1vh'
     },
     icon: {
         height: '180px', // responsive height is 30vh, 180px
-        marginTop: '15vh',
-        marginBottom: '5vh'
+        marginTop: '5vh',
+        marginBottom: '4vh'
     },
     welcomePaper: {
         fontFamily: 'Karla, sans-serif',
@@ -33,10 +37,33 @@ const styles = theme => ({
         paddingRight: '5vw',
         paddingLeft: '5vw',
         textAlign: 'center',
-        marginBottom: '5vh',
+        marginBottom: '3vh',
+    },
+    inputPaper: {
+        border: 'solid',
+        borderColor: '#59bf8e',
+        color: '#3e8563',
+        fontFamily: 'Karla, sans-serif',
+        paddingRight: '3vw',
+        paddingLeft: '3vw',
+        paddingBottom: '3vh',
+        marginBottom: '3vh'
+    },
+    searchField: {
+        color: '#3e8563',
+        fontFamily: 'Karla, sans-serif',
+    },
+    searchFieldLabel: {
+        color: '#3e8563',
+        fontFamily: 'Karla, sans-serif',
+    },
+    searchUnderline: {
+        color: 'red !important'
     }
 
 })
+
+// () => axios.get('/login_casclient').then((data) => {console.log(data)}).catch((error) => {console.error(error);})
 
 
 
@@ -45,6 +72,7 @@ export default withStyles(styles)(class LoginPage extends React.Component {
     state = {
         email: undefined,
         password: undefined,
+        isClicked: false
     };
 
     handleEmailChange = (e) => {
@@ -54,7 +82,6 @@ export default withStyles(styles)(class LoginPage extends React.Component {
 
     handlePasswordChange = (e) => {
         this.setState({password: e.target.value});
-        console.log(this.props.theme);
     }
 
     render() {
@@ -72,8 +99,17 @@ export default withStyles(styles)(class LoginPage extends React.Component {
                     <Paper color="primary" className={classes.welcomePaper}>
                         <div><h1>Welcome to <span style={{padding: 0, margin: 0, color: "#d9f495"}}>Tiger</span>Eats!</h1></div>
                     </Paper>
+                    <Paper className={classes.inputPaper}>
+                        <h3 style={{marginBottom: '0'}}>Please enter your Princeton email and password:</h3>
+                        <Grid item style={{marginBottom: '2%'}}>
+                            <TextField InputLabelProps={{classes: {root: classes.searchFieldLabel}}} InputProps={{classes: {input: classes.searchField, underline: classes.searchUnderline}}} fullWidth={true} label="Email" onKeyUp={this.handleEmailChange} placeholder='i.e. netid@princeton.edu'></TextField>
+                        </Grid>
+                        <Grid item style={{marginBottom: '2%'}}>
+                            <TextField InputLabelProps={{classes: {root: classes.searchFieldLabel}}} InputProps={{classes: {input: classes.searchField, underline: classes.searchUnderline}}} label="Password" type="password" onKeyUp={this.handlePasswordChange} fullWidth={true}></TextField>
+                        </Grid>
+                    </Paper>
                     <Grid item xs={3} >
-                        <Button className={classes.loginButton} variant="contained" color="primary" onClick={() => axios.get('/login_casclient').catch((error) => {console.error(error);})}>Login with CAS</Button>
+                        <NavLink to="/dash" style={{ textDecoration: 'none'}}><Button ref={component => this.clickable = component} className={classes.loginButton} variant="contained" color="primary" onClick={console.log('click')}>Log in!</Button></NavLink>
                     </Grid>
                 </Grid>
             </div>
