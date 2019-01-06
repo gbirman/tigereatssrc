@@ -92,7 +92,7 @@ def login():
     return redirect(uriRoot + '/dash', code=302)
 
 
-def _fill_database():
+def _fill_database_meals():
 
     """
     KEY INFO: I don't know why, but if you just run this method from main(), each entry is inserted
@@ -123,6 +123,60 @@ def _fill_database():
                         "choices": random.choice(meal_choices)
                     }
                 )
+
+def _fill_database_daily_summary():
+    """
+    KEY INFO: I don't know why, but if you just run this method from main(), each entry is inserted
+    twice, which is a pain in the ass. So just copy paste the below code and run it in main.
+    """
+    for person in ['5bf8ca12e7179a56e21592c5', '5bf8ca52e7179a56e21592c8', '5c09f2aae7179a6ca08431f1', '5c09f2e5e7179a6ca0843224']:
+
+        # get start and end date
+        startdate = mongo.db.meal_log.find({
+            "$and": [
+                {'userId': ObjectId(person)},
+            ]
+        }).sort([('date', 1)]).limit(1)[0]['date']
+        enddate = mongo.db.meal_log.find({
+            "$and": [
+                {'userId': ObjectId(person)},
+            ]
+        }).sort([('date', -1)]).limit(1)[0]['date']
+
+        # convert start and end date
+        startdate = _convert_to_date(startdate)
+        enddate = _convert_to_date(enddate)
+        delta = enddate - startdate
+
+        # go through each day
+        for i in range(delta.days + 1):
+            this_date = str(startdate + timedelta(i))
+            data = _get_user_day_meal_data(person, this_date)[0]
+            mongo.db.meal_day_summary.insert(
+                {
+                    "userId": ObjectId(person),
+                    "date": this_date,
+                    "calories" : data['calories'],
+                    "protein" : data['protein'],
+                    "carbs" : data['carbs'],
+                    "fat" : data['fat']
+                }
+            )
+
+
+def _delete_items():
+    """
+       KEY INFO: I don't know why, but if you just run this method from main(), each entry is inserted
+       twice, which is a pain in the ass. So just copy paste the below code and run it in main.
+       """
+    startdate = _convert_to_date('2018-07-01')
+    enddate = _convert_to_date('2018-11-30')
+    delta = enddate - startdate
+
+    for i in range(delta.days + 1):
+        this_date = str(startdate + timedelta(i))
+        mongo.db.meal_log.delete_many({"date": this_date})
+        mongo.db.meal_day_summary.delete_many({"date": this_date})
 
 
 @app.route('/api/getUsers', methods=['GET'])
@@ -376,29 +430,6 @@ def _convert_no_meals_logged(nutrients: dict):
         return nutrients
 
 
-def _get_user_nutrient_progress(id: str, startdate: str, enddate: str):
-    startdate = _convert_to_date(startdate)
-    enddate = _convert_to_date(enddate)
-    delta = enddate - startdate
-
-    date_to_nutrition = {}
-    for i in range(delta.days + 1):
-        this_date = str(startdate + timedelta(i))
-        date_to_nutrition[this_date] =_convert_no_meals_logged(_get_user_day_meal_data(id, this_date)[0])
-
-    return date_to_nutrition
-
-
-@app.route('/api/get_user_nutrient_progress', methods=['GET'])
-def get_user_nutrient_progress():
-    args = request.args
-    id = args['user_id']
-    startdate = args['startdate']
-    enddate = args['enddate']
-
-    return jsonify(_get_user_nutrient_progress(id, startdate, enddate))
-
-
 @app.route('/api/get_user_nutrient_progress_all_dummy', methods=['GET'])
 def get_user_nutrient_progress_all_dummy():
     return open('dummy-data.txt', 'r').read()
@@ -406,8 +437,12 @@ def get_user_nutrient_progress_all_dummy():
 
 @app.route('/api/get_user_nutrient_progress_all', methods=['GET'])
 def get_user_nutrient_progress_all():
+
+    # get input data
     args = request.args
     id = args['user_id']
+
+    # get start and end dates
     startdate = mongo.db.meal_log.find({
         "$and": [
             {'userId': ObjectId(id)},
@@ -418,8 +453,24 @@ def get_user_nutrient_progress_all():
             {'userId': ObjectId(id)},
         ]
     }).sort([('date', -1)]).limit(1)[0]['date']
+    startdate = _convert_to_date(startdate)
+    enddate = _convert_to_date(enddate)
+    delta = enddate - startdate
 
-    return jsonify(_get_user_nutrient_progress(id, startdate, enddate))
+    date_to_nutrition = {}
+    for i in range(delta.days + 1):
+        this_date = str(startdate + timedelta(i))
+        found_data = mongo.db.meal_day_summary.find({
+            "$and": [
+                {'userId': ObjectId(id)},
+                {'date' : this_date}
+            ]
+        })[0]
+        nutrient_dict = {'calories' : found_data['calories'], 'protein' : found_data['protein'], 'carbs' : found_data['carbs'], \
+                'fat' : found_data['fat']}
+        date_to_nutrition[this_date] = _convert_no_meals_logged(nutrient_dict)
+
+    return jsonify(date_to_nutrition)
 
 
 def _prep_data_to_update(user_id: str):
@@ -546,5 +597,13 @@ if __name__ == '__main__':
     # print(_get_user('5bf8ca12e7179a56e21592c5'))
     # print(change_nutrition_goals('5bf8ca12e7179a56e21592c5', 68, 4, 4, 4))
     # print(_get_user_nutrient_progress('5bf8ca12e7179a56e21592c5', '2018-11-01', '2019-01-02'))
+
+    # lp = LineProfiler()
+    # lp_wrapper = lp(get_user_nutrient_progress_all_new)
+    # lp_wrapper('5bf8ca12e7179a56e21592c5')
+    # lp.print_stats()
+
+
+
 
     app.run(debug=True)

@@ -100,7 +100,7 @@ class ProgressPage extends React.Component {
             axios.get(
                 // remove "_dummy" to get real data from server
                 // currently waiting on Ishan to speed it up
-                '/api/get_user_nutrient_progress_all_dummy',
+                '/api/get_user_nutrient_progress_all',
                 {
                     params: {
                     user_id: `${this.props.match.params.id}`
