@@ -146,7 +146,7 @@ def _delete_items():
 
 
 @app.route('/api/verify_login', methods=['GET'])
-def verify_login(email, password):
+def verify_login():
 
     data = request.args
     email = data['email']
@@ -555,14 +555,17 @@ def change_mealnote():
     user_id = args['user_id']
     date = args['date']
     meal = args['meal']
+    note = args['note']
 
     meal_notes = mongo.db.meal_notes
-    data = mongo.db.meal_notes.find({"_id": ObjectId(user_id)})[0]
+    data = {'userId' : ObjectId(user_id), 'date' : date, 'meal' : meal, 'note' : note}
 
-    return True  # need to finish
-    # data['watchlist'] = watchlist_status
-    #
-    # return _update_data(users, user_id, data)
+    try:
+        meal_notes.update_one({'userId' : ObjectId(user_id), 'date' : date, 'meal' : meal}, \
+                              {"$set": data}, upsert=True)
+        return jsonify(True)
+    except:
+        return jsonify(False)
 
 
 @app.route('/api/change_weight_goal', methods=['POST'])
@@ -652,11 +655,13 @@ if __name__ == '__main__':
     # print(verify_login("isinhasda@princeton.edu", "password"))
     # print(_get_user_meal_notes('5bf8ca12e7179a56e21592c5', '2019-01-05', 'breakfast'))
     # print(_get_user_day_meal_notes('5bf8ca12e7179a56e21592c5', '2019-01-05'))
+    # print(change_mealnote("5bf8ca12e7179a56e21592c5", "2019-01-05", "lunch", "asfopiajw"))
 
     # lp = LineProfiler()
     # lp_wrapper = lp(get_user_nutrient_progress_all_new)
     # lp_wrapper('5bf8ca12e7179a56e21592c5')
     # lp.print_stats()
+
 
 
 
