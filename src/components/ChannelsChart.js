@@ -42,7 +42,7 @@ const ChannelsChart = (props) => {
     // the number 325 has been hardcoded but it is based on 
     // the heights of the nav bar and the other elements 
     // so this can be made dynamic 
-    const containerHeight = window.innerHeight - 325;
+    const containerHeight = props.initial_height - 325;
 
     // hide axis when too small 
     const minwidth = useMediaQuery(`(min-width:${props.theme.breakpoints.values.sm}px)`);

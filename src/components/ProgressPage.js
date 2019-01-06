@@ -66,8 +66,8 @@ class ProgressPage extends React.Component {
         mintime: null,
         maxtime: null,
         values: {calories: "--", carbs: "--", fat: "--", protein: "--"},
-        initial_width: window.innerWidth/4,
-        initial_height: window.innerHeight/4
+        initial_width: window.innerWidth,
+        initial_height: window.innerHeight, 
     };
 
     componentDidMount() {
@@ -195,8 +195,10 @@ class ProgressPage extends React.Component {
                     channels[channelName].monthlyseries = monthlyseries;
                     channels[channelName].subseries = dailyseries_null;
 
-                    // for the label axis 
-                    channels[channelName].max = parseInt(dailyseries.max(channelName), 10);
+                    // for the label axis, set the max value to the max of either the channel 
+                    // value itself, or the goal of the channel 
+                    channels[channelName].max = Math.max(parseInt(dailyseries.max(channelName), 10), 
+                                                    channels[channelName].goal);
                 }); 
                 
                 // The following operations are also quite hacky but since our
@@ -388,7 +390,8 @@ class ProgressPage extends React.Component {
 
     render() {
     
-        const { ready, channels, rollupSize, tracker, timerange} = this.state;
+        const { ready, channels, rollupSize, tracker, timerange, 
+            initial_height, initial_width} = this.state;
 
         // wait for the data to be retrieved/aggregated, show 
         // a loading bar while waiting 
@@ -396,13 +399,13 @@ class ProgressPage extends React.Component {
             return (
                 <div>
                     <CircularProgress style={{
-                        width: `${window.innerWidth/4}px`,
-                        height: `${window.innerHeight/4}px`,
+                        // width: `${initial_width/4}px`,
+                        // height: `${initial_height/4}px`,
                         position: "absolute",
                         left: "50%",
-                        top: "50%", 
-                        marginLeft: `${-window.innerWidth/8}px`,
-                        marginTop: `${-window.innerHeight/8}px`,
+                        top: "50%",
+                        // marginLeft: `${-initial_width/8}px`,
+                        // marginTop: `${-initial_width/8}px`,
                         color: `${this.props.theme.palette.primary.main}`
                         }} />
                 </div>
