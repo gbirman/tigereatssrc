@@ -29,7 +29,7 @@ const styles = theme => ({
     },
     welcomePaper: {
         fontFamily: 'Karla, sans-serif',
-        width: '30vw',
+        width: '40vw',
         borderStyle: 'solid',
         backgroundColor: "#59bf8e",
         color: "white",
@@ -47,7 +47,8 @@ const styles = theme => ({
         paddingRight: '3vw',
         paddingLeft: '3vw',
         paddingBottom: '3vh',
-        marginBottom: '3vh'
+        marginBottom: '3vh',
+        width: '40vw'
     },
     searchField: {
         color: '#3e8563',

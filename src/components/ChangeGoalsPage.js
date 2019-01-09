@@ -24,6 +24,7 @@ const styles = theme => ({
     header: {
         color: "#59bf8e",
         fontFamily: 'Karla, sans-serif',
+        alignContent: 'center'
     },
     instructions: {
         color: '#3e8563',
@@ -44,16 +45,16 @@ const styles = theme => ({
         textAlign: 'center'
     },
     instructionsPaper: {
-        marginRight: '30vw', 
-        marginLeft: '30vw',  
+        marginRight: '25vw', 
+        marginLeft: '25vw',  
         marginBottom: '2%',
         paddingBottom: '2vh',
         border: 'solid',
         borderColor: '#59bf8e'
     },
     goalsPaper: {
-        marginRight: '10vw',
-        marginLeft: '10vw',
+        marginRight: '5vw',
+        marginLeft: '5vw',
         border: 'solid',
         borderColor: '#59bf8e'
     },
@@ -145,8 +146,8 @@ export default withStyles(styles)(class ChangeGoalsPage extends React.Component 
         const {classes} = this.props;
         return (
             <div>
-                <Grid container justify="center" alignContent="center" className={classes.header}>
-                    <h1>Change your goals below!</h1>
+                <Grid container justify="center" alignContent="center" alignItems="center" className={classes.header}>
+                    <h1 style={{alignItems: "center"}}>Change your goals below!</h1>
                 </Grid>
                 <Paper className={classes.instructionsPaper}>
                     <Grid container justify="center" >

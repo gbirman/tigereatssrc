@@ -96,7 +96,7 @@ export default withStyles(styles)(class ChangeGoalsModulePercentages extends Rea
         const perc = this.state.proPerc;
         if (perc) {
             const cals = this.state.calGoal;
-            const newPro = parseInt(cals) * (parseInt(perc) / 100) / 4;
+            const newPro = (parseFloat(cals) * (parseFloat(perc) / 100) / 4).toFixed(2);
             this.setState({proGoal: newPro}, () => this.props.onProChange(this.state.proGoal));
         }
         else
@@ -105,9 +105,10 @@ export default withStyles(styles)(class ChangeGoalsModulePercentages extends Rea
 
     updateFats = () => {
         const perc = this.state.fatsPerc;
+        console.log(perc)
         if (perc) {
             const cals = this.state.calGoal;
-            const newFats = parseInt(cals) * (parseInt(perc) / 100) / 9;
+            const newFats = (parseFloat(cals) * (parseFloat(perc) / 100) / 9).toFixed(2);
             this.setState({fatsGoal: newFats}, () => this.props.onFatsChange(this.state.fatsGoal));
         }
         else
@@ -118,7 +119,7 @@ export default withStyles(styles)(class ChangeGoalsModulePercentages extends Rea
         const perc = this.state.carbsPerc;
         if (perc) {
             const cals = this.state.calGoal;
-            const newCarbs = parseInt(cals) * (parseInt(perc) / 100) / 4;
+            const newCarbs = (parseFloat(cals) * (parseFloat(perc) / 100) / 4).toFixed(2);
             this.setState({carbsGoal: newCarbs}, () => this.props.onCarbsChange(this.state.carbsGoal));
         }
         else
@@ -152,7 +153,7 @@ export default withStyles(styles)(class ChangeGoalsModulePercentages extends Rea
         let pros = this.state.proValue;
 
         if (carbs && pros && fats) {
-            let newCal = 4 * parseInt(this.state.carbsGoal) + 9 * parseInt(this.state.fatsGoal) + 4 * parseInt(this.state.proGoal);
+            let newCal = 4 * parseFloat(this.state.carbsGoal) + 9 * parseFloat(this.state.fatsGoal) + 4 * parseFloat(this.state.proGoal);
             this.setState({calShouldBeCalculated: true, calGoal: newCal}, () => this.props.onCalChange(newCal));
         }
         else
@@ -161,6 +162,7 @@ export default withStyles(styles)(class ChangeGoalsModulePercentages extends Rea
 
     render() {
         const {classes} = this.props;
+        console.log((parseFloat(this.props.calGoal)/parseFloat(this.props.proGoal)) * 4)
         return (
             <div>
                 <Grid container justify="center" alignItems="center" className={classes.paperTitle}>
@@ -189,9 +191,9 @@ export default withStyles(styles)(class ChangeGoalsModulePercentages extends Rea
                 </Grid>
                 <Grid container justify="center" alignItems="center" style={{padding: 20}}>
                     <Grid item className={classes.paperInput} xs={3}><Input InputLabelProps={{classes: {root: classes.searchFieldLabel}}} InputProps={{classes: {input: classes.searchField, underline: classes.searchUnderline}}} className={classes.searchField} placeholder={this.props.calGoal} onKeyUp={this.handleCalChange} /></Grid>
-                    <Grid item className={classes.paperInput} xs={3}><Input InputLabelProps={{classes: {root: classes.searchFieldLabel}}} InputProps={{classes: {input: classes.searchField, underline: classes.searchUnderline}}} className={classes.searchField} placeholder={'protein'} onKeyUp={this.handleProChange} /></Grid>
-                    <Grid item className={classes.paperInput} xs={3}><Input InputLabelProps={{classes: {root: classes.searchFieldLabel}}} InputProps={{classes: {input: classes.searchField, underline: classes.searchUnderline}}} className={classes.searchField} placeholder={'carbs'} onKeyUp={this.handleCarbsChange} /></Grid>
-                    <Grid item className={classes.paperInput} xs={3}><Input InputLabelProps={{classes: {root: classes.searchFieldLabel}}} InputProps={{classes: {input: classes.searchField, underline: classes.searchUnderline}}} className={classes.searchField} placeholder={'fats'} onKeyUp={this.handleFatsChange}></Input></Grid>
+                    <Grid item className={classes.paperInput} xs={3}><Input InputLabelProps={{classes: {root: classes.searchFieldLabel}}} InputProps={{classes: {input: classes.searchField, underline: classes.searchUnderline}}} className={classes.searchField} onKeyUp={this.handleProChange} /></Grid>
+                    <Grid item className={classes.paperInput} xs={3}><Input InputLabelProps={{classes: {root: classes.searchFieldLabel}}} InputProps={{classes: {input: classes.searchField, underline: classes.searchUnderline}}} className={classes.searchField} onKeyUp={this.handleCarbsChange} /></Grid>
+                    <Grid item className={classes.paperInput} xs={3}><Input InputLabelProps={{classes: {root: classes.searchFieldLabel}}} InputProps={{classes: {input: classes.searchField, underline: classes.searchUnderline}}} className={classes.searchField} onKeyUp={this.handleFatsChange}></Input></Grid>
                 </Grid>
                 <Grid container justify="center" alignItems="center" className={classes.paperTitle}>
                     <h2>New Goals:</h2>
