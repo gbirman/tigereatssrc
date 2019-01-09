@@ -68,7 +68,7 @@ export default withStyles(styles)(class TableHeaderMoudle extends React.Componen
                                     <TableSortLabel
                                         className={classes.labelRoot}
                                         classes={{active: classes.labelActive}}
-                                        active={this.props.orderBy === row.id && !(row.id === 'change_goals' || row.id === 'email')}
+                                        active={this.props.orderBy === row.id && !(row.id === 'change_goals' || row.id === 'mail')}
                                         direction={this.props.order}
                                         onClick={this.createSortHandler(row.id)}
                                     >

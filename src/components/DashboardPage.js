@@ -11,6 +11,13 @@ import Typography from '@material-ui/core/Typography';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import FormControl from '@material-ui/core/FormControl';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
+
 
 const styles = theme => ({
     table: {
@@ -35,15 +42,28 @@ const styles = theme => ({
     },
     searchUnderline: {
         color: 'red !important'
-    }
+    },
+    blurb: {
+        color: "#4CA279",
+        fontFamily: 'Karla, sans-serif',
+        marginRight: '2vw'
+    },
+    radio: {
+        color: "#4CA279"
+    },
+    formOpLabel: {
+        color: "#59bf8e",
+        fontFamily: 'Karla, sans-serif',
+    },
 
 })
 
 export default withStyles(styles)(class DashboardPage extends React.Component {
 
     state = {
-        restrictions: {name: ""},
-        data: []
+        restrictions: {name: "", watchlist: false},
+        data: [],
+       // listOption: 'all'
     };
 
     getUsers = async () => {
@@ -111,6 +131,16 @@ export default withStyles(styles)(class DashboardPage extends React.Component {
         this.getUsers();
     } 
 
+    handleListChange = (e) => {
+        const val = e.target.value;
+        console.log(val);
+        let rest = this.state.restrictions;
+        rest['watchlist'] = (val === "watchlist") ? true : false;
+        this.setState({restrictions: rest});
+
+        this.getUsers();
+    }
+
     render() {
         const {classes} = this.props;
         return (
@@ -120,10 +150,23 @@ export default withStyles(styles)(class DashboardPage extends React.Component {
                 />
                 <Paper className={classes.table}>
                     <Toolbar>
-                        <Grid container item justify="flex-end" alignItems="flex-end">
+                        <Grid container xs={12} sm={6} item alignItems="center">
+                            <h3 className={classes.blurb}>Select user list:</h3>
+                            <RadioGroup 
+                                row={true} 
+                                style={{display: 'flex', flexDirection: 'row'}}
+                                value={this.state.restrictions['watchlist'] ? 'watchlist' : 'all'}
+                                onChange={this.handleListChange}
+                                >
+                                <FormControlLabel value="all" label={<div className={classes.formOpLabel}>Rest of Users</div>} control={<Radio color="secondary" classes={{root: classes.radio}}/>}/>
+                                <FormControlLabel value="watchlist" label={<div className={classes.formOpLabel}>Watchlist</div>} control={<Radio color="secondary" classes={{root: classes.radio}}/>}/>
+                            </RadioGroup>
+                        </Grid>
+                        <Grid container xs={12} sm={6} item justify="flex-end" alignItems="flex-end">
                             <Grid item><AccountCircle className={classes.personIcon}/></Grid>
                             <Grid item><TextField InputLabelProps={{classes: {root: classes.searchFieldLabel}}} InputProps={{classes: {input: classes.searchField, underline: classes.searchUnderline}}} className={classes.searchField} id="input-with-icon-grid" label="Search for students..." onKeyUp={this.handleSearchChange}/></Grid>
                         </Grid>
+                        
                     </Toolbar>
                     <TableModule 
                         restrictions={this.state.restrictions}
