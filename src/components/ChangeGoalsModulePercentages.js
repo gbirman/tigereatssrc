@@ -162,7 +162,6 @@ export default withStyles(styles)(class ChangeGoalsModulePercentages extends Rea
 
     render() {
         const {classes} = this.props;
-        console.log((parseFloat(this.props.calGoal)/parseFloat(this.props.proGoal)) * 4)
         return (
             <div>
                 <Grid container justify="center" alignItems="center" className={classes.paperTitle}>
