@@ -26,6 +26,7 @@ class MyJSONEncoder(JSONEncoder):
 
 
 app = Flask(__name__, static_folder='./dist/static', template_folder='./dist')
+
 #POTENTIALLY IMPORTANT:
 app.config.from_object(__name__)
 
