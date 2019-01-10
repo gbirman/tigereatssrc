@@ -48,7 +48,7 @@ export default withStyles(styles)(class PersonTile extends React.Component {
 
             // }
             // );
-        console.log("Initial Status: " + this.props.initial_watchlist_status); // debugging
+        // console.log("Initial Status: " + this.props.initial_watchlist_status); // debugging
     
     }
 
@@ -63,7 +63,7 @@ export default withStyles(styles)(class PersonTile extends React.Component {
 
             let result;
     
-            console.log("\n The status sent in this watchlist axios call: " + this.state.watchlist_status); // debugging
+           // console.log("\n The status sent in this watchlist axios call: " + this.state.watchlist_status); // debugging
              axios.post(
                 '/api/change_watchlist',
                 {
@@ -74,7 +74,7 @@ export default withStyles(styles)(class PersonTile extends React.Component {
                     headers: {'Content-type': 'application/json'}
                 }
             ).then((data) => {
-                console.log("Add to Watch List:" + data);
+               // console.log("Add to Watch List:" + data);
                 result = data['data'];
     
                 if (!result) {

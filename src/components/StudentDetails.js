@@ -61,7 +61,7 @@ export default class StudentDetails extends React.Component {
 
     ];
       
-    console.log("Student details watchlist status: " + this.props.userInfo[14]); // Debugging
+    // console.log("Student details watchlist status: " + this.props.userInfo[14]); // Debugging
         // May not need td - they say I need div
         // TODO: Get actual Props from somewhere, including the image for PersonTile
         return (
