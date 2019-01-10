@@ -36,7 +36,8 @@ export default withStyles(styles)(class PersonTile extends React.Component {
 
     state = { // does this happen right when desired
         
-        watchlist_status: (this.props.initial_watchlist_status ? true: false)  // change in database to true to confirm if it works
+        watchlist_status: (this.props.initial_watchlist_status ? true: false),  // change in database to true to confirm if it works
+        buttonEverClicked: false
     }
     
     componentDidMount() {
@@ -112,7 +113,23 @@ export default withStyles(styles)(class PersonTile extends React.Component {
         }
     }
 
+
+    buttonText() {
+
+        setTimeout(() => { // terrible practice, but this is a programmed in delay to allow the buttontext to update after the state changes.
+        },100)
+
+        if (!this.state.buttonEverClicked) return (this.props.initial_watchlist_status ? "Remove From Watch List" : 
+        "Add to Watch List");
+
+        else return (this.state.watchlist_status ? "Remove From Watch List" : "Add To Watch List");
+    }
+
+
     render() {
+
+        
+
         const {classes} = this.props;
         // Error messages made me get rid of outer div here
         return (
@@ -155,9 +172,11 @@ export default withStyles(styles)(class PersonTile extends React.Component {
 
                            () => {
                                 this.setState({
-                                    watchlist_status: !this.state.watchlist_status
+                                    watchlist_status: !this.state.watchlist_status,
+                                    buttonEverClicked: true
                                 }, () => {
                                  this.addToWatchList()
+
                                 })
                             }
 
@@ -166,7 +185,8 @@ export default withStyles(styles)(class PersonTile extends React.Component {
 
                         }
                         >
-                        {this.state.watchlist_status ? "Remove From Watch List" : "Add To Watch List"}</Button>
+                        {this.buttonText()}
+                    </Button>
                     </Grid>
 
                     
