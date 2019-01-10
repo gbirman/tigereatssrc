@@ -25,8 +25,7 @@ class MyJSONEncoder(JSONEncoder):
         return super(MyJSONEncoder, self).default(obj)
 
 
-app = Flask(__name__, static_folder='../build')
-
+app = Flask(__name__, static_folder='./dist/static', template_folder='./dist')
 #POTENTIALLY IMPORTANT:
 app.config.from_object(__name__)
 
