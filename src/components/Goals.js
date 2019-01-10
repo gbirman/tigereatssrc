@@ -48,10 +48,10 @@ export default withStyles(styles)(class Goals extends React.Component {
             {x:  (this.props.todayNutrients.calories * 100/this.props.calorie_goal), y: 20 }]
         
         : [ // default values in case it hasn't loaded yet
-            {x: 0 , y: 10}, 
-            {x: 0, y: 5 }, 
-            {x:  0, y: 15 }, 
-            {x:  0, y: 20 }
+            {x: 75 , y: 10}, 
+            {x: 50, y: 5 }, 
+            {x:  90, y: 15 }, 
+            {x:  65, y: 20 }
         ];
 
 
