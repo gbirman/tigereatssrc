@@ -13,7 +13,7 @@ const styles = theme => ({
 
     buttonStyle: {
         fontFamily: 'Karla, sans-serif',
-        color: 'white',
+        color: 'black',
         border: 'solid',
         borderColor: '#d9f495'
     },
