@@ -38,8 +38,8 @@ export default class StudentGoalsPage extends React.Component {
     componentDidUpdate(prevProps, prevState) {    
     }
 
-    getUserInfo = (user_id) => {
-        axios.get(
+    getUserInfo = async (user_id) => { // attempt at adding async
+        await axios.get( // attempt at adding async
             '/api/get_all_user_info',
             {
 

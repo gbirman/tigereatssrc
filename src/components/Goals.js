@@ -55,8 +55,6 @@ export default withStyles(styles)(class Goals extends React.Component {
         ];
 
 
-
-
             function myFormatterX(t, i) { // for the bar graph
                 return (
                   <tspan x="0" dy="1em">{t}%</tspan>

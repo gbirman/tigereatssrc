@@ -59,8 +59,9 @@ export default class StudentDetails extends React.Component {
             "MEAL NOT ": "LOGGED"
         }
 
-    ]
-    
+    ];
+      
+    console.log("Student details watchlist status: " + this.props.userInfo[14]); // Debugging
         // May not need td - they say I need div
         // TODO: Get actual Props from somewhere, including the image for PersonTile
         return (
@@ -77,7 +78,8 @@ export default class StudentDetails extends React.Component {
                         <PersonTile 
                         name={this.props.fullName}
                         email = {this.props.userInfo[0]}
-                        user_id = {this.props.user_id}
+                        _id = {this.props.user_id}
+                        initial_watchlist_status = {this.props.userInfo[14]}
                         />
                     </Grid>
 
