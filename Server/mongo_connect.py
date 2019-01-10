@@ -25,7 +25,10 @@ class MyJSONEncoder(JSONEncoder):
         return super(MyJSONEncoder, self).default(obj)
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='./dist/static', template_folder='./dist')
+#POTENTIALLY IMPORTANT:
+app.config.from_object(__name__)
+
 app.json_encoder = MyJSONEncoder
 app.config['MONGO_DBNAME'] = 'tiger_eats_db'
 app.config['MONGO_URI'] = 'mongodb://pfrazao:y7gnykTXHj8j7EK@ds053380.mlab.com:53380/tiger_eats_db'
