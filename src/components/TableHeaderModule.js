@@ -32,7 +32,7 @@ const styles = theme => ({
     labelRoot: {
         color: '#4CA279 !important',
         fontFamily: 'Karla, sans-serif',
-        textAlign: 'center'
+        textAlign: 'center',
 
     },
     labelActive: {
@@ -55,6 +55,7 @@ export default withStyles(styles)(class TableHeaderMoudle extends React.Componen
                     {rows.map((row) => {
                         return (
                             <TableCell
+                                
                                 key={row.id}
                                 numeric={row.numeric}
                                 padding={'none'}
@@ -67,7 +68,7 @@ export default withStyles(styles)(class TableHeaderMoudle extends React.Componen
                                 >
                                     <TableSortLabel
                                         className={classes.labelRoot}
-                                        classes={{active: classes.labelActive}}
+                                        classes={{active: classes.labelActive, }}
                                         active={this.props.orderBy === row.id && !(row.id === 'change_goals' || row.id === 'mail')}
                                         direction={this.props.order}
                                         onClick={this.createSortHandler(row.id)}
