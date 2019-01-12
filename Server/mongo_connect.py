@@ -523,12 +523,12 @@ def change_nutrition_goals():
         new_carbs_goal = float(args['new_carbs_goal'])
         new_fats_goal = float(args['new_fats_goal'])
     except ValueError:
-        return jsonify(False)
+        return jsonify([False, "You need to enter numbers!"])
 
     if new_calorie_goal < 0 or new_fats_goal < 0 or new_carbs_goal < 0 or new_protein_goal < 0:
-        return jsonify(False)
+        return jsonify([False, "No negative values allowed!"])
     if not new_calorie_goal - 0.1 <= 4*new_protein_goal + 4*new_carbs_goal + 9*new_fats_goal <= new_calorie_goal + 0.1:
-        return jsonify(False)
+        return jsonify([False, "The number of calories should be about equal to 4*(grams of protein) + 4*(grams of carbs) + 9*(grams of fats"])
 
     users, data = _prep_data_to_update(user_id)
     data['calorie_goal'] = new_calorie_goal
