@@ -113,7 +113,10 @@ export default withStyles(styles)(class ChangeGoalsPage extends React.Component 
             console.log(data);
             result = data['data'];
 
-            const success = result[0];
+            let success;
+            if (result === true) success = true;
+            else success = false;
+            console.log(success)
             let msg;
             if (!success) msg = result[1];
 
