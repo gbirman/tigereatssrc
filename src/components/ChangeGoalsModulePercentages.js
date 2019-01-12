@@ -109,6 +109,7 @@ export default withStyles(styles)(class ChangeGoalsModulePercentages extends Rea
         if (perc) {
             const cals = this.state.calGoal;
             const newFats = (parseFloat(cals) * (parseFloat(perc) / 100) / 9).toFixed(2);
+            console.log(newFats)
             this.setState({fatsGoal: newFats}, () => this.props.onFatsChange(this.state.fatsGoal));
         }
         else
