@@ -527,7 +527,7 @@ def change_nutrition_goals():
 
     if new_calorie_goal < 0 or new_fats_goal < 0 or new_carbs_goal < 0 or new_protein_goal < 0:
         return jsonify(False)
-    if new_calorie_goal != 4*new_protein_goal + 4*new_carbs_goal + 9*new_fats_goal:
+    if not new_calorie_goal - 0.1 <= 4*new_protein_goal + 4*new_carbs_goal + 9*new_fats_goal <= new_calorie_goal + 0.1:
         return jsonify(False)
 
     users, data = _prep_data_to_update(user_id)
