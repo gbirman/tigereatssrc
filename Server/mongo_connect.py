@@ -17,6 +17,8 @@ from pymongo import MongoClient
 from urllib.parse import quote_plus
 from pymongo.errors import ConnectionFailure
 
+from CASClient import CASClient
+
 
 class MyJSONEncoder(JSONEncoder):
     def default(self, obj):
@@ -37,6 +39,12 @@ app.config['MONGO_URI'] = 'mongodb://pfrazao:y7gnykTXHj8j7EK@ds053380.mlab.com:5
 mongo = PyMongo(app)
 CORS(app)
 
+
+cas = CAS()
+cas.init_app(app)
+app.config['CAS_SERVER'] = 'https://fed.princeton.edu/cas/'
+app.secret_key = 'uhuhuhuhuhuhiwannaerykahbadu'
+app.config['CAS_AFTER_LOGIN'] = 'login'
 
 session_opts = {
     'session.type': 'file',
@@ -60,6 +68,46 @@ app.secret_key = secret_key
 
 app.wsgi_app = SessionMiddleware(app.wsgi_app, session_opts)
 app.session_interface = BeakerSessionInterface()
+
+casClient = CASClient()
+
+
+# <Button className={classes.loginButton} variant="contained" color="primary" href='http://localhost:5000/login_casclient'>Login with CAS</Button>
+# <Button className={classes.loginButton} variant="contained" color="primary" onClick={() => axios.get('/cas').catch((error) => {console.error(error);})}>Login with CAS</Button>
+@app.route('/dash', methods=['GET'])
+@casClient.cas_required
+def login_casclient():
+    session['netID'] = cas.username
+    uriRoot = environ.get('URIROOT', 'http://localhost:3000')
+    return redirect('https://tigereats.herokuapp.com/dash', code=302)
+    return redirect(uriRoot + '/dash', code=302)
+
+
+@app.route('/cas', methods=['GET'])
+@login_required
+def login():
+    session['netID'] = cas.username
+    uriRoot = environ.get('URIROOT', 'http://localhost:3000')
+    return redirect(uriRoot + '/dash', code=302)
+
+
+@app.route('/api/verify_login', methods=['GET'])
+def verify_login():
+
+    data = request.args
+    email = data['email']
+    password = data['password']
+
+    try:
+        startdate = mongo.db.authorized_users.find({
+            "$and": [
+                {'email': email},
+                {'password' : password}
+            ]
+        })[0]
+        return jsonify(True)
+    except:
+        return jsonify(False)
 
 
 def _fill_database_meals():
@@ -147,25 +195,6 @@ def _delete_items():
         this_date = str(startdate + timedelta(i))
         mongo.db.meal_log.delete_many({"date": this_date})
         mongo.db.meal_day_summary.delete_many({"date": this_date})
-
-
-@app.route('/api/verify_login', methods=['GET'])
-def verify_login():
-
-    data = request.args
-    email = data['email']
-    password = data['password']
-
-    try:
-        startdate = mongo.db.authorized_users.find({
-            "$and": [
-                {'email': email},
-                {'password' : password}
-            ]
-        })[0]
-        return jsonify(True)
-    except:
-        return jsonify(False)
 
 
 @app.route('/api/getUsers', methods=['GET'])
