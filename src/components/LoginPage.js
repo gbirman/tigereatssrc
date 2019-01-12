@@ -10,7 +10,7 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import logo from '../images/tiger_eats_graphic.png'
+import logo from './images/tiger_eats_graphic.png'
 
 const styles = theme => ({
     loginButton: {
