@@ -525,7 +525,7 @@ def change_nutrition_goals():
     except ValueError:
         return jsonify(False)
 
-    if new_calorie_goal <= 0 or new_fats_goal <= 0 or new_carbs_goal <= 0 or new_protein_goal <= 0:
+    if new_calorie_goal < 0 or new_fats_goal < 0 or new_carbs_goal < 0 or new_protein_goal < 0:
         return jsonify(False)
     if new_calorie_goal != 4*new_protein_goal + 4*new_carbs_goal + 9*new_fats_goal:
         return jsonify(False)
