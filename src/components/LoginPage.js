@@ -110,7 +110,7 @@ export default withStyles(styles)(class LoginPage extends React.Component {
                         </Grid>
                     </Paper>
                     <Grid item xs={3} >
-                        <NavLink to="/dash" style={{ textDecoration: 'none'}}><Button ref={component => this.clickable = component} className={classes.loginButton} variant="contained" color="primary" onClick={console.log('click')}>Log in!</Button></NavLink>
+                        <Button className={classes.loginButton} variant="contained" color="primary" onClick={() => axios.get('/dash').catch((error) => {console.error(error);})}>Login with CAS</Button>
                     </Grid>
                 </Grid>
             </div>
