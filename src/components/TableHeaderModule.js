@@ -24,6 +24,7 @@ const rows = [
     { id: 'protein_goal', numeric: false, disablePadding: true, label: 'Protein'},
     { id: 'carbs_goal', numeric: false, disablePadding: true, label: 'Carbs'},
     { id: 'fats_goal', numeric: false, disablePadding: true, label: 'Fat'},
+    { id: 'watchlist', numeric: false, disablePadding: false, label: 'Watchlist?'},
     { id: 'change_goals', numeric: false, disablePadding: false, label: 'Change Goals'},
     { id: 'mail', numeric: false, disablePadding: false, label: 'Send Email'},
   ];
