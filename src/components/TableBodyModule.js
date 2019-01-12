@@ -7,6 +7,8 @@ import EmailIcon from '@material-ui/icons/Email';
 import EditIcon from '@material-ui/icons/Edit';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import DoneIcon from '@material-ui/icons/Done';
+import CloseIcon from '@material-ui/icons/Close';
 
 
 const styles = theme => ({
@@ -89,6 +91,7 @@ export default withStyles(styles)(class TableBodyModule extends React.Component 
                                         <TableCell className={classes.cell} align="center">{n.protein_goal}</TableCell>
                                         <TableCell className={classes.cell} align="center">{n.carbs_goal}</TableCell>
                                         <TableCell className={classes.cell} align="center">{n.fats_goal}</TableCell>
+                                        <TableCell className={classes.iconCell} align="center">{(n.watchlist) ? <DoneIcon clickable="false"/> : <CloseIcon clickable="false"/>}</TableCell>
                                         <TableCell className={classes.iconCell} align="center" component={Link} to={"/changeGoals/" + n._id + "/" + n.fullname + "/" + n.calorie_goal + "/" + n.protein_goal + "/" + n.fats_goal + "/" + n.carbs_goal}>
                                             <EditIcon clickable="true"/>  
                                         </TableCell>

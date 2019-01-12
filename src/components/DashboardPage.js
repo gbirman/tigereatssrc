@@ -90,6 +90,7 @@ export default withStyles(styles)(class DashboardPage extends React.Component {
                 n['fullname'] = full_name;
             });
             console.log('users updated');
+            console.log(data['data']);
 
             this.setState({data: data['data']});
         })}
