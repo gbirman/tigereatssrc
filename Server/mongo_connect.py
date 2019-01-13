@@ -41,13 +41,6 @@ app.config['MONGO_URI'] = 'mongodb://pfrazao:y7gnykTXHj8j7EK@ds053380.mlab.com:5
 mongo = PyMongo(app)
 CORS(app)
 
-
-cas = CAS()
-cas.init_app(app)
-app.config['CAS_SERVER'] = 'https://fed.princeton.edu/cas/'
-app.secret_key = 'uhuhuhuhuhuhiwannaerykahbadu'
-app.config['CAS_AFTER_LOGIN'] = 'after_login'
-
 session_opts = {
     'session.type': 'file',
     'session.cookie_expires': True,
@@ -65,7 +58,7 @@ class BeakerSessionInterface(SessionInterface):
 
 
 # secret key
-secret_key = environ.get('SECRET_KEY', "erykahbadu")
+secret_key = environ.get('SECRET_KEY', "uhuhuhuhuhuhiwannaerykahbadu")
 app.secret_key = secret_key
 
 app.wsgi_app = SessionMiddleware(app.wsgi_app, session_opts)
@@ -74,67 +67,36 @@ app.session_interface = BeakerSessionInterface()
 casClient = CASClient()
 
 
-def cas_required(self, function):
-    @wraps(function)
-    def wrap(*args, **kwargs):
-        username = self.authenticate()
-        if not username:
-            print('We are in decorator. Will return to a login URL')
-            return self.return_redirect()
-        else:
-            session['username'] = username
-            return function(*args, **kwargs)
-
-    return wrap
-
 @app.route('/')
 def home():
     return render_template('index.html')
 
+
 @app.route('/<path:path>')
-# @casClient.cas_required
+@casClient.cas_required
 def index(path):
     return render_template('index.html')
 
-# <Button className={classes.loginButton} variant="contained" color="primary" href='http://localhost:5000/login_casclient'>Login with CAS</Button>
-# <Button className={classes.loginButton} variant="contained" color="primary" onClick={() => axios.get('/cas').catch((error) => {console.error(error);})}>Login with CAS</Button>
+
 @app.route('/api/login_casclient', methods=['GET'])
-# @casClient.cas_required
+@casClient.cas_required
 def login_casclient():
-    # print(session['username'])
     uriRoot = environ.get('URIROOT', 'http://localhost:5000')
     return redirect(uriRoot + '/dash', code=302)
 
 
-# @app.route('/api/user_role')
-# def user_role():
-#
-#     if session['username'] in list_authorized_users:
-#         return jsonify(True)
-#     else:
-#         return jsonify(False)
+@app.route('/api/user_role')
+def user_role():
 
+    # data = request.args
+    # user = data['user_netid']
 
-@app.route('/api/cas', methods=['GET'])
-@login_required
-def after_login():
-    session['netID'] = cas.username
-    uriRoot = environ.get('URIROOT', 'http://localhost:5000')
-    return redirect(uriRoot + '/dash', code=302)
-
-
-@app.route('/api/verify_login', methods=['GET'])
-def verify_login():
-
-    data = request.args
-    email = data['email']
-    password = data['password']
+    user = session['username']
 
     try:
-        startdate = mongo.db.authorized_users.find({
+        mongo.db.authorized_users.find({
             "$and": [
-                {'email': email},
-                {'password' : password}
+                {'netid': user}
             ]
         })[0]
         return jsonify(True)
@@ -514,11 +476,6 @@ def _convert_no_meals_logged(nutrients: dict):
         return {'calories': None, 'protein': None, 'carbs': None, 'fat': None}
     else:
         return nutrients
-
-
-@app.route('/api/get_user_nutrient_progress_all_dummy', methods=['GET'])
-def get_user_nutrient_progress_all_dummy():
-    return open('dummy-data.txt', 'r').read()
 
 
 @app.route('/api/get_user_nutrient_progress_all', methods=['GET'])

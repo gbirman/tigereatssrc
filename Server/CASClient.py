@@ -70,7 +70,6 @@ class CASClient:
         def wrap(*args, **kwargs):
             username = self.authenticate()
             if not username:
-                print('We are in decorator. Will return to a login URL')
                 return self.return_redirect()
             else:
                 session['username'] = username

@@ -64,8 +64,6 @@ const styles = theme => ({
 
 })
 
-// () => axios.get('/login_casclient').then((data) => {console.log(data)}).catch((error) => {console.error(error);})
-
 
 
 export default withStyles(styles)(class LoginPage extends React.Component {
@@ -84,21 +82,6 @@ export default withStyles(styles)(class LoginPage extends React.Component {
     handlePasswordChange = (e) => {
         this.setState({password: e.target.value});
     }
-
-    handleClick = event => {
-        let url = "https://tigereats.herokuapp.com/login";
-
-        fetch(url, {
-          method: "GET",
-          header: {
-            Accept: "application/json",
-            "Content-Type": "application/json"
-          },
-          dataType: "json"
-        })
-          .then(response => console.log(response.status))
-        console.log("posting that we are logging in to server....");
-    };
 
     render() {
         const {classes} = this.props;
