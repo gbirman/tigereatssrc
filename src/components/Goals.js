@@ -8,7 +8,6 @@ import {HorizontalBarSeries, XYPlot, XAxis, YAxis, HorizontalGridLines, Vertical
 import './dist/style.css'; // this is for the bar graph
 
 
-
 const styles = theme => ({
 
     buttonStyle: {
