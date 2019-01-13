@@ -96,9 +96,9 @@ def user_role():
                 {'netid': user}
             ]
         })[0]
-        return True
+        return jsonify(True)
     except:
-        return False
+        return jsonify(False)
 
 
 def _fill_database_meals():
