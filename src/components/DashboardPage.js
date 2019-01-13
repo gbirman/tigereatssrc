@@ -94,6 +94,33 @@ export default withStyles(styles)(class DashboardPage extends React.Component {
 
             this.setState({data: data['data']});
         })}
+    
+    handleWatchChange = (id, inList) => {
+        console.log(id + " " + inList);
+        axios.post(
+            '/api/change_watchlist',
+            {
+                user_id: id, 
+                watchlist_status: !inList // TODO: This is flipped!!!
+            },
+            {
+                headers: {'Content-type': 'application/json'}
+            }
+        ).then((data) => {
+            // console.log("Add to Watch List:" + data);
+            const result = data['data'];
+            console.log(result)
+
+            if (!result) {
+                console.log("It didn't work!");
+            }
+            else {
+                /// alert("Added to Watch List"); // get rid of this later   
+            }
+
+            this.getUsers();
+        })   
+    }
 
     handleSearchChange = (e) => {
         let rest = this.state.restrictions;
@@ -186,6 +213,7 @@ export default withStyles(styles)(class DashboardPage extends React.Component {
                         restrictions={this.state.restrictions}
                         getUsers={this.getUsers}
                         data={this.state.data}
+                        onWatchChange={this.handleWatchChange}
                     />
                 </Paper>
             </div>

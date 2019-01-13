@@ -9,6 +9,8 @@ import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import DoneIcon from '@material-ui/icons/Done';
 import CloseIcon from '@material-ui/icons/Close';
+import axios from 'axios';
+
 
 
 const styles = theme => ({
@@ -28,14 +30,15 @@ const styles = theme => ({
     },
     iconCell: {
         color: '#3e8563',
-        cursor: "pointer"
+        cursor: "pointer",
+        justiftyContent:"center", 
+        alignItems:"center"
     },
     nameCell: {
         textDecoration: 'none',
         color: '#4CA279',
     }
 });
-
 
 function stableSort(array, cmp) {
     const stabilizedThis = array.map((el, index) => [el, index]);
@@ -61,6 +64,31 @@ function getSorting(order, orderBy) {
 export default withStyles(styles)(class TableBodyModule extends React.Component {
     isSelected = property => {
         console.log('success');
+    }
+
+    handleWatchClick = (id, inList) => {
+        console.log(id + " " + inList);
+        axios.post(
+            '/api/change_watchlist',
+            {
+                user_id: id, 
+                watchlist_status: !inList // TODO: This is flipped!!!
+            },
+            {
+                headers: {'Content-type': 'application/json'}
+            }
+        ).then((data) => {
+           // console.log("Add to Watch List:" + data);
+            const result = data['data'];
+            console.log(result)
+
+            if (!result) {
+                console.log("It didn't work!");
+            }
+            else {
+               /// alert("Added to Watch List"); // get rid of this later   
+            }
+        })   
     }
 
     render () {
@@ -91,7 +119,7 @@ export default withStyles(styles)(class TableBodyModule extends React.Component 
                                         <TableCell className={classes.cell} align="center">{n.protein_goal}</TableCell>
                                         <TableCell className={classes.cell} align="center">{n.carbs_goal}</TableCell>
                                         <TableCell className={classes.cell} align="center">{n.fats_goal}</TableCell>
-                                        <TableCell className={classes.iconCell} align="center">{(n.watchlist) ? <DoneIcon clickable="false"/> : <CloseIcon clickable="false"/>}</TableCell>
+                                        <TableCell className={classes.iconCell} align="center">{(n.watchlist) ? <DoneIcon clickable="true" onClick={(e) => {e.preventDefault(); this.props.onWatchChange(n._id, true)}}/> : <CloseIcon clickable="true" onClick={(e) => {e.preventDefault(); this.props.onWatchChange(n._id, false)}}/>}</TableCell>
                                         <TableCell className={classes.iconCell} align="center" component={Link} to={"/changeGoals/" + n._id + "/" + n.fullname + "/" + n.calorie_goal + "/" + n.protein_goal + "/" + n.fats_goal + "/" + n.carbs_goal}>
                                             <EditIcon clickable="true"/>  
                                         </TableCell>
