@@ -6,7 +6,7 @@ from os import environ
 import random
 import time
 
-from flask import Flask, jsonify, request, redirect, session
+from flask import Flask, jsonify, request, redirect, session, render_template
 from flask.json import JSONEncoder
 from flask_pymongo import PyMongo
 from flask_cas import login_required, CAS, login, logout
@@ -27,7 +27,7 @@ class MyJSONEncoder(JSONEncoder):
         return super(MyJSONEncoder, self).default(obj)
 
 
-app = Flask(__name__, static_folder='./dist/static', template_folder='./dist')
+app = Flask(__name__, static_folder='../build/static', template_folder='../build/')
 
 #POTENTIALLY IMPORTANT:
 app.config.from_object(__name__)
@@ -44,7 +44,7 @@ cas = CAS()
 cas.init_app(app)
 app.config['CAS_SERVER'] = 'https://fed.princeton.edu/cas/'
 app.secret_key = 'uhuhuhuhuhuhiwannaerykahbadu'
-app.config['CAS_AFTER_LOGIN'] = 'login'
+app.config['CAS_AFTER_LOGIN'] = 'after_login'
 
 session_opts = {
     'session.type': 'file',
@@ -71,23 +71,27 @@ app.session_interface = BeakerSessionInterface()
 
 casClient = CASClient()
 
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def index(path):
+    return render_template('index.html');
 
 # <Button className={classes.loginButton} variant="contained" color="primary" href='http://localhost:5000/login_casclient'>Login with CAS</Button>
 # <Button className={classes.loginButton} variant="contained" color="primary" onClick={() => axios.get('/cas').catch((error) => {console.error(error);})}>Login with CAS</Button>
-@app.route('/dash', methods=['GET'])
+@app.route('/api/login_casclient', methods=['GET'])
 @casClient.cas_required
 def login_casclient():
     session['netID'] = cas.username
-    uriRoot = environ.get('URIROOT', 'http://localhost:3000')
-    return redirect('https://tigereats.herokuapp.com/dash', code=302)
+    uriRoot = environ.get('URIROOT', 'http://localhost:5000')
+    # return redirect('https://tigereats.herokuapp.com/dash', code=302)
     return redirect(uriRoot + '/dash', code=302)
 
 
-@app.route('/cas', methods=['GET'])
+@app.route('/api/cas', methods=['GET'])
 @login_required
-def login():
+def after_login():
     session['netID'] = cas.username
-    uriRoot = environ.get('URIROOT', 'http://localhost:3000')
+    uriRoot = environ.get('URIROOT', 'http://localhost:5000')
     return redirect(uriRoot + '/dash', code=302)
 
 

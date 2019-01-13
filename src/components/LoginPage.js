@@ -85,6 +85,21 @@ export default withStyles(styles)(class LoginPage extends React.Component {
         this.setState({password: e.target.value});
     }
 
+    handleClick = event => {
+        let url = "https://tigereats.herokuapp.com/login";
+
+        fetch(url, {
+          method: "GET",
+          header: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          },
+          dataType: "json"
+        })
+          .then(response => console.log(response.status))
+        console.log("posting that we are logging in to server....");
+    };
+
     render() {
         const {classes} = this.props;
         return (
@@ -110,7 +125,7 @@ export default withStyles(styles)(class LoginPage extends React.Component {
                         </Grid>
                     </Paper>
                     <Grid item xs={3} >
-                        <Button className={classes.loginButton} variant="contained" color="primary" onClick={() => axios.get('/dash').catch((error) => {console.error(error);})}>Login with CAS</Button>
+                        <Button className={classes.loginButton} variant="contained" color="primary" href='http://localhost:5000/api/login_casclient'>Login with CAS</Button>
                     </Grid>
                 </Grid>
             </div>
