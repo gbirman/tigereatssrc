@@ -88,7 +88,7 @@ def login_casclient():
 @app.route('/api/user_role')
 def user_role():
 
-    user = session['username']
+    user = session['username'].decode('utf-8')
 
     try:
         mongo.db.authorized_users.find({
@@ -96,9 +96,9 @@ def user_role():
                 {'netid': user}
             ]
         })[0]
-        return jsonify(True)
+        return True
     except:
-        return jsonify(False)
+        return False
 
 
 def _fill_database_meals():
@@ -190,6 +190,8 @@ def _delete_items():
 
 @app.route('/api/getUsers', methods=['GET'])
 def get_users():
+
+    print(user_role())
 
     filters = request.args['restrictions']
     filters = json.loads(filters)
