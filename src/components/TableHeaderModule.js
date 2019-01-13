@@ -18,12 +18,13 @@ import classNames from 'classnames';
 const rows = [
     { id: 'fullname', numeric: false, disablePadding: false, label: 'Name' },
     { id: 'gender', numeric: false, disablePadding: true, label: 'Gender' },
-    { id: 'year', numeric: false, disablePadding: true, label: 'Class Year' },
+    { id: 'year', numeric: false, disablePadding: true, label: 'Year' },
     { id: 'team', numeric: false, disablePadding: true, label: 'Team' },
     { id: 'calorie_goal', numeric: false, disablePadding: true, label: 'Calories'},
     { id: 'protein_goal', numeric: false, disablePadding: true, label: 'Protein'},
     { id: 'carbs_goal', numeric: false, disablePadding: true, label: 'Carbs'},
     { id: 'fats_goal', numeric: false, disablePadding: true, label: 'Fat'},
+    { id: 'watchlist', numeric: false, disablePadding: false, label: 'Watchlist?'},
     { id: 'change_goals', numeric: false, disablePadding: false, label: 'Change Goals'},
     { id: 'mail', numeric: false, disablePadding: false, label: 'Send Email'},
   ];
@@ -32,13 +33,16 @@ const styles = theme => ({
     labelRoot: {
         color: '#4CA279 !important',
         fontFamily: 'Karla, sans-serif',
-        textAlign: 'center'
+        textAlign: 'center',
 
     },
     labelActive: {
         color: '#3e8563 !important',
         fontFamily: 'Karla, sans-serif',
 
+    },
+    labelCell: {
+        textAlign: 'center'
     }
 });
   
@@ -55,26 +59,24 @@ export default withStyles(styles)(class TableHeaderMoudle extends React.Componen
                     {rows.map((row) => {
                         return (
                             <TableCell
+                                className={classes.labelCell}
                                 key={row.id}
                                 numeric={row.numeric}
                                 padding={'none'}
                                 sortDirection={this.props.orderBy === row.id ? this.props.order : false}
-                                align="center"
+                                
                             >
-                                <Tooltip
-                                    title="Sort"
-                                    placement={row.numeric ? 'bottom-end' : 'bottom-start'}
-                                >
+
                                     <TableSortLabel
                                         className={classes.labelRoot}
-                                        classes={{active: classes.labelActive}}
+                                        classes={{active: classes.labelActive, }}
                                         active={this.props.orderBy === row.id && !(row.id === 'change_goals' || row.id === 'mail')}
                                         direction={this.props.order}
                                         onClick={this.createSortHandler(row.id)}
                                     >
                                         <h3>{row.label}</h3>
                                     </TableSortLabel>
-                                </Tooltip>   
+
                             </TableCell>
                         );
                     })}

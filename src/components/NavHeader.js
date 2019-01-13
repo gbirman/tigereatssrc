@@ -1,7 +1,7 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import { NavLink } from 'react-router-dom';
-import logo from '../images/tiger_eats_logo.png'
+import logo from './images/tiger_eats_logo.png'
 import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';

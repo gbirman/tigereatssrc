@@ -6,7 +6,7 @@ from os import environ
 import random
 import time
 
-from flask import Flask, jsonify, request, redirect, session
+from flask import Flask, jsonify, request, redirect, session, render_template
 from flask.json import JSONEncoder
 from flask_pymongo import PyMongo
 from flask_cas import login_required, CAS, login, logout
@@ -17,6 +17,10 @@ from pymongo import MongoClient
 from urllib.parse import quote_plus
 from pymongo.errors import ConnectionFailure
 
+from CASClient import CASClient
+
+from functools import wraps
+
 
 class MyJSONEncoder(JSONEncoder):
     def default(self, obj):
@@ -25,7 +29,7 @@ class MyJSONEncoder(JSONEncoder):
         return super(MyJSONEncoder, self).default(obj)
 
 
-app = Flask(__name__, static_folder='./dist/static', template_folder='./dist')
+app = Flask(__name__, static_folder='../build/static', template_folder='../build/')
 
 #POTENTIALLY IMPORTANT:
 app.config.from_object(__name__)
@@ -36,7 +40,6 @@ app.config['MONGO_URI'] = 'mongodb://pfrazao:y7gnykTXHj8j7EK@ds053380.mlab.com:5
 
 mongo = PyMongo(app)
 CORS(app)
-
 
 session_opts = {
     'session.type': 'file',
@@ -55,11 +58,47 @@ class BeakerSessionInterface(SessionInterface):
 
 
 # secret key
-secret_key = environ.get('SECRET_KEY', "erykahbadu")
+secret_key = environ.get('SECRET_KEY', "uhuhuhuhuhuhiwannaerykahbadu")
 app.secret_key = secret_key
 
 app.wsgi_app = SessionMiddleware(app.wsgi_app, session_opts)
 app.session_interface = BeakerSessionInterface()
+
+casClient = CASClient()
+
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+
+@app.route('/<path:path>')
+@casClient.cas_required
+def index(path):
+    return render_template('index.html')
+
+
+@app.route('/api/login_casclient', methods=['GET'])
+@casClient.cas_required
+# technically don't even need this anymore since all paths are CAS protected
+def login_casclient():
+    uriRoot = environ.get('URIROOT', 'http://localhost:5000')
+    return redirect(uriRoot + '/dash', code=302)
+
+
+@app.route('/api/user_role')
+def user_role():
+
+    user = session['username']
+
+    try:
+        mongo.db.authorized_users.find({
+            "$and": [
+                {'netid': user}
+            ]
+        })[0]
+        return jsonify(True)
+    except:
+        return jsonify(False)
 
 
 def _fill_database_meals():
@@ -147,25 +186,6 @@ def _delete_items():
         this_date = str(startdate + timedelta(i))
         mongo.db.meal_log.delete_many({"date": this_date})
         mongo.db.meal_day_summary.delete_many({"date": this_date})
-
-
-@app.route('/api/verify_login', methods=['GET'])
-def verify_login():
-
-    data = request.args
-    email = data['email']
-    password = data['password']
-
-    try:
-        startdate = mongo.db.authorized_users.find({
-            "$and": [
-                {'email': email},
-                {'password' : password}
-            ]
-        })[0]
-        return jsonify(True)
-    except:
-        return jsonify(False)
 
 
 @app.route('/api/getUsers', methods=['GET'])
@@ -455,11 +475,6 @@ def _convert_no_meals_logged(nutrients: dict):
         return nutrients
 
 
-@app.route('/api/get_user_nutrient_progress_all_dummy', methods=['GET'])
-def get_user_nutrient_progress_all_dummy():
-    return open('dummy-data.txt', 'r').read()
-
-
 @app.route('/api/get_user_nutrient_progress_all', methods=['GET'])
 def get_user_nutrient_progress_all():
 
@@ -523,12 +538,12 @@ def change_nutrition_goals():
         new_carbs_goal = float(args['new_carbs_goal'])
         new_fats_goal = float(args['new_fats_goal'])
     except ValueError:
-        return jsonify(False)
+        return jsonify([False, "You need to enter numbers!"])
 
-    if new_calorie_goal <= 0 or new_fats_goal <= 0 or new_carbs_goal <= 0 or new_protein_goal <= 0:
-        return jsonify(False)
-    if new_calorie_goal != 4*new_protein_goal + 4*new_carbs_goal + 9*new_fats_goal:
-        return jsonify(False)
+    if new_calorie_goal < 0 or new_fats_goal < 0 or new_carbs_goal < 0 or new_protein_goal < 0:
+        return jsonify([False, "No negative values allowed!"])
+    if not new_calorie_goal - 0.1 <= 4*new_protein_goal + 4*new_carbs_goal + 9*new_fats_goal <= new_calorie_goal + 0.1:
+        return jsonify([False, "The number of calories should be about equal to 4*(grams of protein) + 4*(grams of carbs) + 9*(grams of fats)"])
 
     users, data = _prep_data_to_update(user_id)
     data['calorie_goal'] = new_calorie_goal

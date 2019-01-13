@@ -67,6 +67,7 @@ export default class TableModule extends React.Component {
                     onRequestSort={this.handleRequestSort}
                     orderBy={this.state.orderBy}
                     order={this.state.order}
+                    onWatchChange={this.props.onWatchChange}
                 />
             </Table>
         );

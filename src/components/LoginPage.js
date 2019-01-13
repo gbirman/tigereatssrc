@@ -10,7 +10,7 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import logo from '../images/tiger_eats_graphic.png'
+import logo from './images/tiger_eats_graphic.png'
 
 const styles = theme => ({
     loginButton: {
@@ -20,12 +20,13 @@ const styles = theme => ({
         borderColor: '#d9f495',
         fontSize: '1em',
         paddingTop: '1vh',
-        paddingBottom: '1vh'
+        paddingBottom: '1vh',
+        textAlign: 'center'
     },
     icon: {
-        height: '180px', // responsive height is 30vh, 180px
-        marginTop: '5vh',
-        marginBottom: '4vh'
+        height: '50vh', // responsive height is 30vh, 180px
+        marginTop: '10vh',
+        marginBottom: '5vh'
     },
     welcomePaper: {
         fontFamily: 'Karla, sans-serif',
@@ -37,7 +38,7 @@ const styles = theme => ({
         paddingRight: '5vw',
         paddingLeft: '5vw',
         textAlign: 'center',
-        marginBottom: '3vh',
+        marginBottom: '5vh',
     },
     inputPaper: {
         border: 'solid',
@@ -63,8 +64,6 @@ const styles = theme => ({
     }
 
 })
-
-// () => axios.get('/login_casclient').then((data) => {console.log(data)}).catch((error) => {console.error(error);})
 
 
 
@@ -100,17 +99,9 @@ export default withStyles(styles)(class LoginPage extends React.Component {
                     <Paper color="primary" className={classes.welcomePaper}>
                         <div><h1>Welcome to <span style={{padding: 0, margin: 0, color: "#d9f495"}}>Tiger</span>Eats!</h1></div>
                     </Paper>
-                    <Paper className={classes.inputPaper}>
-                        <h3 style={{marginBottom: '0'}}>Please enter your Princeton email and password:</h3>
-                        <Grid item style={{marginBottom: '2%'}}>
-                            <TextField InputLabelProps={{classes: {root: classes.searchFieldLabel}}} InputProps={{classes: {input: classes.searchField, underline: classes.searchUnderline}}} fullWidth={true} label="Email" onKeyUp={this.handleEmailChange} placeholder='i.e. netid@princeton.edu'></TextField>
-                        </Grid>
-                        <Grid item style={{marginBottom: '2%'}}>
-                            <TextField InputLabelProps={{classes: {root: classes.searchFieldLabel}}} InputProps={{classes: {input: classes.searchField, underline: classes.searchUnderline}}} label="Password" type="password" onKeyUp={this.handlePasswordChange} fullWidth={true}></TextField>
-                        </Grid>
-                    </Paper>
+                    
                     <Grid item xs={3} >
-                        <NavLink to="/dash" style={{ textDecoration: 'none'}}><Button ref={component => this.clickable = component} className={classes.loginButton} variant="contained" color="primary" onClick={console.log('click')}>Log in!</Button></NavLink>
+                        <Button className={classes.loginButton} variant="contained" color="primary" href='/api/login_casclient'>Login with CAS</Button>
                     </Grid>
                 </Grid>
             </div>

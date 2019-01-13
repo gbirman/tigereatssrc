@@ -89,8 +89,11 @@ export default withStyles(styles)(class ChangeGoalsPage extends React.Component 
     };
 
     validate = async () => {
-        console.log(this.state.calGoal + " " + this.state.proGoal + " " + this.state.fatsGoal + " " + this.state.carbsGoal);
+        console.log(this.state.calGoal + " " + this.state.proGoal + " " + this.state.carbsGoal + " " + this.state.fatsGoal);
         
+        // checks to see if there are percent signs tacked onto the values
+
+
         let result;
 
         await axios.post(
@@ -110,14 +113,21 @@ export default withStyles(styles)(class ChangeGoalsPage extends React.Component 
             console.log(data);
             result = data['data'];
 
-            if (result) {
-                this.setState({verified: result}, () => {
+            let success;
+            if (result === true) success = true;
+            else success = false;
+            console.log(success)
+            let msg;
+            if (!success) msg = result[1];
+
+            if (success) {
+                this.setState({verified: success}, () => {
                     this.props.history.push("/verified/" + this.state.verified);
                     console.log("/verified/" + this.state.verified);
                 })
             }
             else {
-                alert('Valid values only!');
+                alert('Valid values only! - ' + msg);
             }
         })        
     }
