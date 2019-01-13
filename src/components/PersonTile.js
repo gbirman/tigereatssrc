@@ -78,7 +78,7 @@ export default withStyles(styles)(class PersonTile extends React.Component {
                 result = data['data'];
     
                 if (!result) {
-                    alert("It didn't work!");
+                    console.log("It didn't work!");
                 }
                 else {
                    /// alert("Added to Watch List"); // get rid of this later   

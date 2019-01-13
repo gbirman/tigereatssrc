@@ -18,7 +18,7 @@ import classNames from 'classnames';
 const rows = [
     { id: 'fullname', numeric: false, disablePadding: false, label: 'Name' },
     { id: 'gender', numeric: false, disablePadding: true, label: 'Gender' },
-    { id: 'year', numeric: false, disablePadding: true, label: 'Class Year' },
+    { id: 'year', numeric: false, disablePadding: true, label: 'Year' },
     { id: 'team', numeric: false, disablePadding: true, label: 'Team' },
     { id: 'calorie_goal', numeric: false, disablePadding: true, label: 'Calories'},
     { id: 'protein_goal', numeric: false, disablePadding: true, label: 'Protein'},
@@ -40,6 +40,9 @@ const styles = theme => ({
         color: '#3e8563 !important',
         fontFamily: 'Karla, sans-serif',
 
+    },
+    labelCell: {
+        textAlign: 'center'
     }
 });
   
@@ -56,17 +59,14 @@ export default withStyles(styles)(class TableHeaderMoudle extends React.Componen
                     {rows.map((row) => {
                         return (
                             <TableCell
-                                
+                                className={classes.labelCell}
                                 key={row.id}
                                 numeric={row.numeric}
                                 padding={'none'}
                                 sortDirection={this.props.orderBy === row.id ? this.props.order : false}
-                                align="center"
+                                
                             >
-                                <Tooltip
-                                    title="Sort"
-                                    placement={row.numeric ? 'bottom-end' : 'bottom-start'}
-                                >
+
                                     <TableSortLabel
                                         className={classes.labelRoot}
                                         classes={{active: classes.labelActive, }}
@@ -76,7 +76,7 @@ export default withStyles(styles)(class TableHeaderMoudle extends React.Componen
                                     >
                                         <h3>{row.label}</h3>
                                     </TableSortLabel>
-                                </Tooltip>   
+
                             </TableCell>
                         );
                     })}
