@@ -66,7 +66,6 @@ app.session_interface = BeakerSessionInterface()
 
 casClient = CASClient()
 
-
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -80,6 +79,7 @@ def index(path):
 
 @app.route('/api/login_casclient', methods=['GET'])
 @casClient.cas_required
+# technically don't even need this anymore since all paths are CAS protected
 def login_casclient():
     uriRoot = environ.get('URIROOT', 'http://localhost:5000')
     return redirect(uriRoot + '/dash', code=302)
@@ -87,9 +87,6 @@ def login_casclient():
 
 @app.route('/api/user_role')
 def user_role():
-
-    # data = request.args
-    # user = data['user_netid']
 
     user = session['username']
 
