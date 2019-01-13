@@ -73,6 +73,7 @@ class CASClient:
                 print('We are in decorator. Will return to a login URL')
                 return self.return_redirect()
             else:
+                session['username'] = username
                 return function(*args, **kwargs)
 
         return wrap

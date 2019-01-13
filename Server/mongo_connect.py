@@ -71,17 +71,21 @@ app.session_interface = BeakerSessionInterface()
 
 casClient = CASClient()
 
-@app.route('/', defaults={'path': ''})
+@app.route('/')
+def home():
+    return render_template('index.html')
+
 @app.route('/<path:path>')
+@casClient.cas_required
 def index(path):
-    return render_template('index.html');
+    return render_template('index.html')
 
 # <Button className={classes.loginButton} variant="contained" color="primary" href='http://localhost:5000/login_casclient'>Login with CAS</Button>
 # <Button className={classes.loginButton} variant="contained" color="primary" onClick={() => axios.get('/cas').catch((error) => {console.error(error);})}>Login with CAS</Button>
 @app.route('/api/login_casclient', methods=['GET'])
 @casClient.cas_required
 def login_casclient():
-    session['netID'] = cas.username
+    print(session['username'])
     uriRoot = environ.get('URIROOT', 'http://localhost:5000')
     # return redirect('https://tigereats.herokuapp.com/dash', code=302)
     return redirect(uriRoot + '/dash', code=302)
