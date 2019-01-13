@@ -19,6 +19,8 @@ from pymongo.errors import ConnectionFailure
 
 from CASClient import CASClient
 
+from functools import wraps
+
 
 class MyJSONEncoder(JSONEncoder):
     def default(self, obj):
@@ -71,24 +73,46 @@ app.session_interface = BeakerSessionInterface()
 
 casClient = CASClient()
 
+
+def cas_required(self, function):
+    @wraps(function)
+    def wrap(*args, **kwargs):
+        username = self.authenticate()
+        if not username:
+            print('We are in decorator. Will return to a login URL')
+            return self.return_redirect()
+        else:
+            session['username'] = username
+            return function(*args, **kwargs)
+
+    return wrap
+
 @app.route('/')
 def home():
     return render_template('index.html')
 
 @app.route('/<path:path>')
-@casClient.cas_required
+# @casClient.cas_required
 def index(path):
     return render_template('index.html')
 
 # <Button className={classes.loginButton} variant="contained" color="primary" href='http://localhost:5000/login_casclient'>Login with CAS</Button>
 # <Button className={classes.loginButton} variant="contained" color="primary" onClick={() => axios.get('/cas').catch((error) => {console.error(error);})}>Login with CAS</Button>
 @app.route('/api/login_casclient', methods=['GET'])
-@casClient.cas_required
+# @casClient.cas_required
 def login_casclient():
-    print(session['username'])
+    # print(session['username'])
     uriRoot = environ.get('URIROOT', 'http://localhost:5000')
-    # return redirect('https://tigereats.herokuapp.com/dash', code=302)
     return redirect(uriRoot + '/dash', code=302)
+
+
+# @app.route('/api/user_role')
+# def user_role():
+#
+#     if session['username'] in list_authorized_users:
+#         return jsonify(True)
+#     else:
+#         return jsonify(False)
 
 
 @app.route('/api/cas', methods=['GET'])
