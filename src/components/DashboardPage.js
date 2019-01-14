@@ -1,6 +1,7 @@
 import React from 'react';
 import FilterExpansionsModule from './FilterExpansionsModule';
 import TableModule from './TableModule';
+import {BrowserRouter, Route, Switch, Redirect, withRouter} from 'react-router-dom';
 import axios from 'axios';
 import Paper from '@material-ui/core/Paper';
 import AppBar from '@material-ui/core/AppBar';
@@ -64,13 +65,31 @@ const styles = theme => ({
 
 })
 
-export default withStyles(styles)(class DashboardPage extends React.Component {
+export default withRouter(withStyles(styles)(class DashboardPage extends React.Component {
 
     state = {
         restrictions: {name: ""},
         data: [],
+        valid: false
        // listOption: 'all'
     };
+
+    componentWillMount() {
+        axios.get(
+            '/api/user_role',
+            {
+                headers: {'Content-type': 'application/json'}
+            }
+        ).then((data) => {
+            const result = data['data'];
+            if (!result) {
+                this.props.history.push("/error");
+            }
+            /*else {
+                this.props.history.push("/error")
+            } */
+        })
+    }
 
     getUsers = async () => {
         await axios.get(
@@ -89,9 +108,6 @@ export default withStyles(styles)(class DashboardPage extends React.Component {
                 const full_name = n.firstname + " " + n.lastname;
                 n['fullname'] = full_name;
             });
-            console.log('users updated');
-            console.log(data['data']);
-
             this.setState({data: data['data']});
         })}
     
@@ -182,6 +198,7 @@ export default withStyles(styles)(class DashboardPage extends React.Component {
         this.getUsers();
     }
 
+
     render() {
         const {classes} = this.props;
         return (
@@ -219,4 +236,4 @@ export default withStyles(styles)(class DashboardPage extends React.Component {
             </div>
         );
     }
-})
+}))

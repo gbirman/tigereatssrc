@@ -30,7 +30,7 @@ export default withStyles(styles)(class NavHeader extends React.Component {
     render() {
         const {classes} = this.props;
         console.log(window.location.pathname);
-        if (window.location.pathname === '/') return null;
+        if (window.location.pathname === '/' || window.location.pathname === '/error') return null;
         else {
             return (
             <header>
