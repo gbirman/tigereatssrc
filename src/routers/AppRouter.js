@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
+import {BrowserRouter, Route, Switch, Redirect, withRouter} from 'react-router-dom';
 import DashboardPage from '../components/DashboardPage';
 import NavHeader from '../components/NavHeader';
 import StudentGoalsPage from '../components/StudentGoalsPage';
@@ -7,6 +7,7 @@ import ChangeGoalsPage from '../components/ChangeGoalsPage';
 import ProgressPage from '../components/ProgressPage';
 import TestPage from '../components/TestPage';
 import LoginPage from '../components/LoginPage';
+import ErrorPage from '../components/ErrorPage';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import red from '@material-ui/core/colors/red';
 import amber from '@material-ui/core/colors/amber';
@@ -58,41 +59,48 @@ const theme = createMuiTheme({
         }}
 });
 
-export default class AppRouter extends React.Component {
+class AppRouter extends React.Component {
 
     state = {
         renderHeader: false,
+        test: true
     }
 
-    handleLogin = (e) => {
-        this.setState({renderHeader: true});
+    verifyUser = (nextState, replace) => {
         axios.get(
-            '/cas',
+            '/api/user_role',
             {
                 headers: {'Content-type': 'application/json'}
             }
         ).then((data) => {
-            console.log(data);
+            const result = data['data'];
+            console.log(result);
+            if (result) {
+                replace('/error');
+                //this.props.history.push("/error");
+            }
+            /*else {
+                this.props.history.push("/error")
+            } */
         })
     }
 
-    handleLogout = (e) => {
-        this.setState({renderHeader: false}, () => {console.log(this.state.renderHeader);});
-    }
-
     render() {
+        console.log('test')
+        
         return (
             <MuiThemeProvider theme={theme}>
                 <BrowserRouter>
                     <div> 
                         <NavHeader />
                         <Switch>
-                            <Route path="/" render={(props) => <LoginPage {...props} onLogin={this.handleLogin} onLogout={this.handleLogout}/>} exact={true} />
-                            <Route path="/dash" exact component={DashboardPage} />
+                            <Route path="/" component={LoginPage} exact={true} />
+                            <Route path="/dash" component={DashboardPage} exact />
                             <Route path="/test/:id" component={StudentGoalsPage} exact={true} />
                             <Route path="/changeGoals/:id/:fullname/:calorie_goal/:protein_goal/:fats_goal/:carbs_goal" component={ChangeGoalsPage} />
                             <Route path={"/verified/true"} component={DashboardPage} exact/>
                             <Route path="/progress/:id" component={ProgressPage} exact={true} />
+                            <Route path="/error" component={ErrorPage} exact={true} />
                         </Switch>
                     </div>
                 </BrowserRouter>
@@ -101,3 +109,5 @@ export default class AppRouter extends React.Component {
     }
 
 }
+
+export default (AppRouter)
