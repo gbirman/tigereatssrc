@@ -83,7 +83,7 @@ export default withRouter(withStyles(styles)(class DashboardPage extends React.C
         ).then((data) => {
             const result = data['data'];
             if (!result) {
-                this.props.history.push("/error");
+                //this.props.history.push("/error");
             }
             /*else {
                 this.props.history.push("/error")

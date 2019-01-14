@@ -27,7 +27,7 @@ export default class StudentGoalsPage extends React.Component {
         ).then((data) => {
             const result = data['data'];
             if (!result) {
-                this.props.history.push("/error");
+                //this.props.history.push("/error");
             }
             /*else {
                 this.props.history.push("/error")
