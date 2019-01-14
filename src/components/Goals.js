@@ -47,24 +47,30 @@ export default withStyles(styles)(class Goals extends React.Component {
 
     // Add actual goal data and adjust bars accordingly
     render() {
+
+
+
+
+
         const {classes} = this.props;
 
-        const barData = this.props.todayNutrients.fat ?   
+        const barData = // this.props.todayNutrients.fat ?   
 
-         [{x: (data1) , y: 10}, 
-            {x: (data2), y: 5 }, 
-            {x:  (data3), y: 15 }, 
-            {x:  (data4), y: 20 }]
+        //  [{x: (data1) , y: 10}, 
+        //     {x: (data2), y: 5 }, 
+        //     {x:  (data3), y: 15 }, 
+        //     {x:  (data4), y: 20 }] 
         
-        : [ // default values in case it hasn't loaded yet
+        // : 
+        [ // default values in case it hasn't loaded yet
             // {x: 75 , y: 10}, 
             // {x: 50, y: 5 }, 
             // {x:  90, y: 15 }, 
             // {x:  65, y: 20 }
-            {x: 0 , y: 10}, 
-            {x: 0, y: 5 }, 
-            {x: 0, y: 15 }, 
-            {x: 0, y: 20 }
+            {x: (this.props.todayNutrients.fat * 100/this.props.fats_goal) ? (this.props.todayNutrients.fat * 100/this.props.fats_goal) : data1 , y: 10}, 
+            {x: (this.props.todayNutrients.carbs * 100/this.props.carbs_goal) ? (this.props.todayNutrients.carbs * 100/this.props.carbs_goal) : data1, y: 5 }, 
+            {x: (this.props.todayNutrients.protein * 100/this.props.protein_goal) ? (this.props.todayNutrients.protein * 100/this.props.protein_goal) : data1, y: 15 }, 
+            {x: (this.props.todayNutrients.calories * 100/this.props.cal_goal) ? (this.props.todayNutrients.calories * 100/this.props.cal_goal) : data1, y: 20 }
         ];
 
 
