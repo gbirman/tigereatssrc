@@ -34,7 +34,16 @@ const spaceStyle = {
 
 }
 
+let data1 = Math.random() * 50 + 50;
+let data2 = Math.random() * 50 + 50;
+let data3 = Math.random() * 50 + 50;
+let data4 = Math.random() * 50 + 50;
+
 export default withStyles(styles)(class Goals extends React.Component {
+
+   
+
+
 
     // Add actual goal data and adjust bars accordingly
     render() {
@@ -42,16 +51,20 @@ export default withStyles(styles)(class Goals extends React.Component {
 
         const barData = this.props.todayNutrients.fat ?   
 
-         [{x: (this.props.todayNutrients.fat * 100/this.props.fats_goal) , y: 10}, 
-            {x: (this.props.todayNutrients.carbs * 100/this.props.carbs_goal), y: 5 }, 
-            {x:  (this.props.todayNutrients.protein * 100/ this.props.protein_goal), y: 15 }, 
-            {x:  (this.props.todayNutrients.calories * 100/this.props.calorie_goal), y: 20 }]
+         [{x: (data1) , y: 10}, 
+            {x: (data2), y: 5 }, 
+            {x:  (data3), y: 15 }, 
+            {x:  (data4), y: 20 }]
         
         : [ // default values in case it hasn't loaded yet
-            {x: 75 , y: 10}, 
-            {x: 50, y: 5 }, 
-            {x:  90, y: 15 }, 
-            {x:  65, y: 20 }
+            // {x: 75 , y: 10}, 
+            // {x: 50, y: 5 }, 
+            // {x:  90, y: 15 }, 
+            // {x:  65, y: 20 }
+            {x: 0 , y: 10}, 
+            {x: 0, y: 5 }, 
+            {x: 0, y: 15 }, 
+            {x: 0, y: 20 }
         ];
 
 
@@ -166,6 +179,14 @@ export default withStyles(styles)(class Goals extends React.Component {
 
 
 /* Abandoning the grid code attempt
+
+            // Old data
+             [{x: (this.props.todayNutrients.fat * 100/this.props.fats_goal) , y: 10}, 
+            {x: (this.props.todayNutrients.carbs * 100/this.props.carbs_goal), y: 5 }, 
+            {x:  (this.props.todayNutrients.protein * 100/ this.props.protein_goal), y: 15 }, 
+            {x:  (this.props.todayNutrients.calories * 100/this.props.calorie_goal), y: 20 }]
+
+
         <LabelSeries data={barData}/> // other stuff
 
          tickValues = {["Cals", "Protein", "Carbs", "Fat"]}
