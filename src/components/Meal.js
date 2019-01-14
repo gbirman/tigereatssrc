@@ -95,6 +95,16 @@ export default  withStyles(styles)(class MealBreakfast extends React.Component {
             </Grid>
             
             <Grid container spacing = {24}>
+
+            </Grid>
+            </div>
+
+        );
+    }
+})
+
+/* For the editable text field
+
                 <Grid item xs>
 
             <TextField
@@ -117,14 +127,8 @@ export default  withStyles(styles)(class MealBreakfast extends React.Component {
             />
             
                 </Grid>
-            </Grid>
-            </div>
 
-        );
-    }
-})
 
-/* For the editable text field
 <form>
                         <label>
                             Name:

@@ -65,7 +65,7 @@ export default class Traits extends React.Component {
                 style = {textStyle}
                 >
                 
-                <Grid item><p>Height:</p>  <p align = "center">{this.props.height}</p> </Grid>                 
+                <Grid item><p>Height:</p> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <p align = "center">{this.props.height}</p> </Grid>                 
                 
                 <Grid item><p>Weight:</p> <p align = "center">{this.props.weight}lbs</p></Grid>
                 <Grid item><p>Goal Weight:</p> <p align = "center">{this.props.goalWeight}lbs</p></Grid>
