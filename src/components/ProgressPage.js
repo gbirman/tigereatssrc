@@ -70,6 +70,23 @@ class ProgressPage extends React.Component {
         initial_height: window.innerHeight, 
     };
 
+    componentWillMount() {
+        axios.get(
+            '/api/user_role',
+            {
+                headers: {'Content-type': 'application/json'}
+            }
+        ).then((data) => {
+            const result = data['data'];
+            if (!result) {
+                this.props.history.push("/error");
+            }
+            /*else {
+                this.props.history.push("/error")
+            } */
+        })
+    }
+
     componentDidMount() {
 
         // allows for async call 

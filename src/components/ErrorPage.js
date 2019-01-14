@@ -2,6 +2,7 @@ import React from 'react';
 import FilterExpansionsModule from './FilterExpansionsModule';
 import TableModule from './TableModule';
 import axios from 'axios';
+import { NavLink, Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
 import { Grid } from '@material-ui/core';
@@ -22,51 +23,23 @@ const styles = theme => ({
         paddingBottom: '1vh',
         textAlign: 'center'
     },
-    icon: {
-        height: '50vh', // responsive height is 30vh, 180px
-        marginTop: '10vh',
-        marginBottom: '5vh'
-    },
     welcomePaper: {
         fontFamily: 'Karla, sans-serif',
         width: '40vw',
         borderStyle: 'solid',
-        backgroundColor: "#59bf8e",
-        color: "white",
-        borderColor: '#d9f495',
+        color: "#3e8563",
+        borderColor: '#59bf8e',
         paddingRight: '5vw',
         paddingLeft: '5vw',
         textAlign: 'center',
+        marginTop: '30vh',
         marginBottom: '5vh',
-    },
-    inputPaper: {
-        border: 'solid',
-        borderColor: '#59bf8e',
-        color: '#3e8563',
-        fontFamily: 'Karla, sans-serif',
-        paddingRight: '3vw',
-        paddingLeft: '3vw',
-        paddingBottom: '3vh',
-        marginBottom: '3vh',
-        width: '40vw'
-    },
-    searchField: {
-        color: '#3e8563',
-        fontFamily: 'Karla, sans-serif',
-    },
-    searchFieldLabel: {
-        color: '#3e8563',
-        fontFamily: 'Karla, sans-serif',
-    },
-    searchUnderline: {
-        color: 'red !important'
     }
-
 })
 
 
 
-export default withStyles(styles)(class LoginPage extends React.Component {
+export default withStyles(styles)(class ErrorPage extends React.Component {
 
     state = {
         email: undefined,
@@ -94,13 +67,12 @@ export default withStyles(styles)(class LoginPage extends React.Component {
                     alignItems="center"
                     justify="center"
                 >
-                    <img className={classes.icon} src={logo} />
-                    <Paper color="primary" className={classes.welcomePaper}>
-                        <div><h1>Welcome to <span style={{padding: 0, margin: 0, color: "#d9f495"}}>Tiger</span>Eats!</h1></div>
+                    <Paper className={classes.welcomePaper}>
+                        <div><h1>We're sorry! You aren't authorized to view this page!</h1></div>
                     </Paper>
                     
                     <Grid item xs={3} >
-                        <Button className={classes.loginButton} variant="contained" color="primary" href='/api/login_casclient'>Login with CAS</Button>
+                        <Button className={classes.loginButton} variant="contained" color="primary" component={Link} to={"/dash"}>Return to the dashboard</Button>
                     </Grid>
                 </Grid>
             </div>

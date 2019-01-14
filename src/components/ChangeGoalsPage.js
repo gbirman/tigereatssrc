@@ -2,7 +2,6 @@ import React from 'react';
 import FilterExpansionsModule from './FilterExpansionsModule';
 import TableModule from './TableModule';
 import axios from 'axios';
-import {Router, Route, Link, NavLink } from "react-router-dom";
 import Grid from '@material-ui/core/Grid';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
@@ -87,6 +86,23 @@ export default withStyles(styles)(class ChangeGoalsPage extends React.Component 
         verified: false,
         inputOption: "op1"
     };
+
+    componentWillMount() {
+        axios.get(
+            '/api/user_role',
+            {
+                headers: {'Content-type': 'application/json'}
+            }
+        ).then((data) => {
+            const result = data['data'];
+            if (!result) {
+                this.props.history.push("/error");
+            }
+            /*else {
+                this.props.history.push("/error")
+            } */
+        })
+    }
 
     validate = async () => {
         console.log(this.state.calGoal + " " + this.state.proGoal + " " + this.state.carbsGoal + " " + this.state.fatsGoal);

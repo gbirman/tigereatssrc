@@ -66,7 +66,10 @@ export default withStyles(styles)(class TableHeaderMoudle extends React.Componen
                                 sortDirection={this.props.orderBy === row.id ? this.props.order : false}
                                 
                             >
-
+                                <Tooltip
+                                    title="Sort"
+                                    placement={row.numeric ? 'bottom-end' : 'bottom-start'}
+                                >
                                     <TableSortLabel
                                         className={classes.labelRoot}
                                         classes={{active: classes.labelActive, }}
@@ -76,7 +79,7 @@ export default withStyles(styles)(class TableHeaderMoudle extends React.Componen
                                     >
                                         <h3>{row.label}</h3>
                                     </TableSortLabel>
-
+                                </Tooltip>   
                             </TableCell>
                         );
                     })}

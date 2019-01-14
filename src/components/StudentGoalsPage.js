@@ -18,6 +18,23 @@ export default class StudentGoalsPage extends React.Component {
         dateArray: [this.getToday(0), this.getToday(1), this.getToday(2), this.getToday(3), this.getToday(4)]
     };
 
+    componentWillMount() {
+        axios.get(
+            '/api/user_role',
+            {
+                headers: {'Content-type': 'application/json'}
+            }
+        ).then((data) => {
+            const result = data['data'];
+            if (!result) {
+                this.props.history.push("/error");
+            }
+            /*else {
+                this.props.history.push("/error")
+            } */
+        })
+    }
+
     // Save student data for a page refresh?
     componentDidMount() {
         // console.log("---------------------------DATES---------------------"); // debugging

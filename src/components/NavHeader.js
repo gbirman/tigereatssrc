@@ -9,7 +9,8 @@ import { withStyles } from '@material-ui/core/styles';
 const styles = theme => ({
     logo: {
         marginTop: '2vh',
-        marginBottom: '2vh'
+        marginBottom: '2vh',
+        width: '300px'
     },
     headerButton: {
         marginTop: '2vh',
@@ -30,20 +31,20 @@ export default withStyles(styles)(class NavHeader extends React.Component {
     render() {
         const {classes} = this.props;
         console.log(window.location.pathname);
-        if (window.location.pathname === '/') return null;
+        if (window.location.pathname === '/' || window.location.pathname === '/error') return null;
         else {
             return (
             <header>
                 <Grid container alignItems="center" >
-                    <Grid container item xs={12} sm={4} justify="center">
+                    <Grid container item xs={12} sm={5} justify="center">
                         <img className={classes.logo} src={logo} />
                     </Grid>
-                    <Grid container xs={12} sm={8} item justify="space-around" >
+                    <Grid container xs={12} sm={7} item justify="space-around" >
                         <Grid item>
                             <NavLink to="/dash" style={{ textDecoration: 'none'}}><Button className={classes.headerButton} variant="contained" color="primary">Dashboard</Button></NavLink>
                         </Grid>
                         <Grid item>
-                            <NavLink to="/" style={{ textDecoration: 'none'}}><Button className={classes.headerButton} variant="contained" color="primary">Logout</Button></NavLink>
+                            <Button className={classes.headerButton} variant="contained" color="primary" href="https://fed.princeton.edu/cas/logout">Logout</Button>
                         </Grid>
                     </Grid>
                 </Grid>
