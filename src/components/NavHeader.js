@@ -43,7 +43,7 @@ export default withStyles(styles)(class NavHeader extends React.Component {
                             <NavLink to="/dash" style={{ textDecoration: 'none'}}><Button className={classes.headerButton} variant="contained" color="primary">Dashboard</Button></NavLink>
                         </Grid>
                         <Grid item>
-                            <Button className={classes.headerButton} variant="contained" color="primary" href="https://fed.princeton.edu/cas/logout">Logout</Button>
+                            <NavLink to="/" style={{ textDecoration: 'none'}}><Button className={classes.headerButton} variant="contained" color="primary" href="https://fed.princeton.edu/cas/logout">Logout</Button></NavLink>
                         </Grid>
                     </Grid>
                 </Grid>
