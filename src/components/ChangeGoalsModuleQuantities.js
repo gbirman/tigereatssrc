@@ -76,18 +76,20 @@ export default withStyles(styles)(class ChangeGoalsModuleQuantities extends Reac
     }
 
     handleCalChange = (e) => {
-        let val;
+       /* let val;
 
         if (e.target.value === "")
             val = false;
         else
             val = true;
         
-        this.setState({newCalGoal: e.target.value, calValue: val});
+        this.setState({newCalGoal: e.target.value, calValue: val}); */
+
+        if (e.target.value === "") this.setState()
     }
 
     handleProChange = (e) => {
-        let val;
+        /*let val;
 
         if (e.target.value === "")
             val = false;
@@ -96,11 +98,21 @@ export default withStyles(styles)(class ChangeGoalsModuleQuantities extends Reac
 
         this.props.onProChange(e.target.value);
         
-        this.setState({proValue: val, proGoal: e.target.value});
+        this.setState({proValue: val, proGoal: e.target.value}); */
+
+        let val, v;
+        if (e.target.value === "") val = this.props.proteinGoal;
+        else val = e.target.value;
+
+        this.props.onProChange(val);
+
+        this.setState({proGoal: val}, () => {console.log(this.state.proGoal + " " + this.state.calGoal); v = this.calcNewCals(); this.setState({calGoal: v}); this.props.onCalChange(v);});
+        console.log(this.state.proGoal + " " + v);
+        
     }
 
     handleFatsChange = (e) => {
-        let val;
+        /*let val;
 
         if (e.target.value === "")
             val = false;
@@ -109,11 +121,21 @@ export default withStyles(styles)(class ChangeGoalsModuleQuantities extends Reac
         
         this.props.onFatsChange(e.target.value);
 
-        this.setState({fatsValue: val, fatsGoal: e.target.value});
+        this.setState({fatsValue: val, fatsGoal: e.target.value}); */
+
+        let val, v;
+        if (e.target.value === "") val = this.props.fatsGoal;
+        else val = e.target.value;
+
+        this.props.onFatsChange(val);
+
+        
+        this.setState({fatsGoal: val}, () => {console.log(this.state.fatsGoal + " " + this.state.calGoal); v = this.calcNewCals(); this.setState({calGoal: v}); this.props.onCalChange(v);});
+        
     }
 
     handleCarbsChange = (e) => {
-        let val;
+        /*let val;
 
         if (e.target.value === "")
             val = false;
@@ -122,11 +144,21 @@ export default withStyles(styles)(class ChangeGoalsModuleQuantities extends Reac
 
         this.props.onCarbsChange(e.target.value);
         
-        this.setState({carbsValue: val, carbsGoal: e.target.value});
+        this.setState({carbsValue: val, carbsGoal: e.target.value}); */
+
+        let val, v;
+        if (e.target.value === "") val = this.props.carbsGoal;
+        else val = e.target.value;
+
+        this.props.onCarbsChange(val);
+
+        this.setState({carbsGoal: val}, () => {console.log(this.state.carbsGoal + " " + this.state.calGoal); v = this.calcNewCals(); this.setState({calGoal: v}); this.props.onCalChange(v); });
+              
+
     }
 
     handleFocusOut = (e) => {
-        let carbs = this.state.carbsValue;
+        /*let carbs = this.state.carbsValue;
         let fats = this.state.fatsValue;
         let pros = this.state.proValue;
 
@@ -135,7 +167,12 @@ export default withStyles(styles)(class ChangeGoalsModuleQuantities extends Reac
             this.setState({calShouldBeCalculated: true, calGoal: newCal}, () => this.props.onCalChange(newCal));
         }
         else
-            this.setState({calShouldBeCalculated: false}, () => {console.log('n')})
+            this.setState({calShouldBeCalculated: false}, () => {console.log('n')}) */
+    }
+
+    calcNewCals = () => {
+        console.log(4 * parseInt(this.state.carbsGoal) + 9 * parseInt(this.state.fatsGoal) + 4 * parseInt(this.state.proGoal));
+        return 4 * parseInt(this.state.carbsGoal) + 9 * parseInt(this.state.fatsGoal) + 4 * parseInt(this.state.proGoal);
     }
 
     render() {
@@ -170,7 +207,7 @@ export default withStyles(styles)(class ChangeGoalsModuleQuantities extends Reac
                     <Grid item className={classes.paperInput} xs={3}><Input InputLabelProps={{classes: {root: classes.searchFieldLabel}}} InputProps={{classes: {input: classes.searchField, underline: classes.searchUnderline}}} className={classes.searchField} placeholder={this.props.proteinGoal} onKeyUp={this.handleProChange} onBlur={this.handleFocusOut}/></Grid>
                     <Grid item className={classes.paperInput} xs={3}><Input InputLabelProps={{classes: {root: classes.searchFieldLabel}}} InputProps={{classes: {input: classes.searchField, underline: classes.searchUnderline}}} className={classes.searchField} placeholder={this.props.carbsGoal} onKeyUp={this.handleCarbsChange} onBlur={this.handleFocusOut}/></Grid>
                     <Grid item className={classes.paperInput} xs={3}><Input InputLabelProps={{classes: {root: classes.searchFieldLabel}}} InputProps={{classes: {input: classes.searchField, underline: classes.searchUnderline}}} className={classes.searchField} placeholder={this.props.fatsGoal} onKeyUp={this.handleFatsChange} onBlur={this.handleFocusOut}/></Grid>
-                    <Grid item className={classes.paperInput} xs={3}><Input InputLabelProps={{classes: {root: classes.searchFieldLabel}}} InputProps={{classes: {input: classes.searchField, underline: classes.searchUnderline}}} className={classes.searchField} placeholder={this.props.calGoal} onBlur={this.handleFocusOut} value={this.state.calShouldBeCalculated ? this.state.calGoal : ""}></Input></Grid>
+                    <Grid item className={classes.paperInput} xs={3}><Input InputLabelProps={{classes: {root: classes.searchFieldLabel}}} InputProps={{classes: {input: classes.searchField, underline: classes.searchUnderline}}} className={classes.searchField} placeholder={this.props.calGoal} onBlur={this.handleFocusOut} value={/*this.state.calShouldBeCalculated ? this.state.calGoal : ""*/ this.state.calGoal}></Input></Grid>
                 </Grid>
             </div>
         );
