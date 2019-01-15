@@ -52,7 +52,7 @@ const TrackerTime = (props) => {
     if (tracker >= timerange.begin() && tracker <= timerange.end()) {
         if (rollupSize === 'day') {
             selectiondate = trackertime.format('MM/DD/YY');
-            fontSize = '3vw';
+            fontSize = '2.5vw';
         } else if (rollupSize === 'week') {
             let weekstart = null;
             let weekend = null
