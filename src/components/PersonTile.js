@@ -158,7 +158,7 @@ export default withStyles(styles)(class PersonTile extends React.Component {
                         className={classes.buttonStyle} 
                         variant="contained" 
                         color="primary"
-                        onClick={(e) => {window.location.href = "mailto:" + this.props.email + "?subject=[TigerEats] A Message from your nutritionist!&body=Hi " + this.props.name + ",\n";}}
+                        onClick={(e) => {window.location.href = "mailto:" + this.props.email + "?subject=[TigerEats] A Message from your nutritionist!";}}
                         >Send Message</Button>    
                     </Grid>
                 

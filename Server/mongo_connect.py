@@ -5,6 +5,7 @@ from datetime import datetime, date, timedelta
 from os import environ
 import random
 import time
+import math
 
 from flask import Flask, jsonify, request, redirect, session, render_template
 from flask.json import JSONEncoder
@@ -72,13 +73,13 @@ def home():
 
 
 @app.route('/<path:path>')
-# @casClient.cas_required
+@casClient.cas_required
 def index(path):
     return render_template('index.html')
 
 
 @app.route('/api/login_casclient', methods=['GET'])
-# @casClient.cas_required
+@casClient.cas_required
 # technically don't even need this anymore since all paths are CAS protected
 def login_casclient():
     uriRoot = environ.get('URIROOT', 'http://localhost:5000')
@@ -87,8 +88,6 @@ def login_casclient():
 
 @app.route('/api/user_role')
 def user_role():
-
-    return jsonify(True)
 
     user = session['username'].decode('utf-8')
 
@@ -534,6 +533,10 @@ def change_nutrition_goals():
 
     args = request.get_json()
     user_id = args['user_id']
+
+    if args['new_calorie_goal'] is None or args['new_protein_goal'] is None or args['new_carbs_goal'] is None \
+        or args['new_fats_goal'] is None:
+        return jsonify([False, "Values must be numbers between 0 and 15,000, and all fields must be filled!"])
     try:
         new_calorie_goal = float(args['new_calorie_goal'])
         new_protein_goal = float(args['new_protein_goal'])
@@ -542,10 +545,15 @@ def change_nutrition_goals():
     except ValueError:
         return jsonify([False, "You need to enter numbers!"])
 
+    if new_calorie_goal > 15000 or new_fats_goal > 15000 or new_carbs_goal > 15000 or new_protein_goal > 15000:
+        return jsonify([False, "Values must be numbers between 0 and 15,000!"])
     if new_calorie_goal < 0 or new_fats_goal < 0 or new_carbs_goal < 0 or new_protein_goal < 0:
-        return jsonify([False, "No negative values allowed!"])
+        return jsonify([False, "Values must be numbers between 0 and 15,000 - no negative values allowed!"])
+    if new_calorie_goal == float("inf") or new_protein_goal == float("inf") or new_carbs_goal == float("inf") \
+        or new_fats_goal == float("inf"):
+        return jsonify([False, "Values must be numbers between 0 and 15,000 - values cannot be infinite!"])
     if not new_calorie_goal - 0.1 <= 4*new_protein_goal + 4*new_carbs_goal + 9*new_fats_goal <= new_calorie_goal + 0.1:
-        return jsonify([False, "The number of calories should be about equal to 4*(grams of protein) + 4*(grams of carbs) + 9*(grams of fats)"])
+        return jsonify([False, "Your macronutrient breakdown percentages must add up to 100%!"])
 
     users, data = _prep_data_to_update(user_id)
     data['calorie_goal'] = new_calorie_goal

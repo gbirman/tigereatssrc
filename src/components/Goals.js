@@ -52,6 +52,11 @@ export default withStyles(styles)(class Goals extends React.Component {
 
 
         const {classes} = this.props;
+        console.log(this.props.todayNutrients.calories + " " + this.props.cal_goal + " " + data1);
+        console.log(this.props.todayNutrients.protein + " " + this.props.protein_goal + " " + data1);
+        console.log(this.props.todayNutrients.carbs + " " + this.props.carbs_goal + " " + data1);
+        console.log(this.props.todayNutrients.fat + " " + this.props.fats_goal + " " + data1);
+
 
         const barData = // this.props.todayNutrients.fat ?   
 
@@ -69,7 +74,7 @@ export default withStyles(styles)(class Goals extends React.Component {
             {x: (this.props.todayNutrients.fat * 100/this.props.fats_goal) ? (this.props.todayNutrients.fat * 100/this.props.fats_goal) : data1 , y: 10}, 
             {x: (this.props.todayNutrients.carbs * 100/this.props.carbs_goal) ? (this.props.todayNutrients.carbs * 100/this.props.carbs_goal) : data1, y: 5 }, 
             {x: (this.props.todayNutrients.protein * 100/this.props.protein_goal) ? (this.props.todayNutrients.protein * 100/this.props.protein_goal) : data1, y: 15 }, 
-            {x: (this.props.todayNutrients.calories * 100/this.props.cal_goal) ? (this.props.todayNutrients.calories * 100/this.props.cal_goal) : data1, y: 20 }
+            {x: (this.props.todayNutrients.calories * 100/this.props.calorie_goal) ? (this.props.todayNutrients.calories * 100/this.props.calorie_goal) : data1, y: 20 }
         ];
 
 
