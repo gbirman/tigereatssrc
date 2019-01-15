@@ -5,6 +5,7 @@ from datetime import datetime, date, timedelta
 from os import environ
 import random
 import time
+import math
 
 from flask import Flask, jsonify, request, redirect, session, render_template
 from flask.json import JSONEncoder
@@ -542,6 +543,9 @@ def change_nutrition_goals():
 
     if new_calorie_goal < 0 or new_fats_goal < 0 or new_carbs_goal < 0 or new_protein_goal < 0:
         return jsonify([False, "No negative values allowed!"])
+    if new_calorie_goal == float("inf") or new_protein_goal == float("inf") or new_carbs_goal == float("inf") \
+        or new_fats_goal == float("inf"):
+        return jsonify([False, "Values are too large!"])
     if not new_calorie_goal - 0.1 <= 4*new_protein_goal + 4*new_carbs_goal + 9*new_fats_goal <= new_calorie_goal + 0.1:
         return jsonify([False, "The number of calories should be about equal to 4*(grams of protein) + 4*(grams of carbs) + 9*(grams of fats)"])
 
