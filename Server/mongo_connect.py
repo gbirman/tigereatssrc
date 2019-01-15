@@ -536,7 +536,7 @@ def change_nutrition_goals():
 
     if args['new_calorie_goal'] is None or args['new_protein_goal'] is None or args['new_carbs_goal'] is None \
         or args['new_fats_goal'] is None:
-        return jsonify([False, "You need to enter realistic numbers!"])
+        return jsonify([False, "Values must be numbers between 0 and 15,000, and all fields must be filled!"])
     try:
         new_calorie_goal = float(args['new_calorie_goal'])
         new_protein_goal = float(args['new_protein_goal'])
@@ -546,12 +546,12 @@ def change_nutrition_goals():
         return jsonify([False, "You need to enter numbers!"])
 
     if new_calorie_goal > 15000 or new_fats_goal > 15000 or new_carbs_goal > 15000 or new_protein_goal > 15000:
-        return jsonify([False, "No values more than 15,000!"])
+        return jsonify([False, "Values must be numbers between 0 and 15,000!"])
     if new_calorie_goal < 0 or new_fats_goal < 0 or new_carbs_goal < 0 or new_protein_goal < 0:
-        return jsonify([False, "No negative values allowed!"])
+        return jsonify([False, "Values must be numbers between 0 and 15,000 - no negative values allowed!"])
     if new_calorie_goal == float("inf") or new_protein_goal == float("inf") or new_carbs_goal == float("inf") \
         or new_fats_goal == float("inf"):
-        return jsonify([False, "Values cannot be infinite!"])
+        return jsonify([False, "Values must be numbers between 0 and 15,000 - values cannot be infinite!"])
     if not new_calorie_goal - 0.1 <= 4*new_protein_goal + 4*new_carbs_goal + 9*new_fats_goal <= new_calorie_goal + 0.1:
         return jsonify([False, "The number of calories should be about equal to 4*(grams of protein) + 4*(grams of carbs) + 9*(grams of fats)"])
 
