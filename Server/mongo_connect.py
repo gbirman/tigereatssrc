@@ -553,7 +553,7 @@ def change_nutrition_goals():
         or new_fats_goal == float("inf"):
         return jsonify([False, "Values must be numbers between 0 and 15,000 - values cannot be infinite!"])
     if not new_calorie_goal - 0.1 <= 4*new_protein_goal + 4*new_carbs_goal + 9*new_fats_goal <= new_calorie_goal + 0.1:
-        return jsonify([False, "The number of calories should be about equal to 4*(grams of protein) + 4*(grams of carbs) + 9*(grams of fats)"])
+        return jsonify([False, "Your macronutrient breakdown percentages must add up to 100%!"])
 
     users, data = _prep_data_to_update(user_id)
     data['calorie_goal'] = new_calorie_goal
