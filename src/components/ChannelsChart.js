@@ -39,19 +39,40 @@ const styles = theme => ({
 
 const ChannelsChart = (props) => {
 
+    // hide axis when too small 
+    const abovesm = useMediaQuery(`(min-width:${props.theme.breakpoints.values.sm}px)`);
+    // for tick counts -- we want to prevent crowding
+    const abovemd = useMediaQuery(`(min-width:${props.theme.breakpoints.values.md}px)`); 
+
+    // dynamic resizing 
     // the number 325 has been hardcoded but it is based on 
     // the heights of the nav bar and the other elements 
     // so this can be made dynamic 
-    const containerHeight = props.initial_height - 325;
+    let containerHeight = null 
+    if (abovemd) {
+        if (window.innerHeight >= 340+325) {
+            containerHeight = window.innerHeight - 325;
+        } else {
+            containerHeight = 340; 
+        }
+    } else if (abovesm && !abovemd) {
+        if (window.innerHeight >= 340+325) {
+            containerHeight = window.innerHeight - 325;
+        } else {
+            containerHeight = 340; 
+        }
+    } else {
+        if (window.innerHeight >= 315+325) {
+            containerHeight = window.innerHeight - 325;
+        } else {
+            containerHeight = 315; 
+        }
+    }
 
-    // hide axis when too small 
-    const minwidth = useMediaQuery(`(min-width:${props.theme.breakpoints.values.sm}px)`);
-    // for tick counts -- we want to prevent crowding
-    const medwidth = useMediaQuery(`(min-width:${props.theme.breakpoints.values.md}px)`); 
 
     const {classes} =  props;
     const { channels, tracker, timerange, 
-            rollupSize, channelNames, style, values } = props;
+            rollupSize, channelNames, style, values} = props;
 
     const rows = [];
 
@@ -108,7 +129,7 @@ const ChannelsChart = (props) => {
             >
                 {/* look at left side of the chart! */}
                 <LabelAxis
-                    visible={minwidth}
+                    visible={abovesm}
                     id={`${channelName}_axis`}
                     label={channels[channelName].label}
                     values={summary}
@@ -152,7 +173,7 @@ const ChannelsChart = (props) => {
             <ChartContainer
                 timeRange={timerange}
                 utc={true}
-                timeAxisTickCount={medwidth ? 10 : 5}
+                timeAxisTickCount={abovemd ? 10 : 5}
                 trackerPosition={tracker}
                 onTimeRangeChanged={props.handleTimeRangeChange}
                 onTrackerChanged={props.handleTrackerChanged}
@@ -160,7 +181,7 @@ const ChannelsChart = (props) => {
                 paddingTop={2}
                 paddingLeft={10}
                 paddingRight={10}
-                hideTimeAxis={minwidth ? false : true}
+                hideTimeAxis={abovesm ? false : true}
             >
                 {rows}
             </ChartContainer> 

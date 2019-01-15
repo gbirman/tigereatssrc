@@ -370,8 +370,6 @@ class ProgressPage extends React.Component {
                 dayend = daystart.clone().add(1, 'days');
             }
 
-            //let adjustedrange = new TimeRange(daystart, dayend);
-
             // get beginning and ending position for indexing 
             // optimization: slice faster than crop 
             let timerangeBegin = daystart.toDate();

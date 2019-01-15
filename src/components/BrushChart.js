@@ -5,6 +5,7 @@ import {ChartRow, Charts, YAxis, Brush,
 import Paper from '@material-ui/core/Paper';
 import {themecolors} from '../styles/color';
 import { withStyles } from '@material-ui/core/styles';
+import { unstable_useMediaQuery as useMediaQuery } from '@material-ui/core/useMediaQuery';
 
 const styles = theme => ({
     paper: {
@@ -24,6 +25,11 @@ const BrushChart = (props) => {
     const { ready, totalseries, totalrange, 
         timerange, maxHeight, tracker, channelNames, style } = props;
 
+    // hide axis when too small 
+    const abovesm = useMediaQuery(`(min-width:${props.theme.breakpoints.values.sm}px)`);
+    // for tick counts -- we want to prevent crowding
+    const abovemd = useMediaQuery(`(min-width:${props.theme.breakpoints.values.md}px)`); 
+
     return (
         <Paper className={classes.paper}>
         <Resizable>
@@ -41,7 +47,9 @@ const BrushChart = (props) => {
                                     values: {fill: `${themecolors.darkgreen}`, stroke: "none"}}}
                     hideTimeAxis={true}
                 > 
-                    <ChartRow height="100" debug={false}>
+                    <ChartRow 
+                        height={abovemd ? "100" : "60"}
+                        debug={false}>
                         <Brush
                             timeRange={timerange}
                             allowSelectionClear={true}
