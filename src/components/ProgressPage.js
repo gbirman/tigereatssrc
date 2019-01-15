@@ -354,9 +354,9 @@ class ProgressPage extends React.Component {
             // get end of the day from the range 
             let dayend = null
             // this part is necessary to prevent zooming getting stuck with React-TimeSeries-Charts 
-            if (rangeend.clone().startOf('day').isSameOrBefore(mintime.clone().add(2, 'days'))) {
-                dayend = mintime.clone().add(3, 'days');
-            } else if (rangeend.isSameOrAfter(maxtime)) { // hit upper bound 
+            // if (rangeend.clone().startOf('day').isSameOrBefore(mintime.clone().add(2, 'days'))) {
+            //     dayend = mintime.clone().add(3, 'days');
+            if (rangeend.isSameOrAfter(maxtime)) { // hit upper bound 
                 dayend = maxtime
             } else if (rangeend.isSameOrBefore(mintime)) { // hit lower bound 
                 dayend = mintime.clone().add(1, 'days');

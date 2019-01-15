@@ -68,7 +68,7 @@ const TrackerTime = (props) => {
                 //`${weekstart.format('MM/DD/YY')} - ${weekend.format('MM/DD/YY')}`;
             fontSize = '2vw';
         } else if (rollupSize === 'month') {
-            selectiondate = trackertime.format('MMM-YY');
+            selectiondate = trackertime.format('MMM-YYYY');
             fontSize = '3vw';
         }
     } else {
