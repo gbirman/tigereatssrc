@@ -72,13 +72,13 @@ def home():
 
 
 @app.route('/<path:path>')
-# @casClient.cas_required
+@casClient.cas_required
 def index(path):
     return render_template('index.html')
 
 
 @app.route('/api/login_casclient', methods=['GET'])
-# @casClient.cas_required
+@casClient.cas_required
 # technically don't even need this anymore since all paths are CAS protected
 def login_casclient():
     uriRoot = environ.get('URIROOT', 'http://localhost:5000')
@@ -87,8 +87,6 @@ def login_casclient():
 
 @app.route('/api/user_role')
 def user_role():
-
-    return jsonify(True)
 
     user = session['username'].decode('utf-8')
 
