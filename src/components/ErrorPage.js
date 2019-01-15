@@ -72,7 +72,7 @@ export default withStyles(styles)(class ErrorPage extends React.Component {
                     </Paper>
                     
                     <Grid item xs={3} >
-                        <Button className={classes.loginButton} variant="contained" color="primary" component={Link} to={"/dash"}>Return to the dashboard</Button>
+                        <Button className={classes.loginButton} variant="contained" color="primary" component={Link} to={"/"}>Return to the login page</Button>
                     </Grid>
                 </Grid>
             </div>
