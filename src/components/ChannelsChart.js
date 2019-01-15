@@ -96,7 +96,8 @@ const ChannelsChart = (props) => {
         const summary = [
             { label: "Min", value: parseInt(subseries.min(channelName, filter.ignoreMissing), 10) || '--' },
             { label: "Max", value: parseInt(subseries.max(channelName, filter.ignoreMissing), 10) || '--' },
-            { label: "Avg", value: parseInt(subseries.avg(channelName, filter.ignoreMissing), 10) || '--' }
+            { label: "Avg", value: parseInt(subseries.avg(channelName, filter.ignoreMissing), 10) || '--' },
+            { label: "Goal", value: parseInt(channels[channelName].goal) || '--' }
         ];
 
         // represents each chart row
