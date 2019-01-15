@@ -191,8 +191,6 @@ def _delete_items():
 @app.route('/api/getUsers', methods=['GET'])
 def get_users():
 
-    print(user_role())
-
     filters = request.args['restrictions']
     filters = json.loads(filters)
     if 'gender' in filters:
