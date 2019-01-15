@@ -14,19 +14,13 @@ from functools import wraps
 from flask import Flask, jsonify, request, redirect, session
 
 
-# 
-
 class CASClient:
-
-    # 
 
     # Initialize a new CASClient object so it uses the given CAS
     # server, or fed.princeton.edu if no server is given.
 
     def __init__(self, url='https://fed.princeton.edu/cas/'):
         self.cas_url = url
-
-    # 
 
     # Return the URL of the current request after stripping out the
     # "ticket" parameter added by the CAS server.
@@ -38,8 +32,6 @@ class CASClient:
         url = re.sub(r'ticket=[^&]*&?', '', url)
         url = re.sub(r'\?&?$|&$', '', url)
         return url
-
-    # 
 
     # Validate a login ticket by contacting the CAS server. If
     # valid, return the user's username; otherwise, return None.
@@ -53,16 +45,12 @@ class CASClient:
             return r[1].strip()
         return None
 
-    # 
-
     # dummy function to help the decorator
     def return_redirect(self):
         login_url = self.cas_url + 'login' \
                     + '?service=' + urllib.parse.quote(self.stripTicket(request))
 
         return redirect(login_url)
-
-    # 
 
     # decorator
     def cas_required(self, function):
@@ -76,8 +64,6 @@ class CASClient:
                 return function(*args, **kwargs)
 
         return wrap
-
-    # 
 
     # Authenticate the remote user, and return the user's username.
     # Do not return unless the user is successfully authenticated.
