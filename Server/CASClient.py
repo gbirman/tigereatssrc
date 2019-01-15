@@ -91,17 +91,11 @@ class CASClient:
                 return username
 
 
-        # if using the decorator, this should just have "return None" below
-        # if not using decorator, replace "return None" with what is in return_redirect
+        # We have this so we can use the decorator -- the code that was here is now in
+        # return_redirect()
 
         return None
-        # login_url = self.cas_url + 'login' \
-        #             + '?service=' + urllib.parse.quote(self.stripTicket(request))
-        #
-        # return redirect(login_url)
 
-
-# 
 
 def main():
     print ("CASClient does not run standalone")
