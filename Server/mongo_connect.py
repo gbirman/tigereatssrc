@@ -702,4 +702,4 @@ if __name__ == '__main__':
     # lp_wrapper('5bf8ca12e7179a56e21592c5')
     # lp.print_stats()
 
-    app.run(debug=False)
+    app.run(host="0.0.0.0", debug=False, port=int(os.environ.get('PORT', 33507)))
