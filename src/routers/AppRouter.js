@@ -74,7 +74,6 @@ class AppRouter extends React.Component {
             }
         ).then((data) => {
             const result = data['data'];
-            console.log(result);
             if (result) {
                 replace('/error');
                 //this.props.history.push("/error");

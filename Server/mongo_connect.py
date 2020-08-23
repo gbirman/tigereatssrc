@@ -31,8 +31,8 @@ class MyJSONEncoder(JSONEncoder):
         return super(MyJSONEncoder, self).default(obj)
 
 
-app = Flask(__name__, static_folder='../build/static', template_folder='../build')
-# app = Flask(__name__, template_folder='../public/')
+app = Flask(__name__, static_folder='../build/static', template_folder='../build') # production
+# app = Flask(__name__, template_folder='../public/') # development
 
 #POTENTIALLY IMPORTANT:
 app.config.from_object(__name__)
@@ -93,15 +93,11 @@ def catch_all(path):
 
 @app.route('/api/login_casclient', methods=['GET'])
 # @casClient.cas_required
-# technically don't even need this anymore since all paths are CAS protected
+# this is just going to return the page for now 
 def login_casclient():
-    print('URIROOT', environ.get('URIROOT'))
-    print('request', request.url_root)
-    if 'localhost' in request.url_root:
-        uriRoot = 'http://localhost:5000'
-    else:
-        uriRoot = request.url_root 
-    return redirect(uriRoot + 'dash', code=302)
+    uriRoot = request.url_root
+    return 'dash'
+    # return redirect(uriRoot + 'dash', code=302)
 
 
 @app.route('/api/user_role')
@@ -716,6 +712,7 @@ if __name__ == '__main__':
     # lp_wrapper('5bf8ca12e7179a56e21592c5')
     # lp.print_stats()
 
-    # app.run(host="0.0.0.0", debug=False, port=int(os.environ.get('PORT', 33507)))
-    print(environ.get('PORT'))
-    app.run(port=environ.get('PORT'))
+    app.run(host="0.0.0.0", debug=False, port=int(os.environ.get('PORT', 5000)))
+    # print(environ.get('PORT'))
+    # app.run(port=environ.get('PORT'))
+    # app.run(debug=True)

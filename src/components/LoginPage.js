@@ -10,6 +10,8 @@ import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import logo from './images/tiger_eats_graphic.png'
+import { ThemeProvider } from 'react-jss';
+import { withRouter } from 'react-router-dom';
 
 const styles = theme => ({
     loginButton: {
@@ -66,7 +68,7 @@ const styles = theme => ({
 
 
 // remember to change href here 
-export default withStyles(styles)(class LoginPage extends React.Component {
+export default withRouter(withStyles(styles)(class LoginPage extends React.Component {
 
     state = {
         email: undefined,
@@ -83,8 +85,26 @@ export default withStyles(styles)(class LoginPage extends React.Component {
         this.setState({password: e.target.value});
     }
 
+    reroute = () => {
+        // let path = '/api/login_casclient';
+        // this.props.history.push(path);
+        axios.get(
+            '/api/login_casclient',
+            {
+                headers: {'Content-type': 'application/json'}
+            }
+        ).then((data) => {
+            const redirect = data['data'];
+            if (!redirect) {
+                this.props.history.push("/error");
+            }
+            else {
+                this.props.history.push(redirect);
+            } 
+        })
+    }
+
     render() {
-        console.log('hit login page');
         const {classes} = this.props;
         return (
             <div>
@@ -101,10 +121,10 @@ export default withStyles(styles)(class LoginPage extends React.Component {
                     </Paper>
                     
                     <Grid item xs={3} >
-                        <Button className={classes.loginButton} variant="contained" color="primary" href={'/api/login_casclient'}>Login with CAS</Button>
+                        <Button className={classes.loginButton} variant="contained" color="primary" onClick={this.reroute.bind(this)}>Login with CAS</Button>
                     </Grid>
                 </Grid>
             </div>
         )
     }
-})
+}))
