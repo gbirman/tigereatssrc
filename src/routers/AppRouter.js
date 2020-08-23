@@ -94,15 +94,7 @@ class AppRouter extends React.Component {
                     <div> 
                         <NavHeader />
                         <Switch>
-                            <Route
-                                exact
-                                path="/"
-                                render={() => {
-                                    return (
-                                        <Redirect to="/home"/> 
-                                    )
-                                }}
-                            />
+                            <IndexRedirect to="/home" />
                             <Route path="/home" component={LoginPage} exact={true} />
                             <Route path="/dash" component={DashboardPage} exact />
                             <Route path="/test/:id" component={StudentGoalsPage} exact={true} />
