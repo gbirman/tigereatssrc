@@ -96,7 +96,7 @@ def catch_all(path):
 # this is just going to return nothing for debugging
 def login_casclient():
     uriRoot = request.url_root
-    return 
+    return jsonify('valid')
     # return redirect(uriRoot + 'dash', code=302)
 
 
