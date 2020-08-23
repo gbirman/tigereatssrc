@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import logo from './images/tiger_eats_graphic.png'
 import { ThemeProvider } from 'react-jss';
-import { withRouter } from 'react-router-dom';
+import {withRouter} from 'react-router-dom'
 
 const styles = theme => ({
     loginButton: {
@@ -85,25 +85,41 @@ export default withRouter(withStyles(styles)(class LoginPage extends React.Compo
         this.setState({password: e.target.value});
     }
 
-    reroute = () => {
-        // let path = '/api/login_casclient';
-        // this.props.history.push(path);
-        axios.get(
-            '/api/login_casclient',
-            {
-                headers: {'Content-type': 'application/json'}
-            }
-        ).then((data) => {
-            const redirect = data['data'];
-            console.log(redirect);
-            if (!redirect) {
-                this.props.history.push("/error");
-            }
-            else {
-                this.props.history.push(redirect);
-            } 
-        })
+    // reroute = () => {
+    //     // let path = '/api/login_casclient';
+    //     // this.props.history.push(path);
+        // axios.get(
+        //     '/api/login_casclient',
+        //     {
+        //         headers: {'Content-type': 'application/json'}
+        //     }
+    //     ).then((data) => {
+    //         const redirect = data['data'];
+    //         console.log(data);
+    //         if (!redirect) {
+    //             this.props.history.push("/error");
+    //         }
+    //         else {
+    //             this.props.history.push(redirect);
+    //         } 
+    //     })
+    // }
+
+    login = () => {
+        return axios
+        .get('/api/login_casclient', {headers: {'Content-type': 'application/json'}});
     }
+
+    auth = () => {
+        this.login()
+        .then(() => {
+          this.props.history.push("/dash");
+        })
+        .catch(() => {
+          // Show alert to user;
+          this.props.history.push("/error");
+        })
+      }
 
     render() {
         const {classes} = this.props;
@@ -122,7 +138,7 @@ export default withRouter(withStyles(styles)(class LoginPage extends React.Compo
                     </Paper>
                     
                     <Grid item xs={3} >
-                        <Button className={classes.loginButton} variant="contained" color="primary" onClick={this.reroute.bind(this)}>Login with CAS</Button>
+                        <Button className={classes.loginButton} variant="contained" color="primary" onClick={this.auth.bind(this)}>Login with CAS</Button>
                     </Grid>
                 </Grid>
             </div>

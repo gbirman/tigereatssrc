@@ -93,10 +93,10 @@ def catch_all(path):
 
 @app.route('/api/login_casclient', methods=['GET'])
 # @casClient.cas_required
-# this is just going to return the page for now 
+# this is just going to return nothing for debugging
 def login_casclient():
     uriRoot = request.url_root
-    return 'dash'
+    return 
     # return redirect(uriRoot + 'dash', code=302)
 
 
