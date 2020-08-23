@@ -30,7 +30,8 @@ class MyJSONEncoder(JSONEncoder):
         return super(MyJSONEncoder, self).default(obj)
 
 
-app = Flask(__name__, static_folder='../build/static', template_folder='../build/')
+# app = Flask(__name__, static_folder='../build/static', template_folder='../build/')
+app = Flask(__name__, template_folder='../public/')
 
 #POTENTIALLY IMPORTANT:
 app.config.from_object(__name__)
@@ -50,6 +51,7 @@ session_opts = {
 }
 
 class BeakerSessionInterface(SessionInterface):
+
 	def open_session(self, app, request):
 		session = request.environ['beaker.session']
 		return session
@@ -69,28 +71,37 @@ casClient = CASClient()
 
 @app.route('/')
 def home():
+    print('got here 1')
     return render_template('index.html')
 
 
 @app.route('/<path:path>')
-@casClient.cas_required
+# @casClient.cas_required
 def index(path):
-    return render_template('index.html')
+    print('got here 2')
+    return redirect('http://localhost:3000/dash', code=302)
+    # return render_template('index.html')
 
 
 @app.route('/api/login_casclient', methods=['GET'])
-@casClient.cas_required
+# @casClient.cas_required
 # technically don't even need this anymore since all paths are CAS protected
 def login_casclient():
+    print('got here 3')
     uriRoot = environ.get('URIROOT', 'http://localhost:5000')
-    print(uriRoot)
+    print('uriRoot', uriRoot)
     return redirect(uriRoot + '/dash', code=302)
 
 
 @app.route('/api/user_role')
 def user_role():
 
-    user = session['username'].decode('utf-8')
+    # print(mongo.db.authorized_users)
+
+    # quit()
+    # user = session['username'].decode('utf-8')
+
+    return jsonify(True)
 
     try:
         mongo.db.authorized_users.find({
