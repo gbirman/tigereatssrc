@@ -97,8 +97,7 @@ def login_casclient():
         uriRoot = 'http://localhost:5000'
     else:
         uriRoot = request.url_root 
-    print(uriRoot + '/dash')
-    return redirect(uriRoot + '/dash', code=302)
+    return redirect(uriRoot + 'dash', code=302)
 
 
 @app.route('/api/user_role')
