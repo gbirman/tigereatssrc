@@ -2,7 +2,6 @@
   "name": "tiger_eats_alpha_2",
   "version": "0.1.0",
   "private": true,
-  "homepage": "/build", 
   "main": "index.js",
   "dependencies": {
     "@material-ui/core": "3.8.1",
