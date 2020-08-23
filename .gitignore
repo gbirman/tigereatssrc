@@ -22,7 +22,6 @@ yarn-debug.log*
 yarn-error.log*
 =======
 node_modules/
->>>>>>> f87415a08d0a9f54119accb346c9bbfffc039377
 .DS_STORE
 node_modules
 scripts/flow/*/.flowconfig

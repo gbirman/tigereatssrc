@@ -83,6 +83,7 @@ def index(path):
 # technically don't even need this anymore since all paths are CAS protected
 def login_casclient():
     uriRoot = environ.get('URIROOT', 'http://localhost:5000')
+    print(uriRoot)
     return redirect(uriRoot + '/dash', code=302)
 
 
@@ -690,8 +691,5 @@ if __name__ == '__main__':
     # lp_wrapper = lp(get_user_nutrient_progress_all_new)
     # lp_wrapper('5bf8ca12e7179a56e21592c5')
     # lp.print_stats()
-
-
-
 
     app.run(debug=True)
