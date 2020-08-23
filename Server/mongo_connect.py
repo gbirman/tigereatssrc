@@ -22,6 +22,7 @@ from CASClient import CASClient
 
 from functools import wraps
 
+import logging
 
 class MyJSONEncoder(JSONEncoder):
     def default(self, obj):
