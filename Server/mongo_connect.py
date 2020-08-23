@@ -71,7 +71,7 @@ app.session_interface = BeakerSessionInterface()
 casClient = CASClient()
 
 @app.route('/')
-def home():
+def index():
     return app.send_static_file('index.html')
 
 
