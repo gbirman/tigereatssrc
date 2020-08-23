@@ -71,7 +71,6 @@ app.session_interface = BeakerSessionInterface()
 casClient = CASClient()
 
 @app.route('/')
-@app.route('/<path:path>')
 def home():
     # print('cwd1', os.getcwd())
     # print('prev1', os.listdir('./'))
@@ -79,13 +78,13 @@ def home():
     return render_template('index.html')
 
 
-# @app.route('/<path:path>')
-# # @casClient.cas_required
-# def index(path):
-#     # print('PATH')
-#     # quit()
-#     # return redirect('http://localhost:3000/dash', code=302)
-#     return render_template('index.html')
+@app.route('/<path:path>')
+# @casClient.cas_required
+def index(path):
+    # print('PATH')
+    # quit()
+    # return redirect('http://localhost:3000/dash', code=302)
+    return render_template('index.html')
 
 
 @app.route('/api/login_casclient', methods=['GET'])
