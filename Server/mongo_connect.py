@@ -93,10 +93,11 @@ def index(path):
 def login_casclient():
     print('URIROOT', environ.get('URIROOT'))
     print('request', request.url_root)
-    if request.url_root.contains('localhost'):
+    if 'localhost' in request.url_root:
         uriRoot = 'http://localhost:5000'
     else:
         uriRoot = request.url_root 
+    print(uriRoot + '/dash')
     return redirect(uriRoot + '/dash', code=302)
 
 
