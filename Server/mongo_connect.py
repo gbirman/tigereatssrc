@@ -6,7 +6,7 @@ from os import environ
 import random
 import time
 import math
-
+import os
 from flask import Flask, jsonify, request, redirect, session, render_template
 from flask.json import JSONEncoder
 from flask_pymongo import PyMongo
@@ -702,4 +702,4 @@ if __name__ == '__main__':
     # lp_wrapper('5bf8ca12e7179a56e21592c5')
     # lp.print_stats()
 
-    app.run()
+    app.run(host='0.0.0.0', debug=False, port=os.environ.get('PORT', 80))
