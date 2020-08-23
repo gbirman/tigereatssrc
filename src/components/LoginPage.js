@@ -95,6 +95,7 @@ export default withRouter(withStyles(styles)(class LoginPage extends React.Compo
             }
         ).then((data) => {
             const redirect = data['data'];
+            console.log(redirect);
             if (!redirect) {
                 this.props.history.push("/error");
             }
