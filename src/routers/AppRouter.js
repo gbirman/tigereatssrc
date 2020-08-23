@@ -85,9 +85,7 @@ class AppRouter extends React.Component {
         })
     }
 
-    render() {
-        console.log('test')
-        
+    render() {        
         return (
             <MuiThemeProvider theme={theme}>
                 <BrowserRouter>
