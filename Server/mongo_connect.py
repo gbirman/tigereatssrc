@@ -81,7 +81,8 @@ casClient = CASClient()
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
-    return 'You want path: %s' % path
+    return render_template('index.html')
+    # return 'You want path: %s' % path
 # @casClient.cas_required
 # def index(path):
 #     # print('PATH')
