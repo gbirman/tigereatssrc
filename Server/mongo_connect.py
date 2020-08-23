@@ -31,7 +31,7 @@ class MyJSONEncoder(JSONEncoder):
         return super(MyJSONEncoder, self).default(obj)
 
 
-app = Flask(__name__, static_folder='../build/static', static_url_path='')
+app = Flask(__name__, static_folder='../build/static', template_folder='../build/')
 # app = Flask(__name__, template_folder='../public/')
 
 #POTENTIALLY IMPORTANT:
@@ -72,15 +72,14 @@ casClient = CASClient()
 
 @app.route('/')
 def home():
-    print('got here')
-    return app.send_static_file('index.html')
+    return app.render_template('index.html')
 
 
 @app.route('/<path:path>')
 # @casClient.cas_required
 def index(path):
     # return redirect('http://localhost:3000/dash', code=302)
-    return app.send_static_file('index.html')
+    return app.render_template('index.html')
 
 
 @app.route('/api/login_casclient', methods=['GET'])
