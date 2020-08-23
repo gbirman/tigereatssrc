@@ -72,7 +72,8 @@ casClient = CASClient()
 
 @app.route('/')
 def home():
-    print('cwd1', os.listdir('../'))
+    print('cwd1', os.cwd())
+    print('prev1', os.listdir('../'))
     quit()
     return render_template('index.html')
 

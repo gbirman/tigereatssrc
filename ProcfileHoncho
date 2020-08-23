@@ -1,1 +1,1 @@
-web: cd Server && gunicorn mongo_connect:app
+web: gunicorn --pythonpath app mongo_connect:app
