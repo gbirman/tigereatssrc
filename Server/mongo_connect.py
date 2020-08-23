@@ -70,7 +70,7 @@ app.session_interface = BeakerSessionInterface()
 
 casClient = CASClient()
 
-@app.route('/')
+@app.route('/home')
 def home():
     # print('cwd1', os.getcwd())
     # print('prev1', os.listdir('./'))
