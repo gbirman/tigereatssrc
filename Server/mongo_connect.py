@@ -79,7 +79,7 @@ def index():
 # @casClient.cas_required
 def index(path):
     # return redirect('http://localhost:3000/dash', code=302)
-    return render_template('index.html')
+    return app.send_static_file('index.html')
 
 
 @app.route('/api/login_casclient', methods=['GET'])
