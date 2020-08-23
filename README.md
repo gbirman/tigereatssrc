@@ -13,4 +13,4 @@ To deploy the app:
 - in the `mongo_connect.py` file, go to the flask app declaration code, which can be found immediately after the imports. Uncomment the production code and comment out the development code. 
 - build the production code by running `npm run build` from the root folder.
 - commit and push your changes to the remote branch 
-- run `git push heroku {branch}:master`, where `branch` is the name branch you want to deploy to https://tigereats-dev.herokuapp.com/. 
+- run `git push heroku master` if you are deploying the master branch, or `git push heroku {branch}:master`, where `branch` is the name branch you want to deploy to https://tigereats-dev.herokuapp.com/. 
