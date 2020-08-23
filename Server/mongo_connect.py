@@ -70,15 +70,15 @@ app.session_interface = BeakerSessionInterface()
 
 casClient = CASClient()
 
-@app.route('/home')
-def home():
-    # print('cwd1', os.getcwd())
-    # print('prev1', os.listdir('./'))
-    # quit()
-    return render_template('index.html')
+# @app.route('/home')
+# def home():
+#     # print('cwd1', os.getcwd())
+#     # print('prev1', os.listdir('./'))
+#     # quit()
+#     return render_template('index.html')
 
 
-@app.route('/', defaults={'path': 'home'})
+@app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
     return 'You want path: %s' % path
