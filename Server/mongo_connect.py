@@ -359,7 +359,7 @@ def get_user_year():
     return jsonify(user['year'])
 
 
-def _update_nutrients(nutrients: dict, food_data: dict, num_servings: float) -> None:
+def _update_nutrients(nutrients: dict, food_data: dict, num_servings: float):
     nutrients['calories'] += num_servings*food_data['calories']
     nutrients['protein'] += num_servings*food_data['protein']
     nutrients['carbs'] += num_servings*food_data['carbs']
@@ -702,4 +702,4 @@ if __name__ == '__main__':
     # lp_wrapper('5bf8ca12e7179a56e21592c5')
     # lp.print_stats()
 
-    app.run(host='0.0.0.0', debug=False, port=os.environ.get('PORT', 5000))
+    app.run(debug=False)
