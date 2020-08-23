@@ -703,4 +703,4 @@ if __name__ == '__main__':
     # lp.print_stats()
 
     # app.run(host="0.0.0.0", debug=False, port=int(os.environ.get('PORT', 33507)))
-    app.run()
+    app.run(port=environ.get('PORT'))
