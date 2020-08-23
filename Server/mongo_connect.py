@@ -78,13 +78,16 @@ def home():
     return render_template('index.html')
 
 
+@app.route('/', defaults={'path': 'home'})
 @app.route('/<path:path>')
+def catch_all(path):
+    return 'You want path: %s' % path
 # @casClient.cas_required
-def index(path):
-    # print('PATH')
-    # quit()
-    # return redirect('http://localhost:3000/dash', code=302)
-    return render_template('index.html')
+# def index(path):
+#     # print('PATH')
+#     # quit()
+#     # return redirect('http://localhost:3000/dash', code=302)
+#     return render_template('index.html')
 
 
 @app.route('/api/login_casclient', methods=['GET'])
