@@ -546,6 +546,8 @@ def change_nutrition_goals():
     args = request.get_json()
     user_id = args['user_id']
 
+    print(args)
+
     if args['new_calorie_goal'] is None or args['new_protein_goal'] is None or args['new_carbs_goal'] is None \
         or args['new_fats_goal'] is None:
         return jsonify([False, "Values must be numbers between 0 and 15,000, and all fields must be filled!"])

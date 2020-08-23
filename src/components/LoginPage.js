@@ -65,7 +65,7 @@ const styles = theme => ({
 })
 
 
-
+// remember to change href here 
 export default withStyles(styles)(class LoginPage extends React.Component {
 
     state = {
@@ -100,7 +100,7 @@ export default withStyles(styles)(class LoginPage extends React.Component {
                     </Paper>
                     
                     <Grid item xs={3} >
-                        <Button className={classes.loginButton} variant="contained" color="primary" href='/api/login_casclient'>Login with CAS</Button>
+                        <Button className={classes.loginButton} variant="contained" color="primary" href='http://localhost:5000/api/login_casclient'>Login with CAS</Button>
                     </Grid>
                 </Grid>
             </div>

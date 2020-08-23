@@ -36,7 +36,7 @@ const styles = theme => ({
         minWidth: '0px',
         padding: '0px',
         "position": "relative",
-        "z-index": "5"
+        "zIndex": "5"
     }
 });
 
@@ -104,7 +104,7 @@ const BrushChart = (props) => {
                                         ticks: {fill: "none", stroke: `${themecolors.darkgreen}`},
                                         values: {fill: `${themecolors.darkgreen}`, stroke: "none"}}}
                         hideTimeAxis={true}
-                        style={{"position": "relative", "top": "-24px", "z-index": "0"}}
+                        style={{"position": "relative", "top": "-24px", "zIndex": "0"}}
                     > 
                         <ChartRow 
                             height={abovemd ? "100" : "70"}
