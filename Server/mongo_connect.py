@@ -72,13 +72,16 @@ casClient = CASClient()
 
 @app.route('/')
 def home():
-    print(os.getcwd())
+    print('cwd1', os.getcwd())
+    quit()
     return render_template('index.html')
 
 
 @app.route('/<path:path>')
 # @casClient.cas_required
 def index(path):
+    print('cwd2', os.getcwd())
+    quit()
     # return redirect('http://localhost:3000/dash', code=302)
     return render_template('index.html')
 
