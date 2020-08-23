@@ -84,6 +84,7 @@ export default withStyles(styles)(class LoginPage extends React.Component {
     }
 
     render() {
+        console.log('hit login page');
         const {classes} = this.props;
         return (
             <div>
