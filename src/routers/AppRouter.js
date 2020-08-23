@@ -101,6 +101,7 @@ class AppRouter extends React.Component {
                             <Route path={"/verified/true"} component={DashboardPage} exact/>
                             <Route path="/progress/:id" component={ProgressPage} exact={true} />
                             <Route path="/error" component={ErrorPage} exact={true} />
+                            <Route component={LoginPage} />
                         </Switch>
                     </div>
                 </BrowserRouter>
