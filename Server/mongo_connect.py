@@ -70,45 +70,26 @@ app.session_interface = BeakerSessionInterface()
 
 casClient = CASClient()
 
-# @app.route('/home')
-# def home():
-#     # print('cwd1', os.getcwd())
-#     # print('prev1', os.listdir('./'))
-#     # quit()
-#     return render_template('index.html')
-
-
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
     return render_template('index.html')
-    # return 'You want path: %s' % path
-# @casClient.cas_required
-# def index(path):
-#     # print('PATH')
-#     # quit()
-#     # return redirect('http://localhost:3000/dash', code=302)
-#     return render_template('index.html')
-
 
 @app.route('/api/login_casclient', methods=['GET'])
 # @casClient.cas_required
 # this is just going to return nothing for debugging
 def login_casclient():
+    return jsonify(True)
     uriRoot = request.url_root
-    return jsonify('valid')
-    # return redirect(uriRoot + 'dash', code=302)
+    return redirect(uriRoot + 'dash', code=302)
 
 
 @app.route('/api/user_role')
 def user_role():
 
-    # print(mongo.db.authorized_users)
+    return jsonify(True) # no session testing
 
-    # quit()
-    # user = session['username'].decode('utf-8')
-
-    return jsonify(True)
+    user = session['username'].decode('utf-8')
 
     try:
         mongo.db.authorized_users.find({

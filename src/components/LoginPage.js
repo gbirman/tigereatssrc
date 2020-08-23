@@ -85,26 +85,6 @@ export default withRouter(withStyles(styles)(class LoginPage extends React.Compo
         this.setState({password: e.target.value});
     }
 
-    // reroute = () => {
-    //     // let path = '/api/login_casclient';
-    //     // this.props.history.push(path);
-        // axios.get(
-        //     '/api/login_casclient',
-        //     {
-        //         headers: {'Content-type': 'application/json'}
-        //     }
-    //     ).then((data) => {
-    //         const redirect = data['data'];
-    //         console.log(data);
-    //         if (!redirect) {
-    //             this.props.history.push("/error");
-    //         }
-    //         else {
-    //             this.props.history.push(redirect);
-    //         } 
-    //     })
-    // }
-
     login = () => {
         return axios
         .get('/api/login_casclient', {headers: {'Content-type': 'application/json'}});
