@@ -6,7 +6,7 @@ from os import environ
 import random
 import time
 import math
-
+import os
 from flask import Flask, jsonify, request, redirect, session, render_template
 from flask.json import JSONEncoder
 from flask_pymongo import PyMongo
@@ -22,6 +22,7 @@ from CASClient import CASClient
 
 from functools import wraps
 
+import logging
 
 class MyJSONEncoder(JSONEncoder):
     def default(self, obj):
@@ -30,7 +31,8 @@ class MyJSONEncoder(JSONEncoder):
         return super(MyJSONEncoder, self).default(obj)
 
 
-app = Flask(__name__, static_folder='../build/static', template_folder='../build/')
+app = Flask(__name__, static_folder='../build/static', template_folder='../build') # production
+# app = Flask(__name__, template_folder='../public/') # development
 
 #POTENTIALLY IMPORTANT:
 app.config.from_object(__name__)
@@ -50,6 +52,7 @@ session_opts = {
 }
 
 class BeakerSessionInterface(SessionInterface):
+
 	def open_session(self, app, request):
 		session = request.environ['beaker.session']
 		return session
@@ -67,28 +70,24 @@ app.session_interface = BeakerSessionInterface()
 
 casClient = CASClient()
 
-@app.route('/')
-def home():
-    return render_template('index.html')
-
-
+@app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
-@casClient.cas_required
-def index(path):
+def catch_all(path):
     return render_template('index.html')
-
 
 @app.route('/api/login_casclient', methods=['GET'])
-@casClient.cas_required
-# technically don't even need this anymore since all paths are CAS protected
+# @casClient.cas_required
+# this is just going to return nothing for debugging
 def login_casclient():
-    uriRoot = environ.get('URIROOT', 'http://localhost:5000')
-    print(uriRoot)
-    return redirect(uriRoot + '/dash', code=302)
+    return jsonify(True)
+    uriRoot = request.url_root
+    return redirect(uriRoot + 'dash', code=302)
 
 
 @app.route('/api/user_role')
 def user_role():
+
+    return jsonify(True) # no session testing
 
     user = session['username'].decode('utf-8')
 
@@ -351,7 +350,7 @@ def get_user_year():
     return jsonify(user['year'])
 
 
-def _update_nutrients(nutrients: dict, food_data: dict, num_servings: float) -> None:
+def _update_nutrients(nutrients: dict, food_data: dict, num_servings: float):
     nutrients['calories'] += num_servings*food_data['calories']
     nutrients['protein'] += num_servings*food_data['protein']
     nutrients['carbs'] += num_servings*food_data['carbs']
@@ -535,6 +534,8 @@ def change_nutrition_goals():
     args = request.get_json()
     user_id = args['user_id']
 
+    print(args)
+
     if args['new_calorie_goal'] is None or args['new_protein_goal'] is None or args['new_carbs_goal'] is None \
         or args['new_fats_goal'] is None:
         return jsonify([False, "Values must be numbers between 0 and 15,000, and all fields must be filled!"])
@@ -692,4 +693,7 @@ if __name__ == '__main__':
     # lp_wrapper('5bf8ca12e7179a56e21592c5')
     # lp.print_stats()
 
-    app.run(debug=True)
+    app.run(host="0.0.0.0", debug=False, port=int(os.environ.get('PORT', 5000)))
+    # print(environ.get('PORT'))
+    # app.run(port=environ.get('PORT'))
+    # app.run(debug=True)

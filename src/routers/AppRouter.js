@@ -74,7 +74,6 @@ class AppRouter extends React.Component {
             }
         ).then((data) => {
             const result = data['data'];
-            console.log(result);
             if (result) {
                 replace('/error');
                 //this.props.history.push("/error");
@@ -85,22 +84,21 @@ class AppRouter extends React.Component {
         })
     }
 
-    render() {
-        console.log('test')
-        
+    render() {        
         return (
             <MuiThemeProvider theme={theme}>
                 <BrowserRouter>
                     <div> 
                         <NavHeader />
                         <Switch>
-                            <Route path="/" component={LoginPage} exact={true} />
+                            <Route path="/home" component={LoginPage} exact={true} />
                             <Route path="/dash" component={DashboardPage} exact />
                             <Route path="/test/:id" component={StudentGoalsPage} exact={true} />
                             <Route path="/changeGoals/:id/:fullname/:calorie_goal/:protein_goal/:fats_goal/:carbs_goal" component={ChangeGoalsPage} />
                             <Route path={"/verified/true"} component={DashboardPage} exact/>
                             <Route path="/progress/:id" component={ProgressPage} exact={true} />
                             <Route path="/error" component={ErrorPage} exact={true} />
+                            <Route component={LoginPage} />
                         </Switch>
                     </div>
                 </BrowserRouter>

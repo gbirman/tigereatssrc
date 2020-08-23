@@ -17,7 +17,7 @@ const styles = theme => ({
         [theme.breakpoints.down('sm')]: {
             height: "20px",
         },
-        height: "100%",
+        height: "50px",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",

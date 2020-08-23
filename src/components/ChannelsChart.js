@@ -7,6 +7,7 @@ import { unstable_useMediaQuery as useMediaQuery } from '@material-ui/core/useMe
 import Paper from '@material-ui/core/Paper';
 import {themecolors, nutrientcolors} from '../styles/color';
 import { withStyles } from '@material-ui/core/styles';
+import { NonceProvider } from 'react-select';
 
 // OK, so I know the black background for the channels chart
 // is kind of weird, but the React-time-series-charts API 
@@ -22,7 +23,7 @@ const styles = theme => ({
         //...theme.mixins.gutters(),
         //paddingTop: theme.spacing.unit * 2,
         //paddingBottom: theme.spacing.unit * 2,
-        backgroundColor: "black", //`${themecolors.darkgray}`,
+        backgroundColor: `${themecolors.darkgray}`,
         height: "100%",
         marginLeft: "1%",
         marginRight: "1%",
@@ -138,9 +139,9 @@ const ChannelsChart = (props) => {
                     width={100}
                     type="linear"
                     format="d"
-                    style = { {axis: { fontSize: 11, textAnchor: "left", stroke: `${themecolors.lightgrey}` }, 
+                    style = { {axis: { fontSize: 11, textAnchor: "left", stroke: "none", fill: "#ffffff"}, 
                             label: { fontSize: 12, textAnchor: "middle", fill: `${nutrientcolors[channelName]}`}, 
-                            values: { fill: "none", stroke: "none" }} }
+                            values: { label: {fill: "#ffffff", stroke: "none"}, box: {opacity: 0, fill: '#ffffff'}}} }
                 />
                 <Charts>
                     {charts}
@@ -149,7 +150,7 @@ const ChannelsChart = (props) => {
                         axis={`${channelName}_axis`}
                         value={channels[channelName].goal}
                         //label={`Goal: ${parseInt(channels[channelName].goal)}`}
-                        style = {{ line: { stroke: "white", strokeWidth: 0.5, strokeDasharray: "4,4", pointerEvents: "none" } }}
+                        style = {{ line: { stroke: "white", strokeWidth: 1, strokeDasharray: "4,4", pointerEvents: "none" }}}
                     />
                 </Charts>
                 {/* look at left side of the chart! */}
@@ -159,7 +160,8 @@ const ChannelsChart = (props) => {
                     detail={channels[channelName].units}
                     width={70}
                     min={0}
-                    max={35} // the number here seems to be irrelevant but if i remove max shit breaks
+                    max={10000}
+                    style = { {label: {fontSize: 20, textAnchor: "middle", fill: "#ffffff"}, detail:{fontSize: 12, textAnchor: "middle", fill: "#ffffff"} } }
                 />
             </ChartRow>
         );
@@ -182,6 +184,7 @@ const ChannelsChart = (props) => {
                 paddingLeft={10}
                 paddingRight={10}
                 hideTimeAxis={abovesm ? false : true}
+                timeAxisStyle = {{values: {fill: "#ffffff"}}}
             >
                 {rows}
             </ChartContainer> 

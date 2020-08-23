@@ -10,6 +10,8 @@ import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import logo from './images/tiger_eats_graphic.png'
+import { ThemeProvider } from 'react-jss';
+import {withRouter} from 'react-router-dom'
 
 const styles = theme => ({
     loginButton: {
@@ -65,8 +67,8 @@ const styles = theme => ({
 })
 
 
-
-export default withStyles(styles)(class LoginPage extends React.Component {
+// remember to change href here 
+export default withRouter(withStyles(styles)(class LoginPage extends React.Component {
 
     state = {
         email: undefined,
@@ -82,6 +84,22 @@ export default withStyles(styles)(class LoginPage extends React.Component {
     handlePasswordChange = (e) => {
         this.setState({password: e.target.value});
     }
+
+    login = () => {
+        return axios
+        .get('/api/login_casclient', {headers: {'Content-type': 'application/json'}});
+    }
+
+    auth = () => {
+        this.login()
+        .then(() => {
+          this.props.history.push("/dash");
+        })
+        .catch(() => {
+          // Show alert to user;
+          this.props.history.push("/error");
+        })
+      }
 
     render() {
         const {classes} = this.props;
@@ -100,10 +118,10 @@ export default withStyles(styles)(class LoginPage extends React.Component {
                     </Paper>
                     
                     <Grid item xs={3} >
-                        <Button className={classes.loginButton} variant="contained" color="primary" href='/api/login_casclient'>Login with CAS</Button>
+                        <Button className={classes.loginButton} variant="contained" color="primary" onClick={this.auth.bind(this)}>Login with CAS</Button>
                     </Grid>
                 </Grid>
             </div>
         )
     }
-})
+}))

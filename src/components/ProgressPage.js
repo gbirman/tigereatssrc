@@ -450,7 +450,7 @@ class ProgressPage extends React.Component {
                             direction="row"
                             justify="space-between"
                             alignItems="stretch"
-                            style={{height: 50}}
+                            style={{height: '50px'}}
                         >
                             <Grid item xs={2.5}>
                                 <RadioButtons 

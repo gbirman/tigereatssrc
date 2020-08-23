@@ -20,7 +20,7 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.1",
     "react-select": "^2.1.2",
-    "react-timeseries-charts": "^0.15.5",
+    "react-timeseries-charts": "github:gbirman/react-timeseries-charts#valueaxisstyle",
     "react-vis": "^1.11.5",
     "typeface-roboto": "0.0.54"
   },
@@ -33,7 +33,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "proxy": "http://localhost:5000",
+  "proxy": "http://0.0.0.0:5000",
   "browserslist": [
     ">0.2%",
     "not dead",
