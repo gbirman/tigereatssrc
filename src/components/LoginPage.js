@@ -100,7 +100,7 @@ export default withStyles(styles)(class LoginPage extends React.Component {
                     </Paper>
                     
                     <Grid item xs={3} >
-                        <Button className={classes.loginButton} variant="contained" color="primary" href='api/login_casclient'>Login with CAS</Button>
+                        <Button className={classes.loginButton} variant="contained" color="primary" href='/api/login_casclient'>Login with CAS</Button>
                     </Grid>
                 </Grid>
             </div>
