@@ -72,6 +72,7 @@ casClient = CASClient()
 
 @app.route('/')
 def home():
+    print(os.getcwd())
     return render_template('index.html')
 
 
