@@ -72,14 +72,14 @@ casClient = CASClient()
 
 @app.route('/')
 def home():
-    return app.render_template('index.html')
+    return render_template('index.html')
 
 
 @app.route('/<path:path>')
 # @casClient.cas_required
 def index(path):
     # return redirect('http://localhost:3000/dash', code=302)
-    return app.render_template('index.html')
+    return render_template('index.html')
 
 
 @app.route('/api/login_casclient', methods=['GET'])
