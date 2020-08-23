@@ -72,6 +72,7 @@ casClient = CASClient()
 
 @app.route('/')
 def home():
+    print('got here')
     return app.send_static_file('index.html')
 
 
