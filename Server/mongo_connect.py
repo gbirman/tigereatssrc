@@ -91,6 +91,7 @@ def index(path):
 # @casClient.cas_required
 # technically don't even need this anymore since all paths are CAS protected
 def login_casclient():
+    print('URIROOT', environ.get('URIROOT'))
     uriRoot = environ.get('URIROOT', 'http://localhost:5000')
     return redirect(uriRoot + '/dash', code=302)
 
