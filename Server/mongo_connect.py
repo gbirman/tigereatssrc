@@ -675,25 +675,5 @@ def change_year():
 
 
 if __name__ == '__main__':
-    # print(_get_user_meal_data("5bf8ca12e7179a56e21592c5", "2018-07-11", "lunch"))
-    # print(_get_user_meal_data("5bf8ca12e7179a56e21592c5", "2018-07-11", "breakfast"))
-    # print(_get_user_meal_data("5bf8ca12e7179a56e21592c5", "2018-07-13", "breakfast"))
-    # print(_get_user_nutrient_progress("5bf8ca12e7179a56e21592c5", "2018-07-11", "2018-07-15"))
-    # print(_get_user('5bf8ca12e7179a56e21592c5'))
-    # print(change_nutrition_goals('5bf8ca12e7179a56e21592c5', 68, 4, 4, 4))
-    # print(_get_user_nutrient_progress('5bf8ca12e7179a56e21592c5', '2018-11-01', '2019-01-02'))
-    # print(verify_login("isinha@princeton.edu", "password"))
-    # print(verify_login("isinhasda@princeton.edu", "password"))
-    # print(_get_user_meal_notes('5bf8ca12e7179a56e21592c5', '2019-01-05', 'breakfast'))
-    # print(_get_user_day_meal_notes('5bf8ca12e7179a56e21592c5', '2019-01-05'))
-    # print(change_mealnote("5bf8ca12e7179a56e21592c5", "2019-01-05", "lunch", "asfopiajw"))
-
-    # lp = LineProfiler()
-    # lp_wrapper = lp(get_user_nutrient_progress_all_new)
-    # lp_wrapper('5bf8ca12e7179a56e21592c5')
-    # lp.print_stats()
-
     app.run(host="0.0.0.0", debug=False, port=int(os.environ.get('PORT', 5000)))
-    # print(environ.get('PORT'))
-    # app.run(port=environ.get('PORT'))
-    # app.run(debug=True)
+    
