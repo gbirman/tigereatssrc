@@ -30,8 +30,8 @@ class MyJSONEncoder(JSONEncoder):
         return super(MyJSONEncoder, self).default(obj)
 
 
-# app = Flask(__name__, static_folder='../build/static', template_folder='../build/')
-app = Flask(__name__, template_folder='../public/')
+app = Flask(__name__, static_folder='../build/static', template_folder='../build/')
+# app = Flask(__name__, template_folder='../public/')
 
 #POTENTIALLY IMPORTANT:
 app.config.from_object(__name__)
@@ -71,25 +71,21 @@ casClient = CASClient()
 
 @app.route('/')
 def home():
-    print('got here 1')
     return render_template('index.html')
 
 
 @app.route('/<path:path>')
 # @casClient.cas_required
 def index(path):
-    print('got here 2')
-    return redirect('http://localhost:3000/dash', code=302)
-    # return render_template('index.html')
+    # return redirect('http://localhost:3000/dash', code=302)
+    return render_template('index.html')
 
 
 @app.route('/api/login_casclient', methods=['GET'])
 # @casClient.cas_required
 # technically don't even need this anymore since all paths are CAS protected
 def login_casclient():
-    print('got here 3')
     uriRoot = environ.get('URIROOT', 'http://localhost:5000')
-    print('uriRoot', uriRoot)
     return redirect(uriRoot + '/dash', code=302)
 
 
