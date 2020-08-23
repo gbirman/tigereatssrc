@@ -52,5 +52,6 @@ chrome-user-data
 !*package.json
 !*yarn.lock
 !*asset-manifest.json
+!*manifest.json
 
 Server/data/*
