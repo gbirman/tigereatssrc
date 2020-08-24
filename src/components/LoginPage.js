@@ -85,6 +85,21 @@ export default withRouter(withStyles(styles)(class LoginPage extends React.Compo
         this.setState({password: e.target.value});
     }
 
+    componentWillMount = () => {
+        console.log("requiring authentication");
+        axios.get(
+            '/api/login',
+            {
+                headers: {'Content-type': 'application/json'}
+            }
+        ).then((data) => {
+            const authenticated = data['data'];
+            if (authenticated) {
+                this.props.history.push('/dash')
+            } 
+        })
+    }
+
     login = () => {
         console.log("Logging in")
         return axios.post('/api/login')
