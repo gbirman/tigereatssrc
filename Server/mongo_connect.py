@@ -94,8 +94,8 @@ def send_icon():
 
 @app.route('/site.webmanifest')
 def send_manifest():
-    print('sending manifest', request.url)
-    return send_file(request.url, mimetype='application/manifest+json')
+    print('sending manifest', request)
+    return send_from_directory(app.template_folder, 'site.webmanifest', mimetype='application/manifest+json')
 
 
 # @app.route('/', defaults={'path': ''})
