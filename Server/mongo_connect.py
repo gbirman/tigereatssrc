@@ -79,6 +79,11 @@ app.session_interface = BeakerSessionInterface()
 def index():
     return render_template('index.html')
 
+# @app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def catch_all(path):
+    return redirect('/error')
+
 # @app.route('/api/login_casclient', methods=['GET'])
 # @casClient.cas_required
 # # this is just going to return nothing for debugging
