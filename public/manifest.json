@@ -1,6 +1,0 @@
-{
-  "short_name": "Tiger Eats",
-  "name": "Tiger Eats Nutrition Portal",
-  "start_url": "./index.html",
-  "display": "standalone"
-}
