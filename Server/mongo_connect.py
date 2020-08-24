@@ -78,25 +78,6 @@ app.session_interface = BeakerSessionInterface()
 def index():
     return render_template('index.html')
 
-# @app.route('/android-chrome-192x192.png')
-# @app.route('/android-chrome-256x256.png')
-# @app.route('/apple-touch-icon.png')
-# @app.route('/favicon.ico')
-# @app.route('/favicon-16x16.png')
-# @app.route('/favicon-32x32.png')
-# @app.route('/mstile-150x150.png')
-# @app.route('/tiger_eats_graphic.png')
-# def send_icon():
-#     import re
-#     fname = re.search(r'(.*)/(.*)', request.url).group(2)
-#     print('sending icon', request.url)
-#     return send_from_directory(app.template_folder, fname, mimetype='image/png')
-
-# @app.route('/site.webmanifest')
-# def send_manifest():
-#     print('sending manifest', request)
-#     return send_from_directory(app.template_folder, 'site.webmanifest', mimetype='application/manifest+json')
-
 @app.route('/<path:path>')
 def catch_all(path):
     print(path)
