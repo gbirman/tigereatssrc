@@ -40,7 +40,7 @@ self.__precacheManifest = [
     "url": "/static/media/EggToast.64ba5954.jpg"
   },
   {
-    "revision": "d86d8b4c4e5c1bb805c60f12f3c89869",
+    "revision": "56c560e3f7ee8b181882c2bd4197ea3d",
     "url": "/index.html"
   }
 ];

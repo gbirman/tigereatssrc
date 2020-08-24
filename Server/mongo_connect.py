@@ -99,11 +99,11 @@ def send_manifest():
     return send_from_directory(app.template_folder, 'site.webmanifest', mimetype='application/manifest+json')
 
 
-# @app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def catch_all(path):
-    print(path)
-    return render_template('index.html')
+# # @app.route('/', defaults={'path': ''})
+# @app.route('/<path:path>')
+# def catch_all(path):
+#     print(path)
+#     return render_template('index.html')
 
 # @app.route('/api/login_casclient', methods=['GET'])
 # @casClient.cas_required
