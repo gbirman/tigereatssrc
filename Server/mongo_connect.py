@@ -80,9 +80,9 @@ app.session_interface = BeakerSessionInterface()
 def index():
     return render_template('index.html')
 
-# @app.route('/tiger_eats_graphic.png')
-# def get_img():
-#     return send_file(app.template_folder+'/tiger_eats_graphic.png', mimetype='image/png')
+@app.route('/tiger_eats_graphic.png')
+def get_img():
+    return send_file(app.template_folder+'/tiger_eats_graphic.png', mimetype='image/png')
 
 # @app.route('/', defaults={'path': ''})
 # @app.route('/<path:path>')
