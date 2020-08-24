@@ -3,7 +3,7 @@
   "name": "Tiger Eats Nutrition Portal",
   "icons": [
     {
-      "src": "tiger_eats_graphic.png",
+      "src": "./tiger_eats_graphic.png",
       "sizes": "192x192",
       "type": "image/png"
     }
