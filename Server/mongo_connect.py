@@ -73,9 +73,10 @@ app.session_interface = BeakerSessionInterface()
 
 casClient = CASClient()
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def catch_all(path):
+# @app.route('/', defaults={'path': ''})
+# @app.route('/<path:path>')
+@app.route('/')
+def index():
     return render_template('index.html')
 
 @app.route('/api/login_casclient', methods=['GET'])
