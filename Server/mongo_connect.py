@@ -80,7 +80,6 @@ app.session_interface = BeakerSessionInterface()
 def index():
     return render_template('index.html')
 
-@app.route('/', defaults={'path': ''})
 @app.route('/android-chrome-192x192.png')
 @app.route('/android-chrome-256x256.png')
 @app.route('/apple-touch-icon.png')
@@ -99,7 +98,6 @@ def send_icon():
 def send_manifest():
     print('sending manifest', request)
     return send_from_directory(app.template_folder, 'site.webmanifest', mimetype='application/manifest+json')
-
 
 # # @app.route('/', defaults={'path': ''})
 # @app.route('/<path:path>')
