@@ -7,7 +7,7 @@ import random
 import time
 import math
 import os
-from flask import Flask, jsonify, request, redirect, session, render_template
+from flask import Flask, jsonify, request, redirect, session, render_template, send_from_directory, send_file
 from flask.json import JSONEncoder
 from flask_pymongo import PyMongo
 from flask_cas import login_required, CAS, login, logout
@@ -17,12 +17,21 @@ from beaker.middleware import SessionMiddleware
 from pymongo import MongoClient 
 from urllib.parse import quote_plus
 from pymongo.errors import ConnectionFailure
-
 from CASClient import CASClient
-
 from functools import wraps
 
-import logging
+# use "dev" or "prod"
+mode = "prod"
+print(mode)
+
+#init WSGI instance
+if mode == "dev":
+    app = Flask(__name__, template_folder='../public/') 
+elif mode == "prod":
+    app = Flask(__name__, static_folder='../build/static', template_folder='../build') # production
+else:
+    print("shouldn't get here")
+    quit()
 
 class MyJSONEncoder(JSONEncoder):
     def default(self, obj):
@@ -30,9 +39,14 @@ class MyJSONEncoder(JSONEncoder):
             return str(obj)
         return super(MyJSONEncoder, self).default(obj)
 
+class BeakerSessionInterface(SessionInterface):
 
-app = Flask(__name__, static_folder='../build/static', template_folder='../build') # production
-# app = Flask(__name__, template_folder='../public/') # development
+    def open_session(self, app, request):
+        session = request.environ['beaker.session']
+        return session
+
+    def save_session(self, app, session, response):
+        session.save()
 
 #POTENTIALLY IMPORTANT:
 app.config.from_object(__name__)
@@ -51,16 +65,6 @@ session_opts = {
     'session.auto': True
 }
 
-class BeakerSessionInterface(SessionInterface):
-
-	def open_session(self, app, request):
-		session = request.environ['beaker.session']
-		return session
-
-	def save_session(self, app, session, response):
-		session.save()
-
-
 # secret key
 secret_key = environ.get('SECRET_KEY', "uhuhuhuhuhuhiwannaerykahbadu")
 app.secret_key = secret_key
@@ -68,26 +72,49 @@ app.secret_key = secret_key
 app.wsgi_app = SessionMiddleware(app.wsgi_app, session_opts)
 app.session_interface = BeakerSessionInterface()
 
-casClient = CASClient()
+# casClient = CASClient()
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def catch_all(path):
+@app.route('/')
+def index():
     return render_template('index.html')
 
-@app.route('/api/login_casclient', methods=['GET'])
+@app.route('/<path:path>')
+def catch_all(path):
+    print(path)
+    return render_template('index.html')
+
+# @app.route('/api/login_casclient', methods=['GET'])
 # @casClient.cas_required
-# this is just going to return nothing for debugging
-def login_casclient():
-    return jsonify(True)
-    uriRoot = request.url_root
-    return redirect(uriRoot + 'dash', code=302)
+# # this is just going to return nothing for debugging
+# def login_casclient():
+#     uriRoot = request.url_root
+#     return redirect(uriRoot + 'dash', code=302)
+
+@app.route('/api/logout', methods=['POST'])
+def logout():
+    session["logged_in"]=False
+    return jsonify(None)
+
+@app.route('/api/login', methods=['GET', 'POST'])
+def login():
+
+    if request.method == "POST":
+
+        if not session.get('logged_in', False):
+            session['logged_in']=True
+            print("backend: setting up login")
+        else:
+            print("backend: login session exists")
+        return jsonify(None)
+
+    elif request.method == "GET":
+
+        print("backend: is logged in: ", session.get('logged_in', False))
+        return jsonify(session.get('logged_in', False))
 
 
 @app.route('/api/user_role')
 def user_role():
-
-    return jsonify(True) # no session testing
 
     user = session['username'].decode('utf-8')
 
@@ -675,25 +702,5 @@ def change_year():
 
 
 if __name__ == '__main__':
-    # print(_get_user_meal_data("5bf8ca12e7179a56e21592c5", "2018-07-11", "lunch"))
-    # print(_get_user_meal_data("5bf8ca12e7179a56e21592c5", "2018-07-11", "breakfast"))
-    # print(_get_user_meal_data("5bf8ca12e7179a56e21592c5", "2018-07-13", "breakfast"))
-    # print(_get_user_nutrient_progress("5bf8ca12e7179a56e21592c5", "2018-07-11", "2018-07-15"))
-    # print(_get_user('5bf8ca12e7179a56e21592c5'))
-    # print(change_nutrition_goals('5bf8ca12e7179a56e21592c5', 68, 4, 4, 4))
-    # print(_get_user_nutrient_progress('5bf8ca12e7179a56e21592c5', '2018-11-01', '2019-01-02'))
-    # print(verify_login("isinha@princeton.edu", "password"))
-    # print(verify_login("isinhasda@princeton.edu", "password"))
-    # print(_get_user_meal_notes('5bf8ca12e7179a56e21592c5', '2019-01-05', 'breakfast'))
-    # print(_get_user_day_meal_notes('5bf8ca12e7179a56e21592c5', '2019-01-05'))
-    # print(change_mealnote("5bf8ca12e7179a56e21592c5", "2019-01-05", "lunch", "asfopiajw"))
-
-    # lp = LineProfiler()
-    # lp_wrapper = lp(get_user_nutrient_progress_all_new)
-    # lp_wrapper('5bf8ca12e7179a56e21592c5')
-    # lp.print_stats()
-
     app.run(host="0.0.0.0", debug=False, port=int(os.environ.get('PORT', 5000)))
-    # print(environ.get('PORT'))
-    # app.run(port=environ.get('PORT'))
-    # app.run(debug=True)
+    

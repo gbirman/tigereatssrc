@@ -66,23 +66,23 @@ class AppRouter extends React.Component {
         test: true
     }
 
-    verifyUser = (nextState, replace) => {
-        axios.get(
-            '/api/user_role',
-            {
-                headers: {'Content-type': 'application/json'}
-            }
-        ).then((data) => {
-            const result = data['data'];
-            if (result) {
-                replace('/error');
-                //this.props.history.push("/error");
-            }
-            /*else {
-                this.props.history.push("/error")
-            } */
-        })
-    }
+    // verifyUser = (nextState, replace) => {
+    //     axios.get(
+    //         '/api/user_role',
+    //         {
+    //             headers: {'Content-type': 'application/json'}
+    //         }
+    //     ).then((data) => {
+    //         const result = data['data'];
+    //         if (result) {
+    //             replace('/error');
+    //             //this.props.history.push("/error");
+    //         }
+    //         /*else {
+    //             this.props.history.push("/error")
+    //         } */
+    //     })
+    // }
 
     render() {        
         return (
@@ -91,14 +91,14 @@ class AppRouter extends React.Component {
                     <div> 
                         <NavHeader />
                         <Switch>
-                            <Route path="/home" component={LoginPage} exact={true} />
+                            <Route path="/" component={LoginPage} exact={true}/>
                             <Route path="/dash" component={DashboardPage} exact />
-                            <Route path="/test/:id" component={StudentGoalsPage} exact={true} />
+                            <Route path="/test/:id" component={StudentGoalsPage} exact={true}/>
                             <Route path="/changeGoals/:id/:fullname/:calorie_goal/:protein_goal/:fats_goal/:carbs_goal" component={ChangeGoalsPage} />
-                            <Route path={"/verified/true"} component={DashboardPage} exact/>
+                            <Route path={"/verified/true"} component={DashboardPage} exact />
                             <Route path="/progress/:id" component={ProgressPage} exact={true} />
                             <Route path="/error" component={ErrorPage} exact={true} />
-                            <Route component={LoginPage} />
+                            <Route>{<Redirect to="/error"/>}</Route> 
                         </Switch>
                     </div>
                 </BrowserRouter>
@@ -108,4 +108,4 @@ class AppRouter extends React.Component {
 
 }
 
-export default (AppRouter)
+export default AppRouter

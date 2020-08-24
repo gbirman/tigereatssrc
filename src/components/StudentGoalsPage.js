@@ -18,22 +18,40 @@ export default class StudentGoalsPage extends React.Component {
         dateArray: [this.getToday(0), this.getToday(1), this.getToday(2), this.getToday(3), this.getToday(4)]
     };
 
-    componentWillMount() {
+    // componentWillMount() {
+    //     axios.get(
+    //         '/api/user_role',
+    //         {
+    //             headers: {'Content-type': 'application/json'}
+    //         }
+    //     ).then((data) => {
+    //         const result = data['data'];
+    //         if (!result) {
+    //             this.props.history.push("/error");
+    //         }
+    //         /*else {
+    //             this.props.history.push("/error")
+    //         } */
+    //     })
+    // }
+
+    componentWillMount = () => {
+        console.log("requiring authentication");
         axios.get(
-            '/api/user_role',
+            '/api/login',
             {
                 headers: {'Content-type': 'application/json'}
             }
         ).then((data) => {
-            const result = data['data'];
-            if (!result) {
-                this.props.history.push("/error");
-            }
-            /*else {
+            const authenticated = data['data'];
+            if (authenticated) {
+                this.props.history.push(this.props.match.url)
+            } else  {
                 this.props.history.push("/error")
-            } */
+            }
         })
     }
+
 
     // Save student data for a page refresh?
     componentDidMount() {

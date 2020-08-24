@@ -85,21 +85,31 @@ export default withRouter(withStyles(styles)(class LoginPage extends React.Compo
         this.setState({password: e.target.value});
     }
 
-    login = () => {
-        return axios
-        .get('/api/login_casclient', {headers: {'Content-type': 'application/json'}});
+    componentWillMount = () => {
+        console.log("requiring authentication");
+        axios.get(
+            '/api/login',
+            {
+                headers: {'Content-type': 'application/json'}
+            }
+        ).then((data) => {
+            const authenticated = data['data'];
+            if (authenticated) {
+                this.props.history.push('/dash')
+            } 
+        })
     }
 
-    auth = () => {
-        this.login()
+    login = () => {
+        console.log("Logging in")
+        return axios.post('/api/login')
         .then(() => {
-          this.props.history.push("/dash");
+            this.props.history.push("/dash");
+          })
+          .catch(() => {
+            this.props.history.push("/error");
         })
-        .catch(() => {
-          // Show alert to user;
-          this.props.history.push("/error");
-        })
-      }
+    }
 
     render() {
         const {classes} = this.props;
@@ -118,7 +128,7 @@ export default withRouter(withStyles(styles)(class LoginPage extends React.Compo
                     </Paper>
                     
                     <Grid item xs={3} >
-                        <Button className={classes.loginButton} variant="contained" color="primary" onClick={this.auth.bind(this)}>Login with CAS</Button>
+                        <Button className={classes.loginButton} variant="contained" color="primary" onClick={this.login.bind(this)}>Login</Button>
                     </Grid>
                 </Grid>
             </div>
