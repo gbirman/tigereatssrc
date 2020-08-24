@@ -5,6 +5,8 @@ import logo from './images/tiger_eats_logo.png'
 import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import axios from 'axios';
+import {withRouter} from 'react-router-dom'
 
 const styles = theme => ({
     logo: {
@@ -27,7 +29,19 @@ const styles = theme => ({
     }
 })
 
-export default withStyles(styles)(class NavHeader extends React.Component {
+export default withRouter(withStyles(styles)(class NavHeader extends React.Component {
+
+    logout = () => {
+        console.log("Logging out")
+        return axios.post('/api/logout')
+        .then(() => {
+            this.props.history.push("/");
+          })
+          .catch(() => {
+            this.props.history.push("/error");
+        })
+    }
+
     render() {
         const {classes} = this.props;
         console.log(window.location.pathname);
@@ -44,7 +58,7 @@ export default withStyles(styles)(class NavHeader extends React.Component {
                             <NavLink to="/dash" style={{ textDecoration: 'none'}}><Button className={classes.headerButton} variant="contained" color="primary">Dashboard</Button></NavLink>
                         </Grid>
                         <Grid item>
-                            <Button className={classes.headerButton} variant="contained" color="primary" href="https://fed.princeton.edu/cas/logout">Logout</Button>
+                            <Button className={classes.headerButton} variant="contained" color="primary" onClick={this.logout}>Logout</Button>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -52,4 +66,4 @@ export default withStyles(styles)(class NavHeader extends React.Component {
         );
         }
     }
-})
+}))

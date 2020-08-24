@@ -74,22 +74,37 @@ export default withRouter(withStyles(styles)(class DashboardPage extends React.C
        // listOption: 'all'
     };
 
-    componentWillMount() {
+    // componentWillMount() {
+    //     axios.get(
+    //         '/api/user_role',
+    //         {
+    //             headers: {'Content-type': 'application/json'}
+    //         }
+    //     ).then((data) => {
+    //         const result = data['data'];
+    //         if (!result) {
+    //             this.props.history.push("/error");
+    //         }
+    //      })
+    // }
+
+    componentWillMount = () => {
+        console.log("requiring authentication");
         axios.get(
-            '/api/user_role',
+            '/api/login',
             {
                 headers: {'Content-type': 'application/json'}
             }
         ).then((data) => {
-            const result = data['data'];
-            if (!result) {
-                this.props.history.push("/error");
-            }
-            /*else {
+            const authenticated = data['data'];
+            if (authenticated) {
+                this.props.history.push(this.props.match.url)
+            } else  {
                 this.props.history.push("/error")
-            } */
+            }
         })
     }
+
 
     getUsers = async () => {
         await axios.get(

@@ -86,23 +86,19 @@ export default withRouter(withStyles(styles)(class LoginPage extends React.Compo
     }
 
     login = () => {
-        return axios
-        .get('/api/login_casclient', {headers: {'Content-type': 'application/json'}});
-    }
-
-    auth = () => {
-        this.login()
+        console.log("Logging in")
+        return axios.post('/api/login')
         .then(() => {
-          this.props.history.push("/dash");
+            this.props.history.push("/dash");
+          })
+          .catch(() => {
+            this.props.history.push("/error");
         })
-        .catch(() => {
-          // Show alert to user;
-          this.props.history.push("/error");
-        })
-      }
+    }
 
     render() {
         const {classes} = this.props;
+        console.log(this.props)
         return (
             <div>
                 <Grid
@@ -118,7 +114,7 @@ export default withRouter(withStyles(styles)(class LoginPage extends React.Compo
                     </Paper>
                     
                     <Grid item xs={3} >
-                        <Button className={classes.loginButton} variant="contained" color="primary" onClick={this.auth.bind(this)}>Login with CAS</Button>
+                        <Button className={classes.loginButton} variant="contained" color="primary" onClick={this.login.bind(this)}>Login</Button>
                     </Grid>
                 </Grid>
             </div>

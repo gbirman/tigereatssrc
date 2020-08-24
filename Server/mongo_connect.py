@@ -71,7 +71,7 @@ app.secret_key = secret_key
 app.wsgi_app = SessionMiddleware(app.wsgi_app, session_opts)
 app.session_interface = BeakerSessionInterface()
 
-casClient = CASClient()
+# casClient = CASClient()
 
 # @app.route('/', defaults={'path': ''})
 # @app.route('/<path:path>')
@@ -79,19 +79,38 @@ casClient = CASClient()
 def index():
     return render_template('index.html')
 
-@app.route('/api/login_casclient', methods=['GET'])
+# @app.route('/api/login_casclient', methods=['GET'])
 # @casClient.cas_required
-# this is just going to return nothing for debugging
-def login_casclient():
-    return jsonify(True)
-    uriRoot = request.url_root
-    return redirect(uriRoot + 'dash', code=302)
+# # this is just going to return nothing for debugging
+# def login_casclient():
+#     uriRoot = request.url_root
+#     return redirect(uriRoot + 'dash', code=302)
+
+@app.route('/api/logout', methods=['POST'])
+def logout():
+    session["logged_in"]=False
+    return jsonify(None)
+
+@app.route('/api/login', methods=['GET', 'POST'])
+def login():
+
+    if request.method == "POST":
+
+        if not session.get('logged_in', False):
+            session['logged_in']=True
+            print("backend: setting up login")
+        else:
+            print("backend: login session exists")
+        return jsonify(None)
+
+    elif request.method == "GET":
+
+        print("backend: is logged in: ", session.get('logged_in', False))
+        return jsonify(session.get('logged_in', False))
 
 
 @app.route('/api/user_role')
 def user_role():
-
-    return jsonify(True) # no session testing
 
     user = session['username'].decode('utf-8')
 
