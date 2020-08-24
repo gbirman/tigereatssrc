@@ -7,7 +7,7 @@ import random
 import time
 import math
 import os
-from flask import Flask, jsonify, request, redirect, session, render_template, send_file
+from flask import Flask, jsonify, request, redirect, session, render_template, send_from_directory
 from flask.json import JSONEncoder
 from flask_pymongo import PyMongo
 from flask_cas import login_required, CAS, login, logout
@@ -81,8 +81,9 @@ def index():
     return render_template('index.html')
 
 @app.route('/tiger_eats_graphic.png')
-def get_img():
-    return send_file(app.template_folder+'/tiger_eats_graphic.png', mimetype='image/png')
+def tiger_eats_graphic():
+    print('sending icon')
+    return send_from_directory(app.template_folder,'tiger_eats_graphic.png', mimetype='image/png')
 
 # @app.route('/', defaults={'path': ''})
 # @app.route('/<path:path>')
