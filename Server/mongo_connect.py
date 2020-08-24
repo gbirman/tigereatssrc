@@ -84,10 +84,10 @@ def index():
 def get_img():
     return send_file(app.template_folder+'/tiger_eats_graphic.png', mimetype='image/png')
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def catch_all(path):
-    return render_template('index.html')
+# @app.route('/', defaults={'path': ''})
+# @app.route('/<path:path>')
+# def catch_all(path):
+#     return render_template('index.html')
 
 # @app.route('/api/login_casclient', methods=['GET'])
 # @casClient.cas_required
