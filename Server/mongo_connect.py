@@ -7,7 +7,7 @@ import random
 import time
 import math
 import os
-from flask import Flask, jsonify, request, redirect, session, render_template
+from flask import Flask, jsonify, request, redirect, session, render_template, send_file
 from flask.json import JSONEncoder
 from flask_pymongo import PyMongo
 from flask_cas import login_required, CAS, login, logout
@@ -22,6 +22,7 @@ from functools import wraps
 
 # use "dev" or "prod"
 mode = "prod"
+print(mode)
 
 #init WSGI instance
 if mode == "dev":
@@ -79,10 +80,14 @@ app.session_interface = BeakerSessionInterface()
 def index():
     return render_template('index.html')
 
-# @app.route('/', defaults={'path': ''})
-# @app.route('/<path:path>')
-# def catch_all(path):
-#     return render_template('index.html')
+@app.route('/tiger_eats_graphic.png')
+def get_img():
+    return send_file(app.template_folder+'/tiger_eats_graphic.png', mimetype='image/png')
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def catch_all(path):
+    return render_template('index.html')
 
 # @app.route('/api/login_casclient', methods=['GET'])
 # @casClient.cas_required
