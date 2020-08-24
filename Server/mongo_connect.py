@@ -17,12 +17,20 @@ from beaker.middleware import SessionMiddleware
 from pymongo import MongoClient 
 from urllib.parse import quote_plus
 from pymongo.errors import ConnectionFailure
-
 from CASClient import CASClient
-
 from functools import wraps
 
-import logging
+# use "dev" or "prod"
+mode = "prod"
+
+#init WSGI instance
+if mode == "dev":
+    app = Flask(__name__, template_folder='../public/') 
+elif mode == "prod":
+    app = Flask(__name__, static_folder='../build/static', template_folder='../build') # production
+else:
+    print("shouldn't get here")
+    quit()
 
 class MyJSONEncoder(JSONEncoder):
     def default(self, obj):
@@ -30,9 +38,14 @@ class MyJSONEncoder(JSONEncoder):
             return str(obj)
         return super(MyJSONEncoder, self).default(obj)
 
+class BeakerSessionInterface(SessionInterface):
 
-app = Flask(__name__, static_folder='../build/static', template_folder='../build') # production
-# app = Flask(__name__, template_folder='../public/') # development
+    def open_session(self, app, request):
+        session = request.environ['beaker.session']
+        return session
+
+    def save_session(self, app, session, response):
+        session.save()
 
 #POTENTIALLY IMPORTANT:
 app.config.from_object(__name__)
@@ -50,16 +63,6 @@ session_opts = {
     'session.data_dir': './data',
     'session.auto': True
 }
-
-class BeakerSessionInterface(SessionInterface):
-
-	def open_session(self, app, request):
-		session = request.environ['beaker.session']
-		return session
-
-	def save_session(self, app, session, response):
-		session.save()
-
 
 # secret key
 secret_key = environ.get('SECRET_KEY', "uhuhuhuhuhuhiwannaerykahbadu")
