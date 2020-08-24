@@ -74,8 +74,6 @@ app.session_interface = BeakerSessionInterface()
 
 # casClient = CASClient()
 
-# @app.route('/', defaults={'path': ''})
-# @app.route('/<path:path>')
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -99,7 +97,6 @@ def send_manifest():
     print('sending manifest', request)
     return send_from_directory(app.template_folder, 'site.webmanifest', mimetype='application/manifest+json')
 
-# @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
     print(path)
