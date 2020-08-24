@@ -1,11 +1,11 @@
 self.__precacheManifest = [
   {
-    "revision": "cb2ffbf863a4c2ec3b63",
+    "revision": "49e96a26926ca9fd558d",
     "url": "/static/css/main.fd397f84.chunk.css"
   },
   {
-    "revision": "cb2ffbf863a4c2ec3b63",
-    "url": "/static/js/main.cb2ffbf8.chunk.js"
+    "revision": "49e96a26926ca9fd558d",
+    "url": "/static/js/main.49e96a26.chunk.js"
   },
   {
     "revision": "92e07c37181ab392ce78",
@@ -40,7 +40,7 @@ self.__precacheManifest = [
     "url": "/static/media/EggToast.64ba5954.jpg"
   },
   {
-    "revision": "83fecc9f152382dea5492f9229476dd6",
+    "revision": "4196534ad80f11ae702b90da8bb1e6b8",
     "url": "/index.html"
   }
 ];

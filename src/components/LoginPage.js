@@ -113,7 +113,6 @@ export default withRouter(withStyles(styles)(class LoginPage extends React.Compo
 
     render() {
         const {classes} = this.props;
-        console.log(this.props)
         return (
             <div>
                 <Grid
