@@ -7,7 +7,7 @@ import random
 import time
 import math
 import os
-from flask import Flask, jsonify, request, redirect, session, render_template, send_from_directory
+from flask import Flask, jsonify, request, redirect, session, render_template, send_from_directory, send_file
 from flask.json import JSONEncoder
 from flask_pymongo import PyMongo
 from flask_cas import login_required, CAS, login, logout
@@ -80,10 +80,23 @@ app.session_interface = BeakerSessionInterface()
 def index():
     return render_template('index.html')
 
+@app.route('/android-chrome-192x192.png')
+@app.route('/android-chrome-256x256.png')
+@app.route('/apple-touch-icon.png')
+@app.route('/favicon.ico')
+@app.route('/favicon-16x16.png')
+@app.route('/favicon-32x32.png')
+@app.route('/mstile-150x150.png')
 @app.route('/tiger_eats_graphic.png')
-def tiger_eats_graphic():
-    print('sending icon')
-    return send_from_directory(app.template_folder,'tiger_eats_graphic.png', mimetype='image/png')
+def send_icon():
+    print('sending icon', request.url)
+    return send_file(request.url, mimetype='image/png')
+
+@app.route('/site.webmanifest')
+def send_manifest():
+    print('sending manifest', request.url)
+    return send_file(request.url, mimetype='application/json')
+
 
 # @app.route('/', defaults={'path': ''})
 # @app.route('/<path:path>')
