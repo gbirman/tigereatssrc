@@ -21,7 +21,7 @@ from CASClient import CASClient
 from functools import wraps
 
 # use "dev" or "prod"
-mode = "prod"
+mode = "dev"
 print(mode)
 
 #init WSGI instance
@@ -97,7 +97,7 @@ def logout():
 
 @app.route('/api/login', methods=['GET', 'POST'])
 def login():
-
+    print("test")
     if request.method == "POST":
 
         if not session.get('logged_in', False):
@@ -702,5 +702,5 @@ def change_year():
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", debug=False, port=int(os.environ.get('PORT', 5000)))
+    app.run(host="0.0.0.0", debug=True, port=int(os.environ.get('PORT', 5000)))
     
