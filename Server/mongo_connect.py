@@ -97,7 +97,6 @@ def logout():
 
 @app.route('/api/login', methods=['GET', 'POST'])
 def login():
-    print("test")
     if request.method == "POST":
 
         if not session.get('logged_in', False):
