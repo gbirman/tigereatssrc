@@ -52,8 +52,8 @@ class BeakerSessionInterface(SessionInterface):
 app.config.from_object(__name__)
 
 app.json_encoder = MyJSONEncoder
-app.config['MONGO_DBNAME'] = 'tiger_eats_db'
-app.config['MONGO_URI'] = 'mongodb://pfrazao:y7gnykTXHj8j7EK@ds053380.mlab.com:53380/tiger_eats_db'
+app.config['MONGO_DBNAME'] = 'TigerEats'
+app.config['MONGO_URI'] = 'mongodb+srv://dbAdmin:cRLjZaC8Ji9Xwsbe@cluster0.fqe3w.mongodb.net/TigerEats?retryWrites=true&w=majority'
 
 mongo = PyMongo(app)
 CORS(app)
@@ -127,30 +127,34 @@ def user_role():
     except:
         return jsonify(False)
 
+# call this to reset the db new data 
+@app.route('/api/fill_db', methods=['GET'])
+def fill_db():
+    persons = ['5bf8ca12e7179a56e21592c5', '5bf8ca52e7179a56e21592c8'] # hashed person ids
+    date_range = ['2021-06-01', '2021-08-31'] # days to fill with data
+    print("deleting then filling DB")
+    _delete_items()
+    _fill_database_meals(persons, date_range)
+    _fill_database_daily_summary(persons)
+    return "success"
 
-def _fill_database_meals():
+def _fill_database_meals(persons, date_range):
 
-    """
-    KEY INFO: I don't know why, but if you just run this method from main(), each entry is inserted
-    twice, which is a pain in the ass. So just copy paste the below code and run it in main.
-    """
     meal_choices = [
         {"eggs": 3, "bread": 4.5}, {"eggs": 2, "bread": 8}, {"eggs": 7, "bread": 3},
         {"eggs": 2.5, "bread": 5}, {"eggs": 4.5, "bread": 1}, {"eggs": 5.5, "bread": 2}
     ]
 
-    startdate = _convert_to_date('2018-07-14')
-    enddate = _convert_to_date('2018-09-01')
+    startdate = _convert_to_date(date_range[0])
+    enddate = _convert_to_date(date_range[1])
     delta = enddate - startdate
 
-    for person in ["5bf8ca12e7179a56e21592c5", "5bf8ca52e7179a56e21592c8", "5c09f2aae7179a6ca08431f1",
-                   "5c09f2e5e7179a6ca0843224"]:
+    for person in persons: #["5bf8ca12e7179a56e21592c5", "5bf8ca52e7179a56e21592c8", "5c09f2aae7179a6ca08431f1", "5c09f2e5e7179a6ca0843224"]:
 
         for i in range(delta.days + 1):
             this_date = str(startdate + timedelta(i))
-
             for meal in ['breakfast', 'lunch', 'dinner']:
-                mongo.db.meal_log.insert(
+                mongo.db.meal_log.insert_one(
                     {
                         "userId": ObjectId(person),
                         "date": this_date,
@@ -160,12 +164,8 @@ def _fill_database_meals():
                     }
                 )
 
-def _fill_database_daily_summary():
-    """
-    KEY INFO: I don't know why, but if you just run this method from main(), each entry is inserted
-    twice, which is a pain in the ass. So just copy paste the below code and run it in main.
-    """
-    for person in ['5bf8ca12e7179a56e21592c5', '5bf8ca52e7179a56e21592c8', '5c09f2aae7179a6ca08431f1', '5c09f2e5e7179a6ca0843224']:
+def _fill_database_daily_summary(persons):
+    for person in persons:
 
         # get start and end date
         startdate = mongo.db.meal_log.find({
@@ -188,7 +188,7 @@ def _fill_database_daily_summary():
         for i in range(delta.days + 1):
             this_date = str(startdate + timedelta(i))
             data = _get_user_day_meal_data(person, this_date)[0]
-            mongo.db.meal_day_summary.insert(
+            mongo.db.meal_day_summary.insert_one(
                 {
                     "userId": ObjectId(person),
                     "date": this_date,
@@ -200,13 +200,16 @@ def _fill_database_daily_summary():
             )
 
 
-def _delete_items():
-    """
-    KEY INFO: I don't know why, but if you just run this method from main(), each entry is inserted
-    twice, which is a pain in the ass. So just copy paste the below code and run it in main.
-    """
-    startdate = _convert_to_date('2018-07-01')
-    enddate = _convert_to_date('2018-11-30')
+# deletes everything in range (if provided, otherwise everything)
+def _delete_items(date_range = None):
+
+    if date_range is None:
+        mongo.db.meal_log.delete_many({})
+        mongo.db.meal_day_summary.delete_many({})
+        return
+
+    startdate = _convert_to_date(date_range[0])
+    enddate = _convert_to_date(date_range[1])
     delta = enddate - startdate
 
     for i in range(delta.days + 1):
@@ -699,7 +702,5 @@ def change_year():
 
     return _update_data(users, user_id, data)
 
-
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True, port=int(os.environ.get('PORT', 5000)))
-    
