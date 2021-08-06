@@ -70,23 +70,6 @@ class ProgressPage extends React.Component {
         initial_height: window.innerHeight, 
     };
 
-    // componentWillMount() {
-    //     axios.get(
-    //         '/api/user_role',
-    //         {
-    //             headers: {'Content-type': 'application/json'}
-    //         }
-    //     ).then((data) => {
-    //         const result = data['data'];
-    //         if (!result) {
-    //             this.props.history.push("/error");
-    //         }
-    //         /*else {
-    //             this.props.history.push("/error")
-    //         } */
-    //     })
-    // }
-
     componentWillMount = () => {
         console.log("requiring authentication");
         axios.get(
@@ -132,8 +115,6 @@ class ProgressPage extends React.Component {
 
             // get nutrient progress from server, then render 
             axios.get(
-                // remove "_dummy" to get real data from server
-                // currently waiting on Ishan to speed it up
                 '/api/get_user_nutrient_progress_all',
                 {
                     params: {
@@ -164,6 +145,7 @@ class ProgressPage extends React.Component {
                     });
                 });
 
+                // TODO: handle aggregations in background to speed up data surfacing
                 // make the TimeSeries here from points collected above
                 channelNames.map(channelName => {
 

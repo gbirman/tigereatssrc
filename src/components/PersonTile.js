@@ -91,25 +91,29 @@ export default withStyles(styles)(class PersonTile extends React.Component {
 
     returnPicture() {
 
-        if (this.props._id == "5c09f2e5e7179a6ca0843224") { // Jamie
-            return (<img src={Jamie} style = {imageStyle} width = "120" height = "120" alt="Profile" />);
-        
-        }
+        let useRealPictures = false;
+        if (useRealPictures) {
+            if (this.props._id == "5c09f2e5e7179a6ca0843224") { // Jamie
+                return (<img src={Jamie} style = {imageStyle} width = "120" height = "120" alt="Profile" />);
+            
+            }
 
-        if (this.props._id == "5bf8ca52e7179a56e21592c8") { // Gabe
-            return (<img src={Gabe} style = {imageStyle} width = "120" height = "120" alt="Profile" />);
-        }
+            if (this.props._id == "5bf8ca52e7179a56e21592c8") { // Gabe
+                return (<img src={Gabe} style = {imageStyle} width = "120" height = "120" alt="Profile" />);
+            }
 
-        if (this.props._id == "5bf8ca12e7179a56e21592c5") { // Ishan
-            return (<img src={Ishan} style = {imageStyle} width = "120" height = "120" alt="Profile" />);
-        }
+            if (this.props._id == "5bf8ca12e7179a56e21592c5") { // Ishan
+                return (<img src={Ishan} style = {imageStyle} width = "120" height = "120" alt="Profile" />);
+            }
 
-        if (this.props._id == "5c09f2aae7179a6ca08431f1") { // Paulo
-            return (<img src={Paulo} style = {imageStyle} width = "120" height = "120" alt="Profile" />);
+            if (this.props._id == "5c09f2aae7179a6ca08431f1") { // Paulo
+                return (<img src={Paulo} style = {imageStyle} width = "120" height = "120" alt="Profile" />);
+            }
+
+            return (<img src={PersonPlaceholder} style = {imageStyle} width = "120" height = "120" alt="Profile" />);
         }
-        
         else { // Placeholder
-        return (<img src={PersonPlaceholder} style = {imageStyle} width = "120" height = "120" alt="Profile" />);
+            return (<img src={PersonPlaceholder} style = {imageStyle} width = "120" height = "120" alt="Profile" />);
         }
     }
 

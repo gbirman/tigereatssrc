@@ -64,7 +64,7 @@ export default withStyles(styles)(class ExpansionModule extends React.Component 
             ).then((response) => {console.log(response)}).catch((response) => {console.log(response)}); */
         }
         else if (this.props.criteria === 'team') {
-            ops = ['Soccer', 'Football', 'Basketball'];
+            ops = ['Soccer', 'Swimming'];
             label = "Team";
             /*ops = axios.get(
                 '/api/get_user_team',
