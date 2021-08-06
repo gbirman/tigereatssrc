@@ -21,7 +21,7 @@ from CASClient import CASClient
 from functools import wraps
 
 # use "dev" or "prod"
-mode = "dev"
+mode = "prod"
 print(mode)
 
 #init WSGI instance
